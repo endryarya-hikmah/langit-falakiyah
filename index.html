@@ -3,17 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Langit Falaqyah CBA ✦ Al-Hikmah v3.1a</title>
+<title>Langit Falaqyah CBA ✦ Al-Hikmah v3.3 (Ijtima')</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
+:root {
+  --dvh: 100vh;
+}
 html,body{
-  margin:0;padding:0;overflow:hidden;height:100%;
+  margin:0;padding:0;overflow:hidden;
+  height: var(--dvh, 100vh); 
   background:radial-gradient(circle at center,#0a1025 0%,#000010 100%);
   color:#f0e6b2;font-family:'Cormorant Garamond',serif;
   cursor: none;
 }
-canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;}
+canvas{position:fixed;top:0;left:0;width:100vw;height:var(--dvh, 100vh);z-index:0;}
 
 canvas.interactive-planet {
   cursor: none;
@@ -21,24 +25,35 @@ canvas.interactive-planet {
 
 
 #intro,#main{
-  position:absolute;top:0;left:0;width:100%;height:100%;
+  position:absolute;top:0;left:0;width:100%;
+  height: var(--dvh, 100vh); 
   display:flex;flex-direction:column;
-  justify-content:space-between; 
   align-items:center;
   text-align:center;color:#f0e6b2;transition:opacity 2s ease-in-out;z-index:2;
-  padding: 8vh 0 2vh 0; 
   box-sizing: border-box; 
 }
 
+/* Intro kembali di-center */
+#intro {
+  padding: 0;
+  pointer-events: auto; 
+  justify-content: center; 
+  z-index: 4; 
+}
+
+/* Main pakai space-between */
 #main {
+  justify-content: space-between;
+  padding: 8vh 0 2vh 0; 
   z-index: 2;
 }
+
 
 #ui-container {
   position: relative;
   z-index: 3; 
   width: 100%;
-  height: 100%;
+  height: var(--dvh, 100vh); 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -57,12 +72,6 @@ canvas.interactive-planet {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-#intro {
-  padding: 0;
-  pointer-events: auto; 
-  justify-content: center;
-  z-index: 4; 
 }
 
 
@@ -83,8 +92,30 @@ button{
   padding:8px 16px;margin:6px;font-size:1em;backdrop-filter:blur(3px);
   transition:all 0.3s;
   cursor: none; 
+  position: relative; 
+  overflow: hidden; 
 }
 button:hover{background:rgba(255,255,255,0.1);transform:scale(1.05);box-shadow:0 0 15px #bfa84e;}
+
+/* [IDE BARU] Efek Shimmer Mistis */
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 230, 180, 0.3), transparent);
+  transform: skewX(-25deg);
+  animation: shimmer 6s infinite ease-in-out;
+  animation-delay: 3s; 
+}
+@keyframes shimmer {
+  0%, 20% { left: -100%; }
+  40% { left: 150%; }
+  100% { left: 150%; }
+}
+
 
 button.nav-button {
   border-color: #fcefb5;
@@ -94,6 +125,36 @@ button.nav-button {
   max-width: 320px;
   margin-top: 10px;
 }
+/* [PERBAIKAN] Tombol Kalkulator dibuat "Ajib" */
+button.calculator-button {
+  border-color: #88aaff;
+  color: #aae0ff;
+  text-shadow: 0 0 10px #88aaff;
+  width: 90%;
+  max-width: 320px;
+  margin-top: 5px;
+  margin-bottom: 15px; /* Kasih jarak ke tombol di bawahnya */
+  
+  /* Style Eksklusif "Ajib" */
+  background: linear-gradient(145deg, rgba(136, 170, 255, 0.1), rgba(136, 170, 255, 0.05));
+  box-shadow: 0 0 15px rgba(136, 170, 255, 0.3);
+  animation: pulse-blue 3s infinite ease-in-out;
+}
+button.calculator-button:hover {
+  transform: scale(1.05); /* Pertahankan hover, tapi shadow di-handle animasi */
+}
+
+@keyframes pulse-blue {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(136, 170, 255, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(136, 170, 255, 0.6);
+    transform: scale(1.02);
+  }
+}
+
 
 #audioBtn{
   position:fixed;top:12px;right:12px;background:rgba(255,255,255,0.1);
@@ -105,13 +166,26 @@ button.nav-button {
   pointer-events: auto; 
 }
 
-.author,footer,#button-container, #planet-hint {
+.author, #planet-hint {
   opacity:0;
   animation:fadeUp 3s ease forwards;
 }
-#button-container { animation-delay: 2.2s; } 
+#button-container { animation-delay: 2.2s; opacity: 0; animation: fadeUp 3s ease forwards; } 
 .author { animation-delay: 2.5s; }
-footer { animation-delay: 2.5s; }
+footer{
+  position:absolute;
+  bottom:8px;
+  right:15px;
+  font-size:0.75em;
+  color:#d3b96f;
+  font-family:'Cinzel Decorative',serif; 
+  pointer-events: auto;
+  opacity:0;
+  animation:fadeUp 3s ease forwards;
+  animation-delay: 2.5s;
+  z-index: 5; 
+}
+
 #planet-hint { 
   animation-delay: 3s;
   font-size: 0.9em;
@@ -123,7 +197,7 @@ footer { animation-delay: 2.5s; }
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 .author{margin-top:10px;font-size:0.85em;color:#d3b96f;}
-footer{position:absolute;bottom:8px;right:15px;font-size:0.75em;color:#d3b96f;font-family:'Cinzel Decorative',serif; pointer-events: auto;}
+
 
 /* counter ruh */
 #visitor-counter {
@@ -135,10 +209,61 @@ footer{position:absolute;bottom:8px;right:15px;font-size:0.75em;color:#d3b96f;fo
   text-shadow: 0 0 8px #88aaff;
 }
 
+/* Gerbang Password */
+#password-gate {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#password-input {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1em;
+  text-align: center;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid #d8c471;
+  border-radius: 10px;
+  color: #f5e8b8;
+  padding: 8px 12px;
+  width: 220px;
+  backdrop-filter: blur(3px);
+  margin-bottom: 10px;
+  transition: border-color 0.3s; 
+}
+#password-input::placeholder {
+  color: #d3b96f;
+  opacity: 0.7;
+}
+/* [IDE BARU] Animasi Shake */
+#password-input.shake {
+  animation: shake 0.5s ease-in-out;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+#password-error {
+  display: none;
+  color: #ff8888;
+  text-shadow: 0 0 5px #ff0000;
+  margin-top: 5px;
+  font-size: 0.9em;
+}
+
+
 /* waktu & info */
 #timeInfo{
   margin-top:20px;font-size:1.05em;color:#f5e9c1;text-shadow:0 0 6px #bfa84e;
   line-height: 1.6; 
+}
+/* Info Jam Haqiqi (BARU) */
+#saat-info {
+  font-size: 0.85em;
+  font-style: italic;
+  color: #d3b96f;
+  margin-top: 5px;
 }
 
 /* Tafsir Energi */
@@ -231,6 +356,67 @@ body:hover #stardust-cursor {
   to{opacity:1;transform:scale(1);}
 }
 
+/* Styling Kalkulator Sa'at */
+#saat-calculator-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 15px;
+}
+.saat-btn {
+  font-size: 0.85em !important;
+  padding: 6px 10px !important;
+  margin: 4px !important;
+  flex-basis: 120px;
+}
+#saat-calculator-result {
+  margin-top: 15px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid #d8c471;
+  color: #aae0ff;
+  text-shadow: 0 0 8px #88aaff;
+  line-height: 1.6;
+}
+
+/* [MIND BLOWING] Tombol Live Chat WA */
+#live-chat-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, rgba(255, 215, 130, 0.2), rgba(216, 196, 113, 0.1));
+  border: 1px solid #d8c471;
+  border-radius: 50%;
+  color: #fcefb5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  pointer-events: auto;
+  cursor: none;
+  backdrop-filter: blur(4px);
+  animation: pulse-gold 2.5s infinite ease-in-out;
+  transition: all 0.3s;
+}
+#live-chat-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #fcefb5;
+  animation-play-state: paused;
+}
+@keyframes pulse-gold {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(240, 230, 178, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(240, 230, 178, 0.8);
+    transform: scale(1.05);
+  }
+}
+
 /* responsif */
 @media (max-width:600px){
   h1{font-size:1.5em;}
@@ -255,8 +441,15 @@ body:hover #stardust-cursor {
   
   #stardust-cursor { display: none; }
   body { cursor: auto; }
-  button, #audioBtn { cursor: pointer; }
+  button, #audioBtn, #live-chat-btn { cursor: pointer; }
   canvas { cursor: default; }
+
+  #live-chat-btn {
+    width: 45px;
+    height: 45px;
+    bottom: 20px;
+    right: 20px;
+  }
 }
 </style>
 </head>
@@ -278,10 +471,14 @@ body:hover #stardust-cursor {
   <p class="quote">"Langit dan waktu adalah cermin ketetapan, tempat ruh menapaki garis takdir."</p>
   
   <div id="visitor-counter" class="auratik-counter">
-    ✦ Jumlah Ruh yang Telah Menatap Langit Ini: <span id="visitor-count">Memuat...</span> ✦
+    ✦ Jumlah Ruh yang Telah Menatap Langit Ini: <span id="visitor-count">...</span> ✦
   </div>
   
-  <button onclick="startMain()">Masuk ke Langit Falaqyah</button>
+  <div id="password-gate">
+    <input type="password" id="password-input" placeholder="Masukkan Kode Rahasia...">
+    <button id="unlock-btn">Buka Tabir</button>
+    <p id="password-error"></p>
+  </div>
 </div>
 
 <!-- ✦ Halaman Utama ✦ -->
@@ -290,7 +487,7 @@ body:hover #stardust-cursor {
   <div id="ui-container">
     <!-- Grup konten atas -->
     <div id="top-group">
-      <h1 style="margin-top:0;">Perhitungan Falaqiyah Al-Hikmah</h1> 
+      <h1 style="margin-top:0;">Perhitungan Falaqiyah <span style="white-space: nowrap;">Al-Hikmah</span></h1> 
       <h2>سر الوقت — Rahasia Waktu</h2>
       
       <div class="quoteBox" id="quoteBox">
@@ -303,42 +500,42 @@ body:hover #stardust-cursor {
 
     <!-- Grup konten bawah -->
     <div id="bottom-group">
-      <!-- ✦ Informasi Waktu ✦ -->
       <div id="timeInfo">
         <span id="hijriah">...</span><br> 
         🌞 Penguasa Hari: <span id="hari">...</span><br>
         ⏳ Planet Jam Aktif: <span id="planet">...</span><br>
         🕒 <span id="jam">...</span><br>
-        <small>☀ Pergantian Penguasa Hari: setelah matahari terbit lokal</small>
+        <small>☀ Pergantian Penguasa Hari: <span id="sunrise-time">...</span></small><br>
+        <small id="saat-info">Durasi Jam Sa'at: memuat...</small>
       </div>
 
-      <!-- Tafsir Energi -->
       <div id="tafsirInfo">
         Tafsir Saat Ini: <span id="tafsir-text">...</span>
       </div>
       
-      <!-- Petunjuk Klik Planet -->
       <p id="planet-hint" class="author">✦ Coba klik planet di langit untuk melihat info energinya ✦</p>
 
-      <!-- ✦ Tombol Interaktif ✦ -->
       <div id="button-container" style="margin-top:20px;">
         
-        <!-- Set Tombol Halaman 1 -->
+        <!-- [PERBAIKAN] Tombol Kalkulator dipindah ke atas -->
+        <button class="calculator-button">🔮 Kalkulator Sa'at</button> 
+
         <div id="button-set-1" class="button-set">
           <button>🕯 Sa’at Amal</button>
           <button>🌠 Waktu Mustajab</button>
           <button>🕊 Do’a & Niat</button>
           <button>📜 Info Falakiyah</button>
           <button>🪶 Perhitungan Falaqiyah</button>
-          <button class="nav-button">Amalan Lanjutan ❯</button>
         </div>
         
-        <!-- Set Tombol Halaman 2 (tersembunyi) -->
+        <button class="nav-button">Amalan Lanjutan ❯</button>
+        
         <div id="button-set-2" class="button-set button-set-inactive">
           <button>🗝 Ritual Khusus</button>
           <button>✨ Asma' Falakiyah</button>
           <button>📜 Wafaq & Rajah</button>
           <button>💬 Konsultasi Batin</button>
+          <!-- Tombol kalkulator sudah pindah -->
           <button class="nav-button">❮ Halaman Utama</button>
         </div>
 
@@ -354,17 +551,31 @@ body:hover #stardust-cursor {
 <!-- ✦ Tombol Musik ✦ -->
 <div id="audioBtn">🔊</div>
 
+<!-- [MIND BLOWING] Tombol Live Chat WA -->
+<a id="live-chat-btn" href="https://wa.me/6285173262649" target="_blank" title="Live Chat via WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #fcefb5;">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+  </svg>
+</a>
+
 <div id="stardust-cursor"></div>
 
 <!-- ✦ Audio Player ✦ -->
 <audio id="music" loop>
-  <!-- [PERUBAHAN] Menggunakan file lokal music.mp3 -->
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 <audio id="chime" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c07f4f3101.mp3?filename=chime-magic-6107.mp3"></audio>
 
+
 <script>
-// ✦ Musik & Pembuka ✦
+// Perbaikan Firefox layout
+function setDynamicViewportHeight() {
+  let vh = window.innerHeight;
+  document.documentElement.style.setProperty('--dvh', `${vh}px`);
+}
+window.addEventListener('load', setDynamicViewportHeight);
+window.addEventListener('resize', setDynamicViewportHeight);
+
 const music=document.getElementById("music");
 const audioBtn=document.getElementById("audioBtn");
 let showPlanets=false; 
@@ -405,7 +616,32 @@ function startMain(){
   }
 }
 
-// ✦ Audio Manual Klik ✦
+// Logika Gerbang Password
+const unlockBtn = document.getElementById('unlock-btn');
+const passwordInput = document.getElementById('password-input'); 
+
+if (unlockBtn) {
+  unlockBtn.onclick = () => {
+    const errorMsg = document.getElementById('password-error');
+    if (passwordInput.value.toUpperCase() === 'CBA26') {
+      startMain();
+    } else {
+      errorMsg.textContent = 'Kode Rahasia Salah.';
+      errorMsg.style.display = 'block';
+      passwordInput.style.borderColor = '#ff8888';
+      passwordInput.classList.add('shake');
+      setTimeout(() => passwordInput.classList.remove('shake'), 500);
+      if (navigator.vibrate) navigator.vibrate(100);
+    }
+  };
+  passwordInput.oninput = () => {
+    document.getElementById('password-error').style.display = 'none';
+    passwordInput.style.borderColor = '#d8c471';
+  };
+}
+
+
+// Audio Manual Klik
 document.body.addEventListener('click',()=>{ 
   if(music.paused && document.getElementById('main').style.opacity === '1') {
     music.play();
@@ -443,87 +679,246 @@ function initQuotes(){
   },12000); 
 }
 
-// ✦ Falakiyah — Penguasa Hari & Planet ✦
-const planetHari=["Syams","Qamar","Marīkh","Utārid","Musytarī","Zuhrah","Zuhal"]; 
-let sunriseTime=5.5; 
+// ==================================================
+// [ROMBAKAN TOTAL] MESIN HISAB HAQIQI v3.3
+// ==================================================
 
-function getPenguasaHari(now){
-  const h=now.getHours()+now.getMinutes()/60;
-  let dayIndex = now.getDay(); 
-  
-  if(h < sunriseTime){
-    dayIndex = (dayIndex - 1 + 7) % 7;
+const planetHari = ["Syams","Qamar","Marīkh","Utārid","Musytarī","Zuhrah","Zuhal"]; 
+const chaldeanOrder = ["Zuhal", "Musytarī", "Marīkh", "Syams", "Zuhrah", "Utārid", "Qamar"];
+
+// [MIND BLOWING] Obyek Tafsir Ijtima' (Pertemuan)
+const ijtimaTafsir = {
+  "Syams": { // Hari Kewibawaan
+    "Zuhal": "Energi Wibawa (Hari) bertemu Energi Keras (Jam). *Sa'at al-Jalal* (Waktu Keagungan & Batasan). Kuat untuk membuat pagar gaib, menanam keteguhan, atau memberi peringatan keras (Halak) yang berwibawa.",
+    "Musytarī": "Energi Wibawa (Hari) bertemu Energi Rezeki (Jam). *Sa'at al-Rifa'ah* (Waktu Ketinggian). Waktu terbaik untuk memohon kenaikan pangkat, kelapangan rezeki, dan kemuliaan dari para pembesar.",
+    "Marīkh": "Energi Wibawa (Hari) bertemu Energi Kuat (Jam). *Sa'at al-Qahr* (Waktu Penaklukan). Sangat kuat untuk menaklukkan musuh, memenangkan kompetisi, atau amalan kewibawaan tingkat tinggi (menundukkan).",
+    "Syams": "Energi Wibawa (Hari) bertemu Energi Wibawa (Jam). *Sa'at al-Sultan* (Waktu Raja). Ini adalah Puncak Kewibawaan. Waktu terbaik menghadap penguasa, memohon jabatan, atau amalan kemuliaan tertinggi.",
+    "Zuhrah": "Energi Wibawa (Hari) bertemu Energi Harmoni (Jam). *Sa'at al-Jamal* (Waktu Keindahan & Wibawa). Sangat baik untuk 'Pelet' (Mahabbah) tingkat tinggi, agar dicintai sekaligus disegani.",
+    "Utārid": "Energi Wibawa (Hari) bertemu Energi Komunikasi (Jam). *Sa'at al-Khitabah* (Waktu Pidato). Waktu terbaik untuk pidato, presentasi, negosiasi, agar ucapan didengar dan berwibawa.",
+    "Qamar": "Energi Wibawa (Hari) bertemu Energi Perasaan (Jam). *Sa'at al-Kasyf* (Waktu Penyingkapan). Baik untuk membuka mata batin (Kasyf) atau memohon agar rahasia-rahasia kemuliaan dibukakan."
+  },
+  "Qamar": { // Hari Perasaan
+    "Zuhal": "Energi Perasaan (Hari) bertemu Energi Keras (Jam). *Sa'at al-Qabdh* (Waktu Kesempitan). Hati bisa terasa berat/was-was. Sangat baik untuk penjagaan batin, membuat pagar gaib, atau ritual *pemisah* (Tafriq).",
+    "Musytarī": "Energi Perasaan (Hari) bertemu Energi Rezeki (Jam). *Sa'at al-Ijabah* (Waktu Terkabul). Baik untuk memohon rezeki yang lembut & menenangkan hati, atau dari jalur yang tidak terduga.",
+    "Marīkh": "Energi Perasaan (Hari) bertemu Energi Kuat (Jam). *Sa'at al-Ghadab* (Waktu Amarah). Hati-hati, emosi (Qamar) bertemu Api (Marikh). Emosi bisa meledak. Hindari pertengkaran.",
+    "Syams": "Energi Perasaan (Hari) bertemu Energi Wibawa (Jam). *Sa'at al-Ilham* (Waktu Ilham). Baik untuk amalan spiritual, membuka intuisi (Qamar) untuk menerima cahaya (Syams) ilham.",
+    "Zuhrah": "Energi Perasaan (Hari) bertemu Energi Harmoni (Jam). *Sa'at al-Mahabbah* (Waktu Cinta Kasih). Waktu terbaik untuk amalan kasih sayang, perdamaian, dan menenangkan hati yang gelisah.",
+    "Utārid": "Energi Perasaan (Hari) bertemu Energi Komunikasi (Jam). *Sa'at al-Syi'r* (Waktu Sastra/Sihir). Sangat kuat untuk menulis (terutama yg puitis/magis), atau amalan 'kata-kata' (ucapan memikat).",
+    "Qamar": "Energi Perasaan (Hari) bertemu Energi Perasaan (Jam). *Sa'at al-Bathin* (Waktu Batin). Puncak Energi Batin. Waktu terbaik untuk amalan intuisi, mimpi gaib, atau hal-hal yang tersembunyi."
+  },
+  "Marīkh": { // Hari Kekuatan
+    "Zuhal": "Energi Kuat (Hari) bertemu Energi Keras (Jam). *Sa'at al-Intiqam* (Waktu Pembalasan). Waktu paling merusak. Sangat kuat untuk Halak, serangan balik, atau ritual pemisah (Tafriq) yang keras.",
+    "Musytarī": "Energi Kuat (Hari) bertemu Energi Rezeki (Jam). *Sa'at al-Ghanimah* (Waktu Harta Rampasan). Kuat untuk 'merebut' peluang rezeki, memenangkan tender, atau menagih hutang dengan tegas.",
+    "Marīkh": "Energi Kuat (Hari) bertemu Energi Kuat (Jam). *Sa'at al-Harb* (Waktu Perang). Puncak Energi Kekuatan. Waktu terbaik untuk amalan kekebalan, menaklukkan musuh/jin, atau pekerjaan fisik yang sangat berat.",
+    "Syams": "Energi Kuat (Hari) bertemu Energi Wibawa (Jam). *Sa'at al-Syaja'ah* (Waktu Keberanian). Sangat baik untuk meningkatkan keberanian, menaikkan wibawa ketentaraan/kepolisian, atau menaklukkan atasan.",
+    "Zuhrah": "Energi Kuat (Hari) bertemu Energi Harmoni (Jam). *Sa'at al-Syahwah* (Waktu Syahwat). Energi Api (Marikh) bertemu Cinta (Zuhrah). Sangat kuat untuk ritual 'Pelet' (Mahabbah) yang bersifat pemaksaan.",
+    "Utārid": "Energi Kuat (Hari) bertemu Energi Komunikasi (Jam). *Sa'at al-Jidal* (Waktu Debat). Waktu yang tajam untuk berdebat, mematahkan argumen lawan, atau membuat tulisan yang 'menyerang'.",
+    "Qamar": "Energi Kuat (Hari) bertemu Energi Perasaan (Jam). *Sa'at al-Hadas* (Waktu Insting Tajam). Insting (Qamar) menjadi setajam pedang (Marikh). Baik untuk melatih insting tempur atau proteksi.",
+  },
+  "Utārid": { // Hari Komunikasi
+    "Zuhal": "Energi Akal (Hari) bertemu Energi Keras (Jam). *Sa'at al-Hifz* (Waktu Menghafal). Baik untuk mengunci ingatan/hafalan, membuat rajah/wafaq yang bersifat 'mengunci', atau penjagaan surat.",
+    "Musytarī": "Energi Akal (Hari) bertemu Energi Rezeki (Jam). *Sa'at al-Tijarah* (Waktu Perdagangan). Waktu terbaik untuk negosiasi bisnis, jual-beli, tanda tangan kontrak, atau memulai dagang.",
+    "Marīkh": "Energi Akal (Hari) bertemu Energi Kuat (Jam). *Sa'at al-Mantiq* (Waktu Logika Tajam). Baik untuk memecahkan masalah rumit, debat kusir, atau menyusun strategi (perang/bisnis).",
+    "Syams": "Energi Akal (Hari) bertemu Energi Wibawa (Jam). *Sa'at al-Bayan* (Waktu Penjelasan). Waktu terbaik untuk mengajar, presentasi di depan umum, atau agar ucapan (Utarid) didengar oleh pembesar (Syams).",
+    "Zuhrah": "Energi Akal (Hari) bertemu Energi Harmoni (Jam). *Sa'at al-Fann* (Waktu Seni). Sangat baik untuk menulis surat cinta, puisi, lirik lagu, atau komunikasi yang bersifat mendamaikan.",
+    "Utārid": "Energi Akal (Hari) bertemu Energi Akal (Jam). *Sa'at al-Dzikra* (Waktu Kecerdasan). Puncak Energi Akal. Waktu terbaik untuk belajar, menghafal, menulis kitab, atau ritual kecerdasan.",
+    "Qamar": "Energi Akal (Hari) bertemu Energi Perasaan (Jam). *Sa'at al-Hikayah* (Waktu Cerita). Baik untuk 'meramal' (tarot/pasir), menulis fiksi, atau komunikasi yang menyentuh perasaan (hipnosis).",
+  },
+  "Musytarī": { // Hari Rezeki
+    "Zuhal": "Energi Rezeki (Hari) bertemu Energi Keras (Jam). *Sa'at al-Kanz* (Waktu Harta Karun). Baik untuk 'mengunci' harta/aset, menabung, investasi jangka panjang (properti/tanah), atau penjagaan bisnis.",
+    "Musytarī": "Energi Rezeki (Hari) bertemu Energi Rezeki (Jam). *Sa'at al-Barakah* (Waktu Keberkahan). Puncak Energi Rezeki. Waktu terbaik untuk memulai usaha apapun, memohon kelapangan rezeki, atau sedekah.",
+    "Marīkh": "Energi Rezeki (Hari) bertemu Energi Kuat (Jam). *Sa'at al-Iqtidar* (Waktu Kemampuan). Baik untuk mencari rezeki yang butuh 'kekuatan' (menagih hutang, memenangkan tender) atau rezeki dalam jumlah besar.",
+    "Syams": "Energi Rezeki (Hari) bertemu Energi Wibawa (Jam). *Sa'at al-Tsaurah* (Waktu Kekayaan). Waktu terbaik untuk memohon rezeki yang besar (Musytari) sekaligus kemuliaan (Syams) atau rezeki dari penguasa.",
+    "Zuhrah": "Energi Rezeki (Hari) bertemu Energi Harmoni (Jam). *Sa'at al-Ni'mah* (Waktu Kenikmatan). Baik untuk rezeki yang bersifat 'nikmat' (bisnis kuliner, fashion, seni) atau menikmati hasil jerih payah.",
+    "Utārid": "Energi Rezeki (Hari) bertemu Energi Akal (Jam). *Sa'at al-Fulus* (Waktu Uang). Waktu terbaik untuk perdagangan, marketing, atau mencari rezeki yang mengandalkan kecerdasan (Utarid).",
+    "Qamar": "Energi Rezeki (Hari) bertemu Energi Perasaan (Jam). *Sa'at al-Hadaya* (Waktu Hadiah). Baik untuk memohon rezeki dari jalur tak terduga (Qamar) atau rezeki yang bersifat 'hadiah'/'bonus'.",
+  },
+  "Zuhrah": { // Hari Harmoni
+    "Zuhal": "Energi Harmoni (Hari) bertemu Energi Keras (Jam). *Sa'at al-'Ahd* (Waktu Ikatan). Baik untuk amalan 'mengikat' pasangan (Zuhrah) secara 'keras' (Zuhal), atau membuat hubungan awet/tertutup.",
+    "Musytarī": "Energi Harmoni (Hari) bertemu Energi Rezeki (Jam). *Sa'at al-Farah* (Waktu Kebahagiaan). Waktu terbaik untuk pernikahan, pesta, atau memulai bisnis yang berhubungan dengan keindahan/kesenangan.",
+    "Marīkh": "Energi Harmoni (Hari) bertemu Energi Kuat (Jam). *Sa'at al-Syahwah* (Waktu Syahwat). Energi Cinta (Zuhrah) bertemu Api (Marikh). Puncak energi 'Pelet' (Mahabbah) yang bersifat memaksa.",
+    "Syams": "Energi Harmoni (Hari) bertemu Energi Wibawa (Jam). *Sa'at al-Zinah* (Waktu Perhiasan). Baik untuk amalan 'susuk', membuka aura (Zuhrah) agar terlihat agung (Syams) dan disukai pembesar.",
+    "Zuhrah": "Energi Harmoni (Hari) bertemu Energi Harmoni (Jam). *Sa'at al-'Isyq* (Waktu Asmara). Puncak Energi Cinta. Waktu terbaik untuk amalan Mahabbah (pengasihan), perdamaian, atau bersolek.",
+    "Utārid": "Energi Harmoni (Hari) bertemu Energi Akal (Jam). *Sa'at al-Lathifah* (Waktu Kelembutan). Baik untuk diplomasi, merayu (lisan/tulisan), atau menenangkan orang yang sedang marah.",
+    "Qamar": "Energi Harmoni (Hari) bertemu Energi Perasaan (Jam). *Sa'at al-Unfuwan* (Waktu Kerinduan). Waktu terbaik untuk amalan 'pengasihan' jarak jauh, atau agar dirindukan (Qamar) oleh target (Zuhrah).",
+  },
+  "Zuhal": { // Hari Kekerasan
+    "Zuhal": "Energi Keras (Hari) bertemu Energi Keras (Jam). *Sa'at al-Mawt* (Waktu Kematian/Akhir). Puncak Energi Keras. Waktu terkuat untuk Halak, memutus (Tafriq), atau mengunci total (pagar gaib).",
+    "Musytarī": "Energi Keras (Hari) bertemu Energi Rezeki (Jam). *Sa'at al-Milk* (Waktu Kepemilikan). Waktu terbaik untuk urusan tanah, properti, pertanian, atau 'mengunci' rezeki/aset (warisan).",
+    "Marīkh": "Energi Keras (Hari) bertemu Energi Kuat (Jam). *Sa'at al-Damm* (Waktu Darah). Energi Keras (Zuhal) bertemu Api (Marikh). Waktu terkuat kedua untuk Halak, merusak, atau mengirim serangan balik.",
+    "Syams": "Energi Keras (Hari) bertemu Energi Wibawa (Jam). *Sa'at al-Hadd* (Waktu Batasan). Baik untuk membuat pagar gaib (Zuhal) yang berwibawa (Syams) atau memberi 'batasan' pada musuh/penguasa.",
+    "Zuhrah": "Energi Keras (Hari) bertemu Energi Harmoni (Jam). *Sa'at al-Tafriq* (Waktu Pemisah). Energi Pemisah (Zuhal) bertemu Cinta (Zuhrah). Waktu terkuat untuk ritual pemisah hubungan (Tafriq).",
+    "Utārid": "Energi Keras (Hari) bertemu Energi Akal (Jam). *Sa'at al-Sijn* (Waktu Penjara). Baik untuk 'mengunci' lisan (Utarid) musuh, membuat wafaq/rajah penjagaan (Zuhal), atau amalan yang butuh fokus tinggi.",
+    "Qamar": "Energi Keras (Hari) bertemu Energi Perasaan (Jam). *Sa'at al-Waswas* (Waktu Keraguan). Energi Keras (Zuhal) bertemu Batin (Qamar). Bisa bikin was-was. Tidak baik untuk memulai. Baik untuk mengirim 'was-was' ke musuh."
   }
-  return planetHari[dayIndex];
-}
+};
 
-// ✦ Deteksi Lokasi Otomatis ✦
-function calcSunrise(lat,lon){
-  try {
-    const now=new Date();
-    const N=Math.floor((now-new Date(now.getFullYear(),0,0))/86400000);
-    const lngHour=lon/15;
-    const t=N+((6-lngHour)/24);
-    const M=(0.9856*t)-3.289;
-    let L=M+(1.916*Math.sin(M*Math.PI/180))+(0.020*Math.sin(2*M*Math.PI/180))+282.634;
-    L=(L+360)%360;
-    const RA=Math.atan(0.91764*Math.tan(L*Math.PI/180))*180/Math.PI;
-    const Lq=Math.floor(L/90)*90,RAq=Math.floor(RA/90)*90;
-    const RAcor=(RA+(Lq-RAq))/15;
-    const sinDec=0.39782*Math.sin(L*Math.PI/180);
-    const cosDec=Math.cos(Math.asin(SinDec)); 
-    const cosH=(Math.cos(90.833*Math.PI/180)-(sinDec*Math.sin(lat*Math.PI/180)))/(cosDec*Math.cos(lat*Math.PI/180));
-    if(cosH>1){ return 6; }
-    if (cosH < -1) { return 6; }
-    const H=Math.acos(cosH)*180/Math.PI; 
-    const Hh=H/15; 
-    const T=Hh+RAcor-(0.06571*t)-6.622;
-    const UT=(T-lngHour+24)%24;
-    return UT+(new Date().getTimezoneOffset()/-60); 
-  } catch (e) {
-    console.error("Gagal menghitung sunrise:", e);
-    return 5.5; // Fallback
+// [MIND BLOWING] Fungsi baru untuk Tafsir Ijtima'
+function getTafsirIjtima(planetHari, planetJam) {
+  if (ijtimaTafsir[planetHari] && ijtimaTafsir[planetHari][planetJam]) {
+    return ijtimaTafsir[planetHari][planetJam];
   }
-}
-
-if(navigator.geolocation){
-  navigator.geolocation.getCurrentPosition(pos=>{
-    const {latitude,longitude}=pos.coords;
-    sunriseTime=calcSunrise(latitude,longitude);
-  }, err => {
-    console.warn("Gagal mendapatkan lokasi, menggunakan sunrise default.", err.message);
-  });
-} else {
-  console.warn("Geolocation tidak didukung, menggunakan sunrise default.");
+  // Fallback jika ada error (seharusnya tidak terjadi)
+  return `Energi ${planetHari} (Hari) bertemu Energi ${planetJam} (Jam).`;
 }
 
 
-// ✦ Waktu Real-time ✦
+// Variabel global untuk data falak
+let lat = -6.595018; // Default Bogor
+let lon = 106.815025; // Default Bogor
+let sunriseTime = 5.75; // 05:45
+let sunsetTime = 17.75; // 17:45
+let sunriseTomorrow = 5.76;
+let durasiJamSaatSiang = 60;
+let durasiJamSaatMalam = 60;
+
 const hariElem=document.getElementById('hari');
 const planetElem=document.getElementById('planet');
 const jamElem=document.getElementById('jam');
 const hijriahElem=document.getElementById('hijriah'); 
 const tafsirElem=document.getElementById('tafsir-text'); 
+const sunriseElem=document.getElementById('sunrise-time');
+const saatInfoElem=document.getElementById('saat-info');
 
-const planetOrder=["Qamar","Utārid","Zuhrah","Syams","Marīkh","Musytarī","Zuhal"]; 
+function formatJam(jamDesimal) {
+    const totalMenit = Math.floor(jamDesimal * 60);
+    const jam = Math.floor(totalMenit / 60) % 24; 
+    const menit = totalMenit % 60; 
+    return `${jam < 10 ? '0' + jam : jam}:${menit < 10 ? '0' + menit : menit}`;
+}
 
-// Database Tafsir Energi
-const tafsirEnergi = {
-  "Syams": { nama: "Kewibawaan", tafsir: "Baik untuk memimpin, tampil di depan umum, & meminta kemuliaan." },
-  "Qamar": { nama: "Perasaan", tafsir: "Baik untuk kelembutan batin, intuisi, & hal yang berhubungan dengan air." },
-  "Marīkh": { nama: "Kekuatan", tafsir: "Baik untuk ketegasan, memutus perkara, olahraga, & pekerjaan berat." },
-  "Utārid": { nama: "Komunikasi", tafsir: "Baik untuk belajar, menulis, negosiasi, dagang, & kecerdasan." },
-  "Musytarī": { nama: "Keberuntungan", tafsir: "Baik untuk memulai usaha, meminta rezeki, & mencari berkah." },
-  "Zuhrah": { nama: "Harmoni", tafsir: "Baik untuk kasih sayang, perdamaian, seni, & keindahan." },
-  "Zuhal": { nama: "Keteguhan", tafsir: "Baik untuk membangun fondasi, penjagaan gaib, & kesabaran." }
-};
+function calcSunTimes(date, lat, lon) {
+  try {
+    const N = Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 86400000);
+    const lngHour = lon / 15;
+    const t = N + 1; 
+    const M = (0.9856 * t) - 3.289;
+    let L = M + (1.916 * Math.sin(M * Math.PI / 180)) + (0.020 * Math.sin(2 * M * Math.PI / 180)) + 282.634;
+    L = (L + 360) % 360;
 
+    const RA = Math.atan(0.91764 * Math.tan(L * Math.PI / 180)) * 180 / Math.PI;
+    const Lq = Math.floor(L / 90) * 90, RAq = Math.floor(RA / 90) * 90;
+    const RAcor = (RA + (Lq - RAq)) / 15;
+
+    const sinDec = 0.39782 * Math.sin(L * Math.PI / 180);
+    const cosDec = Math.cos(Math.asin(sinDec));
+    const cosH = (Math.cos(90.833 * Math.PI / 180) - (sinDec * Math.sin(lat * Math.PI / 180))) / (cosDec * Math.cos(lat * Math.PI / 180));
+
+    if (cosH > 1 || cosH < -1) {
+        return { sunrise: 6, sunset: 18 }; 
+    }
+    
+    const H = Math.acos(cosH) * 180 / Math.PI; 
+    const HhRise = (360 - H) / 15;
+    const HhSet = H / 15;
+
+    const TRise = HhRise + RAcor - (0.06571 * t) - 6.622;
+    const TSet = HhSet + RAcor - (0.06571 * t) - 6.622;
+
+    const UTRise = (TRise - lngHour + 24) % 24;
+    const UTSet = (TSet - lngHour + 24) % 24;
+
+    const tzOffset = date.getTimezoneOffset() / -60;
+    return {
+        sunrise: UTRise + tzOffset,
+        sunset: UTSet + tzOffset
+    };
+  } catch (e) {
+    console.error("Gagal menghitung sun times:", e);
+    return { sunrise: 5.75, sunset: 17.75 }; 
+  }
+}
+
+async function initFalak() {
+  try {
+    const pos = await new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error("Geolocation tidak didukung."));
+      } else {
+        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 });
+      }
+    });
+    lat = pos.coords.latitude;
+    lon = pos.coords.longitude;
+  } catch (err) {
+    console.warn(`Gagal mendapatkan lokasi: ${err.message}. Menggunakan lokasi default (Bogor).`);
+  }
+
+  const now = new Date();
+  const tomorrow = new Date(now.getTime() + 86400000);
+  
+  const todayTimes = calcSunTimes(now, lat, lon);
+  const tomorrowTimes = calcSunTimes(tomorrow, lat, lon);
+
+  sunriseTime = todayTimes.sunrise;
+  sunsetTime = todayTimes.sunset;
+  sunriseTomorrow = tomorrowTimes.sunrise;
+  
+  const totalMenitSiang = (sunsetTime - sunriseTime) * 60;
+  const totalMenitMalam = ((24 - sunsetTime) + sunriseTomorrow) * 60;
+  
+  durasiJamSaatSiang = totalMenitSiang / 12;
+  durasiJamSaatMalam = totalMenitMalam / 12;
+
+  if(sunriseElem) sunriseElem.textContent = `setelah ${formatJam(sunriseTime)} (Lokal)`;
+  if(saatInfoElem) saatInfoElem.textContent = `Durasi Jam Sa'at: ~${durasiJamSaatSiang.toFixed(0)} menit (Siang) / ~${durasiJamSaatMalam.toFixed(0)} menit (Malam)`;
+  
+  updateTime();
+  setInterval(updateTime, 1000);
+}
+
+function getPenguasaHari(now) {
+  const h = now.getHours() + now.getMinutes() / 60;
+  let dayIndex = now.getDay(); 
+  
+  if (h < sunriseTime) {
+    dayIndex = (dayIndex - 1 + 7) % 7;
+  }
+  return planetHari[dayIndex];
+}
+
+function getPlanetJam(now, penguasaHariIni) {
+  const h = now.getHours() + now.getMinutes() / 60;
+  
+  const startIndex = chaldeanOrder.indexOf(penguasaHariIni);
+  if (startIndex === -1) return "Error";
+
+  let jamSaatIndex = 0;
+  let planetJam = "";
+
+  if (h >= sunriseTime && h < sunsetTime) {
+    // Waktu Siang
+    const menitSejakTerbit = (h - sunriseTime) * 60;
+    jamSaatIndex = Math.floor(menitSejakTerbit / durasiJamSaatSiang); 
+    if (jamSaatIndex > 11) jamSaatIndex = 11; 
+    
+    planetJam = chaldeanOrder[(startIndex + jamSaatIndex) % 7];
+    
+  } else {
+    // Waktu Malam
+    const startIndexMalam = (startIndex + 12) % 7;
+    let menitSejakTerbenam;
+
+    if (h >= sunsetTime) {
+      menitSejakTerbenam = (h - sunsetTime) * 60;
+    } else {
+      menitSejakTerbenam = ((24 - sunsetTime) + h) * 60;
+    }
+
+    jamSaatIndex = Math.floor(menitSejakTerbenam / durasiJamSaatMalam); 
+    if (jamSaatIndex > 11) jamSaatIndex = 11;
+    
+    planetJam = chaldeanOrder[(startIndexMalam + jamSaatIndex) % 7];
+  }
+  
+  return planetJam;
+}
 
 function updateTime(){
-  const d=new Date();
+  const d = new Date();
   
   const penguasaHariIni = getPenguasaHari(d);
-  const planetJamIni = planetOrder[d.getHours()%7];
+  const planetJamIni = getPlanetJam(d, penguasaHariIni);
   
   if(hariElem) hariElem.textContent = penguasaHariIni;
   if(planetElem) planetElem.textContent = planetJamIni;
@@ -536,21 +931,20 @@ function updateTime(){
     if(hijriahElem) hijriahElem.textContent = "📅 (Gagal memuat tanggal Hijriah)";
   }
   
-  const tafsirHari = tafsirEnergi[penguasaHariIni];
-  const tafsirJam = tafsirEnergi[planetJamIni];
-  
-  if(tafsirElem && tafsirHari && tafsirJam) {
-    tafsirElem.textContent = `Energi ${tafsirHari.nama} (Hari) bertemu Energi ${tafsirJam.nama} (Jam). ${tafsirJam.tafsir}`;
+  // [MIND BLOWING] Menggunakan Tafsir Ijtima'
+  if(tafsirElem) {
+    tafsirElem.textContent = getTafsirIjtima(penguasaHariIni, planetJamIni);
   }
 }
-updateTime(); 
-setInterval(updateTime,1000);
 
-// ✦ Langit Falakiyah 4D (Canvas 2.5D) ✦
+// ==================================================
+// AKHIR DARI ROMBAKAN MESIN HISAB
+// ==================================================
+
 const canvas=document.getElementById("universe");
 const ctx=canvas.getContext("2d");
 let cx = innerWidth / 2;
-let cy = innerHeight * 0.45; // Geser orbit ke atas
+let cy = innerHeight * 0.45; 
 
 let mouse = { x: -9999, y: -9999 };
 let hoveringPlanet = null;
@@ -584,7 +978,7 @@ const planetInfo = {
   },
   "♄ Zuhal": {
     title: "♄ Zuhal (Saturnus)",
-    desc: "Energi Struktur & Keteguhan. Aspek: Kesabaran, Batasan, Fondasi, Penjagaan Gaib, Disiplin, Pertanian, Warisan. Tabiat: Dingin & Kering. Logam: Timbal."
+    desc: "Energi Struktur & Batasan. Aspek: Kesabaran, Fondasi, Disiplin, Penjagaan Gaib, tapi juga urusan keras: Halak (penghancuran), pemisah, & serangan balik. Tabiat: Dingin & Kering. Logam: Timbal."
   }
 };
 
@@ -593,17 +987,19 @@ function resizeCanvas() {
     canvas.width=innerWidth;
     canvas.height=innerHeight;
     cx = canvas.width / 2;
-    cy = canvas.height * 0.45; // Geser orbit ke atas
+    cy = canvas.height * 0.45; 
 }
-window.addEventListener('resize', resizeCanvas);
+window.addEventListener('resize', () => {
+  resizeCanvas();
+  setDynamicViewportHeight(); 
+});
 resizeCanvas();
 
-function makeStar(){return{x:(Math.random()*2-1)*canvas.width,y:(Math.random()*2-1)*canvas.height,z:Math.random()*canvas.width,o:Math.random()};}
+function makeStar(){return{x:(Math.random()*2-1)*canvas.width,y:(Math.random()*2-1)*canvas.height,z:Math.random()*canvas.width,o:Math.random(), vo: Math.random() * 0.05 - 0.025};}
 const stars=Array(1200).fill().map(makeStar);
 
-// Data planet dengan radius lebih besar
 const planets=[
-  {name:"☉ Syams",r:38,orbit:0,dist:0,color:"#FFD86C",speed:0.000, x:0, y:0, size:0, zPos: 0, hasRings: false}, 
+  {name:"☉ Syams",r:38,orbit:0,dist:0,color:"#FFD86C",speed:0.000, x:cx, y:cy, size:0, zPos: 0, hasRings: false}, 
   {name:"☿ Utārid",r:22,orbit:90,dist:140,color:"#A68E74",speed:0.00017, x:0, y:0, size:0, zPos: 0, hasRings: false},
   {name:"♀ Zuhrah",r:28,orbit:120,dist:190,color:"#E8B888",speed:0.00014, x:0, y:0, size:0, zPos: 0, hasRings: false},
   {name:"☾ Qamar",r:24,orbit:230,dist:250,color:"#CDE3F3",speed:0.00012, x:0, y:0, size:0, zPos: 0, hasRings: false},
@@ -612,7 +1008,6 @@ const planets=[
   {name:"♄ Zuhal",r:52,orbit:480,dist:470,color:"#C5BA9D",speed:0.00008, x:0, y:0, size:0, zPos: 0, hasRings: true} 
 ];
 
-// Nebula bergerak
 function drawNebula(t) {
   ctx.save();
   ctx.globalAlpha = 0.04; 
@@ -646,7 +1041,7 @@ function drawPlanet(p,t){
   let sinAngle = Math.sin(angle);
   p.zPos = sinAngle; 
   
-  let zScale = 0.8 + (sinAngle * 0.2); 
+  let zScale = 0.7 + (sinAngle * 0.3); 
   let planetSize = (p.r * Math.max(0.7, scale)) * zScale;
   
   let x = cx + (orbitDistX > 0 ? Math.cos(angle) * orbitDistX : 0);
@@ -662,7 +1057,6 @@ function drawPlanet(p,t){
   let ringRadiusX = planetSize * 2;
   let ringRadiusY = planetSize * perspective * 0.7;
 
-  // Gambar bagian BELAKANG cincin (jika planet di depan)
   if (p.hasRings && p.zPos > 0) {
       ctx.save();
       ctx.beginPath();
@@ -673,7 +1067,6 @@ function drawPlanet(p,t){
       ctx.restore();
   }
 
-  // --- GAMBAR PLANET ---
   if (p.name === "☉ Syams") {
     let glowGrad = ctx.createRadialGradient(x,y,planetSize * 1.2, x,y, planetSize * 3 + pulse);
     glowGrad.addColorStop(0, "rgba(255, 180, 80, 0.5)");
@@ -694,15 +1087,31 @@ function drawPlanet(p,t){
     ctx.fill();
     
   } else {
-    // Gradien planet lebih halus
-    let grad=ctx.createRadialGradient(x-planetSize*0.1, y-planetSize*0.1, planetSize*0.05, x, y, planetSize + pulse);
-    grad.addColorStop(0, "rgba(255,255,255,0.7)"); 
-    grad.addColorStop(0.5, p.color); 
-    grad.addColorStop(1, "rgba(0,0,0,0.3)"); 
+    let sun = planets[0];
+    let dx = sun.x - x;
+    let dy = sun.y - y;
+    let dist = Math.sqrt(dx*dx + dy*dy);
+    let highlightX = x, highlightY = y;
+
+    if (dist > 0) {
+        let normX = dx / dist;
+        let normY = dy / dist;
+        highlightX = x + normX * planetSize * 0.4;
+        highlightY = y + normY * planetSize * 0.4;
+    }
+
+    let grad=ctx.createRadialGradient(
+      highlightX, 
+      highlightY, 
+      planetSize * 0.05, 
+      x, y, planetSize + pulse 
+    );
+    grad.addColorStop(0, "rgba(255,255,255,0.7)");
+    grad.addColorStop(0.4, p.color);
+    grad.addColorStop(1, "rgba(0,0,0,0.4)");
     ctx.beginPath();ctx.fillStyle=grad;ctx.arc(x,y,planetSize + pulse,0,Math.PI*2);ctx.fill();
   }
   
-  // Gambar bagian DEPAN cincin (jika planet di belakang)
   if (p.hasRings && p.zPos <= 0) {
       ctx.save();
       ctx.beginPath();
@@ -712,9 +1121,7 @@ function drawPlanet(p,t){
       ctx.stroke();
       ctx.restore();
   }
-  // --- AKHIR GAMBAR PLANET ---
   
-  // Gambar orbit
   if (orbitDistX > 0) {
     ctx.beginPath();
     ctx.strokeStyle=`rgba(255,215,130,0.08)`;
@@ -722,7 +1129,6 @@ function drawPlanet(p,t){
     ctx.stroke();
   }
   
-  // Gambar Teks
   ctx.font=`${14 * Math.max(0.8, scale) * zScale}px 'Cormorant Garamond'`; 
   ctx.fillStyle= isHovering ? "#FFD700" : "#e6dcb0"; 
   ctx.textAlign="center";
@@ -738,7 +1144,6 @@ function animate(t){
   
   if(showPlanets) drawNebula(t); 
 
-  // Update posisi planet
   if(showPlanets) {
       planets.forEach(p => {
           let scale = Math.min(cx, cy) / 500;
@@ -751,12 +1156,11 @@ function animate(t){
           p.x = cx + (orbitDistX > 0 ? Math.cos(angle) * orbitDistX : 0);
           p.y = cy + (orbitDistY > 0 ? sinAngle * orbitDistY : 0);
           
-          let zScale = 0.8 + (sinAngle * 0.2);
+          let zScale = 0.7 + (sinAngle * 0.3);
           p.size = (p.r * Math.max(0.7, scale)) * zScale;
       });
   }
 
-  // Cek hovering (hanya untuk visual, tidak untuk klik)
   let currentlyHovering = null;
   if(showPlanets) {
     planets.sort((a, b) => b.zPos - a.zPos); 
@@ -777,9 +1181,14 @@ function animate(t){
   }
   canvas.classList.toggle('interactive-planet', !!hoveringPlanet);
 
-  // Gambar bintang
   stars.forEach(s=>{
-    s.z-=1.5;if(s.z<=0){Object.assign(s,makeStar());s.z=canvas.width;}
+    s.z-=1.5;
+    if(s.z<=0){Object.assign(s,makeStar());s.z=canvas.width;}
+    
+    s.o += s.vo;
+    if (s.o <= 0.1) { s.o = 0.1; s.vo *= -1; }
+    if (s.o >= 0.9) { s.o = 0.9; s.vo *= -1; }
+    
     const k=200/s.z;
     const px=s.x*k+cx;
     const py=s.y*k+cy;
@@ -789,7 +1198,6 @@ function animate(t){
     }
   });
   
-  // Gambar planet (sudah diurutkan zPos-nya)
   if(showPlanets) {
     planets.sort((a, b) => a.zPos - b.zPos); 
     planets.forEach(p=>drawPlanet(p,t));
@@ -799,12 +1207,12 @@ function animate(t){
 }
 animate(0);
 
+
 canvas.addEventListener('mousemove', e => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
 });
 
-// Logika klik mandiri
 canvas.addEventListener('click', e => {
   if (!showPlanets) return;
 
@@ -835,7 +1243,6 @@ canvas.addEventListener('click', e => {
 });
 
 
-// ✦ Modal Mistik ✦
 const modalOverlay=document.createElement('div');
 modalOverlay.id='modalOverlay';
 modalOverlay.style=`position:fixed;top:0;left:0;width:100%;height:100%;
@@ -871,18 +1278,78 @@ function closeModal(){
 document.getElementById('modalCloseBtn').onclick = closeModal;
 modalOverlay.addEventListener('click',e=>{if(e.target===modalOverlay)closeModal();});
 
-// ✦ Tombol Konten ✦
 const buttonSet1 = document.getElementById('button-set-1');
 const buttonSet2 = document.getElementById('button-set-2');
 
+// [ROMBAKAN TOTAL] Logika Kalkulator Sa'at (Haqiqi)
+function calculateSaat(planetName, hajat) {
+  let jamListSiang = [];
+  let jamListMalam = [];
+  const penguasaHariIni = getPenguasaHari(new Date());
+  const startIndex = chaldeanOrder.indexOf(penguasaHariIni);
+  
+  // Loop Siang
+  for (let i = 0; i < 12; i++) {
+    const planetSaatIni = chaldeanOrder[(startIndex + i) % 7];
+    if (planetSaatIni === planetName) {
+      const waktuMulai = sunriseTime + (i * durasiJamSaatSiang / 60);
+      const waktuSelesai = sunriseTime + ((i + 1) * durasiJamSaatSiang / 60);
+      jamListSiang.push(`Jam ${formatJam(waktuMulai)} - ${formatJam(waktuSelesai)} (Siang)`);
+    }
+  }
+
+  // Loop Malam
+  const startIndexMalam = (startIndex + 12) % 7;
+  for (let i = 0; i < 12; i++) {
+    const planetSaatIni = chaldeanOrder[(startIndexMalam + i) % 7];
+    if (planetSaatIni === planetName) {
+      const waktuMulai = sunsetTime + (i * durasiJamSaatMalam / 60);
+      const waktuSelesai = sunsetTime + ((i + 1) * durasiJamSaatMalam / 60);
+      jamListMalam.push(`Jam ${formatJam(waktuMulai)} - ${formatJam(waktuSelesai)} (Malam)`);
+    }
+  }
+  
+  let resultText = `
+    <p>Hari ini (${penguasaHariIni}), jam terbaik untuk <b>${hajat} (${planetName})</b> adalah:</p>
+    <div id="saat-calculator-result">
+      ${jamListSiang.join('<br>')}
+      <br>
+      ${jamListMalam.join('<br>')}
+    </div>
+    <p style="font-size: 0.8em; font-style: italic; margin-top: 10px;">(Perhitungan Haqiqi berdasarkan waktu Terbit/Terbenam Matahari di lokasi Anda)</p>
+  `;
+  
+  openModal("🔮 Kalkulator Sa'at Haqiqi", resultText);
+}
+
+// [UPDATE ZUHAL] Deskripsi Zuhal diperbarui
+const calculatorModalContent = `
+  <p>Pilih hajat Anda. Kami akan carikan jam-planet yang selaras hari ini (Hisab Haqiqi).</p>
+  <div id="saat-calculator-buttons">
+    <button class="saat-btn" data-planet="Syams" data-hajat="Kewibawaan">Kewibawaan (Syams)</button>
+    <button class="saat-btn" data-planet="Zuhrah" data-hajat="Kasih Sayang">Kasih Sayang (Zuhrah)</button>
+    <button class="saat-btn" data-planet="Musytarī" data-hajat="Rezeki">Rezeki (Musytarī)</button>
+    <button class="saat-btn" data-planet="Utārid" data-hajat="Ilmu & Komunikasi">Ilmu (Utārid)</button>
+    <button class="saat-btn" data-planet="Marīkh" data-hajat="Kekuatan">Kekuatan (Marīkh)</button>
+    <button class="saat-btn" data-planet="Zuhal" data-hajat="Halak & Penjagaan">Halak & Penjagaan (Zuhal)</button>
+    <button class="saat-btn" data-planet="Qamar" data-hajat="Intuisi & Batin">Intuisi (Qamar)</button>
+  </div>
+`;
+
 document.querySelectorAll('button').forEach(btn=>{
   btn.addEventListener('click',()=>{
-    if(btn.id === 'audioBtn' || btn.textContent === 'Masuk ke Langit Falaqyah' || btn.id === 'modalCloseBtn') return;
+    if(btn.id === 'audioBtn' || btn.id === 'unlock-btn' || btn.id === 'modalCloseBtn') return;
     
+    if (btn.classList.contains('saat-btn')) {
+      calculateSaat(btn.dataset.planet, btn.dataset.hajat);
+      return;
+    }
+
     switch(btn.textContent.trim()){
       case 'Amalan Lanjutan ❯':
         buttonSet1.classList.remove('button-set');
         buttonSet1.classList.add('button-set-inactive');
+        document.querySelector('.calculator-button').style.display = 'none'; // Sembunyikan kalkulator
         buttonSet2.classList.remove('button-set-inactive');
         buttonSet2.classList.add('button-set');
         return;
@@ -891,50 +1358,61 @@ document.querySelectorAll('button').forEach(btn=>{
         buttonSet2.classList.add('button-set-inactive');
         buttonSet1.classList.remove('button-set-inactive');
         buttonSet1.classList.add('button-set');
+        document.querySelector('.calculator-button').style.display = 'block'; // Tampilkan lagi kalkulator
         return;
+      case '🔮 Kalkulator Sa\'at':
+        openModal("🔮 Kalkulator Sa'at", calculatorModalContent);
+        document.querySelectorAll('.saat-btn').forEach(saatBtn => {
+          saatBtn.onclick = () => {
+            calculateSaat(saatBtn.dataset.planet, saatBtn.dataset.hajat);
+          };
+        });
+        return; 
     }
 
-    const waLink = `<a href="https://wa.me/6285173262649" target="_blank" style="color: #f5e8b8; cursor: pointer;">Endry Arya (WhatsApp)</a>`;
+    const waIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#25D366" viewBox="0 0 16 16" style="vertical-align: -0.125em; margin-right: 5px;"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>`;
+    const waLinkEl = `<a href="https://wa.me/6285173262649" target="_blank" style="color: #fcefb5; font-weight: bold; text-decoration: underline; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">${waIcon}Endry Arya (WhatsApp)</a>`;
+    
+    const contactBlock = `
+      <hr>
+      <p style="margin-bottom: 5px;"><b>Untuk informasi lengkap:</b></p>
+      <p style="font-size: 0.9em; font-style: italic; color: #d3b96f; margin-top: 0; margin-bottom: 10px;">(Klik logo WhatsApp di bawah untuk menghubungi kami)</p>
+      <p style="margin-top: 10px;">${waLinkEl}</p>
+    `;
 
     switch(btn.textContent.trim()){
       // Halaman 1
       case '🕯 Sa’at Amal':
         openModal('🕯 Sa‘at Amal',`
         <p>Setiap jam memiliki planet yang berkuasa atasnya. Lakukan amalan yang seirama dengan planet penguasanya, agar energi waktu berpadu dengan niat dan amalmu.</p>
-        <p>🌞 <b>Syams</b> — kewibawaan & kemuliaan<br>🌙 <b>Qamar</b> — kelembutan & penerangan batin<br>☿ <b>Utārid</b> — kecerdasan & komunikasi<br>♀ <b>Zuhrah</b> — kasih sayang & harmoni<br>♂ <b>Marīkh</b> — ketegasan & kekuatan<br>♃ <b>Musytarī</b> — rezeki & keberuntungan<br>♄ <b>Zuhal</b> — penjagaan & keteguhan</p>
+        <p>🌞 <b>Syams</b> — kewibawaan & kemuliaan<br>🌙 <b>Qamar</b> — kelembutan & penerangan batin<br>☿ <b>Utārid</b> — kecerdasan & komunikasi<br>♀ <b>Zuhrah</b> — kasih sayang & harmoni<br>♂ <b>Marīkh</b> — ketegasan & kekuatan<br>♃ <b>Musytarī</b> — rezeki & keberuntungan<br>♄ <b>Zuhal</b> — penjagaan, halak, pemisah</p>
         <p><i>“Barang siapa beramal pada sa‘atnya, ia menyentuh getaran semesta.”</i></p>
-        <hr>
-        <p><b>Untuk informasi lengkap hubungi:</b><br>${waLink}</p>
+        ${contactBlock}
         `);break;
       case '🌠 Waktu Mustajab':
         openModal('🌠 Waktu Mustajab',`
-        <p>Waktu mustajab adalah jam-planet yang selaras dengan tabiat amalanmu. Pada saat itu, doa lebih mudah menembus tabir langit.</p>
-        <p>Contoh:<br>♂ Marīkh → waktu kuat untuk kekuatan & pemutus.<br>♀ Zuhrah → waktu kasih & penerimaan.<br>♃ Musytarī → waktu kelapangan rezeki & keberuntungan.</p>
+        <p>Waktu mustajab adalah jam-planet (Sa'at) yang selaras dengan tabiat amalanmu. Gunakan "Kalkulator Sa'at" untuk menemukan jam yang tepat hari ini.</p>
         <p><i>“Ada saat di mana tabir langit menipis, dan doa naik tanpa penghalang.”</i></p>
-        <hr>
-        <p><b>Untuk informasi lengkap hubungi:</b><br>${waLink}</p>
+        ${contactBlock}
         `);break;
       case '🕊 Do’a & Niat':
         openModal('🕊 Do‘a & Niat',`
         <p><b>Do‘a Tahsin CBA</b></p>
-        <p style="font-size: 1.2em; line-height: 1.8; direction: rtl; text-align: right;">اللّٰهُمَّ اجْعَلْنِي مِنَ الَّذِينَ nَظَرْتَ إِلَيْهِمْ بِنَظَرَةِ الرَّحْمَةِ، وَفَتَحْتَ لَهُمْ أَبْوَابَ الْحِkْمَةِ، وَصَرَfْتَ عَنْهُمُ الْفِtْنَةَ.</p>
+        <!-- [PERBAIKAN] Typo Arab final -->
+        <p style="font-size: 1.2em; line-height: 1.8; direction: rtl; text-align: right;">اللّٰهُمَّ اجْعَلْنِي مِنَ الَّذِينَ نَظَرْتَ إِلَيْهِمْ بِنَظَرَةِ الرَّحْمَةِ، وَفَتَحْتَ لَهُمْ أَبْوَابَ الْحِكْمَةِ، وَصَرَفْتَ عَنْهُمُ الْفِتْنَةَ.</p>
         <p><i>“Ya Allah, jadikan aku termasuk hamba yang Engkau pandang dengan rahmat-Mu, Engkau bukakan baginya pintu hikmah, dan Engkau jauhkan dari fitnah.”</i></p>
-        <hr>
-        <p><b>Untuk informasi lengkap hubungi:</b><br>${waLink}</p>
+        ${contactBlock}
         `);break;
       case '📜 Info Falakiyah':
         openModal('📜 Info Falakiyah',`
-        <p>Ilmu Falakiyah menyingkap hubungan antara langit, waktu, dan ruh manusia. Tiap hari & jam dipimpin planet pembawa getaran energi.</p>
-        <p><i>“Langit adalah kitab yang terbuka; tiap planet huruf rahasia Ilahi.”</i></p>
-        <hr>
-        <p><b>Untuk informasi lengkap hubungi:</b><br>${waLink}</p>
+        <p>Ilmu Falakiyah menyingkap hubungan antara langit, waktu, dan ruh manusia. Website ini menggunakan metode Hisab Haqiqi (perhitungan akurat terbit/terbenam matahari lokal) untuk menentukan Jam Sa'at planet.</p>
+        ${contactBlock}
         `);break;
       case '🪶 Perhitungan Falaqiyah':
         openModal('🪶 Perhitungan Falaqiyah',`
         <p>Perhitungan Falaqiyah CBA membantu menentukan waktu terbaik untuk segala urusan ruhani & duniawi:</p>
         <p>🔹 Ritual Pelet<br>🔹 Halak & Pembinasaan<br>🔹 Pengobatan Ruhani<br>🔹 Rezeki & Keberuntungan<br>🔹 Pembuka Hijab & Perlindungan</p>
-        <hr>
-        <p><b>Untuk informasi lengkap hubungi:</b><br>${waLink}</p>
+        ${contactBlock}
         `);break;
       
       // Halaman 2
@@ -942,38 +1420,37 @@ document.querySelectorAll('button').forEach(btn=>{
         openModal('🗝 Ritual Khusus',`
         <p>Layanan ini mencakup panduan dan pelaksanaan ritual khusus yang disesuaikan dengan hajat Anda, menggunakan waktu dan sa'at falakiyah yang paling tajam.</p>
         <p><i>Hanya untuk anggota terverifikasi atau dengan bimbingan khusus.</i></p>
-        <hr>
-        <p><b>Untuk informasi lengkap hubungi:</b><br>${waLink}</p>
+        ${contactBlock}
         `);break;
       case '✨ Asma\' Falakiyah':
         openModal('✨ Asma\' Falakiyah',`
         <p>Pembelajaran dan ijazah Asma' (Nama-nama) yang selaras dengan energi 7 planet (Kawakib). Digunakan untuk membangkitkan energi spiritual spesifik dalam diri.</p>
         <p><i>Membutuhkan bimbingan khusus untuk pengamalan.</i></p>
-        <hr>
-        <p><b>Untuk informasi lengkap hubungi:</b><br>${waLink}</p>
+        ${contactBlock}
         `);break;
       case '📜 Wafaq & Rajah':
         openModal('📜 Wafaq & Rajah',`
         <p>Layanan pembuatan Wafaq (jimat numerologi) dan Rajah (sigil) yang ditulis pada waktu falakiyah yang tepat, di atas media yang tepat, untuk hajat spesifik (kerezekian, proteksi, mahabbah).</p>
-        <hr>
-        <p><b>Untuk informasi lengkap hubungi:</b><br>${waLink}</p>
+        ${contactBlock}
         `);break;
       case '💬 Konsultasi Batin':
         openModal('💬 Konsultasi Batin',`
         <p>Konsultasi ruhani privat dengan Endry Arya untuk membaca energi, masalah, dan menentukan solusi terbaik menggunakan pendekatan falakiyah dan hikmah.</p>
-        <hr>
-        <p><b>Untuk informasi lengkap hubungi:</b><br>${waLink}</p>
+        ${contactBlock}
         `);break;
     }
   });
 });
 
-// ✦ Pelacak Ruh ✦
 window.addEventListener('load',async()=>{
+  // Mulai inisialisasi falak (termasuk geolocation)
+  await initFalak(); 
+
+  // Pelacak Ruh (setelah falak siap)
   try{
     const el=document.getElementById("visitor-count");
     if (!el) return;
-    const r=await fetch("https://api.countapi.xyz/hit/langitfalaqyahcba/ruh"); 
+    const r=await fetch("https://api.countapi.xyz/hit/langitfalaqyahcba/v3-ruh"); 
     const data=await r.json();
     const total=data.value;
     el.textContent=total.toLocaleString("id-ID");
@@ -988,7 +1465,6 @@ window.addEventListener('load',async()=>{
   }
 });
 
-// Stardust Cursor Logic
 const stardustCursorEl = document.getElementById('stardust-cursor');
 if (stardustCursorEl) {
   window.addEventListener('mousemove', e => {
@@ -1006,7 +1482,6 @@ if (stardustCursorEl) {
 </script>
 
 <style>
-/* Animasi Sigil untuk Pelacak Ruh */
 @keyframes sigilRise{
   0%{opacity:0;transform:scale(.5)rotate(0deg);}
   10%{opacity:1;transform:scale(1.2)rotate(72deg);}
