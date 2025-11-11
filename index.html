@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Langit Falaqyah CBA ✦ Al-Hikmah v3.3 (Ijtima')</title>
+<title>Langit Falaqyah CBA ✦ Al-Hikmah v3.5 (Hisab Lengkap)</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
@@ -31,21 +31,22 @@ canvas.interactive-planet {
   align-items:center;
   text-align:center;color:#f0e6b2;transition:opacity 2s ease-in-out;z-index:2;
   box-sizing: border-box; 
+  overflow-y: auto;
 }
 
-/* Intro kembali di-center */
 #intro {
-  padding: 0;
+  padding: 5vh 0;
   pointer-events: auto; 
   justify-content: center; 
   z-index: 4; 
 }
 
-/* Main pakai space-between */
+/* [PERBAIKAN] Main page bisa di-scroll */
 #main {
-  justify-content: space-between;
+  justify-content: flex-start; /* Tidak lagi space-between */
   padding: 8vh 0 2vh 0; 
   z-index: 2;
+  overflow-y: auto; 
 }
 
 
@@ -53,10 +54,10 @@ canvas.interactive-planet {
   position: relative;
   z-index: 3; 
   width: 100%;
-  height: var(--dvh, 100vh); 
+  /* Hapus height agar bisa di-scroll */
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   pointer-events: none; 
   padding: 8vh 0 2vh 0;
@@ -72,6 +73,11 @@ canvas.interactive-planet {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+/* [PERBAIKAN] Bottom group tidak lagi di-push ke bawah */
+#bottom-group {
+  justify-content: flex-start;
+  padding-bottom: 50px; /* Jarak untuk footer */
 }
 
 
@@ -97,7 +103,6 @@ button{
 }
 button:hover{background:rgba(255,255,255,0.1);transform:scale(1.05);box-shadow:0 0 15px #bfa84e;}
 
-/* [IDE BARU] Efek Shimmer Mistis */
 button::before {
   content: '';
   position: absolute;
@@ -125,24 +130,56 @@ button.nav-button {
   max-width: 320px;
   margin-top: 10px;
 }
-/* [PERBAIKAN] Tombol Kalkulator dibuat "Ajib" */
 button.calculator-button {
   border-color: #88aaff;
   color: #aae0ff;
   text-shadow: 0 0 10px #88aaff;
   width: 90%;
   max-width: 320px;
-  margin-top: 5px;
-  margin-bottom: 15px; /* Kasih jarak ke tombol di bawahnya */
+  margin-top: 15px; /* Kasih jarak dari tombol fitur */
+  margin-bottom: 5px; 
   
-  /* Style Eksklusif "Ajib" */
   background: linear-gradient(145deg, rgba(136, 170, 255, 0.1), rgba(136, 170, 255, 0.05));
   box-shadow: 0 0 15px rgba(136, 170, 255, 0.3);
   animation: pulse-blue 3s infinite ease-in-out;
 }
 button.calculator-button:hover {
-  transform: scale(1.05); /* Pertahankan hover, tapi shadow di-handle animasi */
+  transform: scale(1.05); 
 }
+/* Tombol Fitur Ajib */
+.feature-btn-set {
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  max-width: 320px;
+}
+button.feature-btn {
+  border-color: #ffc471;
+  color: #ffd8a8;
+  text-shadow: 0 0 8px #ffc471;
+  width: 100%; /* Biar bisa 1 baris atau 2 baris */
+  background: linear-gradient(145deg, rgba(255, 196, 113, 0.1), rgba(255, 196, 113, 0.05));
+  box-shadow: 0 0 15px rgba(255, 196, 113, 0.3);
+  animation: pulse-gold 2.5s infinite ease-in-out;
+}
+button.feature-btn:hover {
+  transform: scale(1.05);
+}
+
+/* [BARU] Tombol Fitur AI (Pink) */
+button.ai-btn {
+  border-color: #ffb8d0;
+  color: #ffcee0;
+  text-shadow: 0 0 8px #ffb8d0;
+  width: 100%;
+  background: linear-gradient(145deg, rgba(255, 184, 208, 0.1), rgba(255, 184, 208, 0.05));
+  box-shadow: 0 0 15px rgba(255, 184, 208, 0.3);
+  animation: pulse-pink 2.8s infinite ease-in-out;
+}
+button.ai-btn:hover {
+  transform: scale(1.05);
+}
+
 
 @keyframes pulse-blue {
   0%, 100% {
@@ -151,6 +188,26 @@ button.calculator-button:hover {
   }
   50% {
     box-shadow: 0 0 25px rgba(136, 170, 255, 0.6);
+    transform: scale(1.02);
+  }
+}
+@keyframes pulse-gold {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(255, 196, 113, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(255, 196, 113, 0.6);
+    transform: scale(1.02);
+  }
+}
+@keyframes pulse-pink {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(255, 184, 208, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(255, 184, 208, 0.6);
     transform: scale(1.02);
   }
 }
@@ -172,10 +229,11 @@ button.calculator-button:hover {
 }
 #button-container { animation-delay: 2.2s; opacity: 0; animation: fadeUp 3s ease forwards; } 
 .author { animation-delay: 2.5s; }
+/* [PERBAIKAN] Footer diposisikan di dalam bottom-group */
 footer{
-  position:absolute;
-  bottom:8px;
-  right:15px;
+  position: relative;
+  margin-top: 30px;
+  padding-bottom: 20px;
   font-size:0.75em;
   color:#d3b96f;
   font-family:'Cinzel Decorative',serif; 
@@ -183,7 +241,6 @@ footer{
   opacity:0;
   animation:fadeUp 3s ease forwards;
   animation-delay: 2.5s;
-  z-index: 5; 
 }
 
 #planet-hint { 
@@ -209,9 +266,84 @@ footer{
   text-shadow: 0 0 8px #88aaff;
 }
 
+/* --- [BARU] Gerbang Donasi --- */
+#donation-info {
+  background: rgba(136, 170, 255, 0.05); 
+  border: 1px solid #88aaff; 
+  border-radius: 10px; 
+  padding: 15px; 
+  max-width: 320px; 
+  width: 90%; 
+  box-shadow: 0 0 15px rgba(136, 170, 255, 0.2);
+  margin-top: 20px;
+  color: #f0e6b2;
+}
+#donation-info h3 {
+  font-family:'Cinzel Decorative',serif; 
+  color:#aae0ff; 
+  margin:0 0 10px 0;
+  font-size: 1.1em;
+}
+#donation-info p {
+  font-size: 0.9em; 
+  margin:0 0 10px 0; 
+  line-height: 1.5;
+}
+.donation-account {
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+}
+.donation-account p {
+  margin: 5px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1em;
+}
+.copy-btn {
+  font-size: 0.8em !important;
+  padding: 3px 8px !important;
+  margin: 0 0 0 10px !important;
+  backdrop-filter: none;
+}
+#wa-donasi-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-family: 'Cormorant Garamond', serif;
+  border: 1px solid #88aaff;
+  border-radius: 10px;
+  color: #aae0ff;
+  padding: 8px 16px;
+  margin-top: 10px;
+  font-size: 1em;
+  width: 90%;
+  max-width: 320px;
+  text-shadow: 0 0 10px #88aaff;
+  background: linear-gradient(145deg, rgba(136, 170, 255, 0.1), rgba(136, 170, 255, 0.05));
+  box-shadow: 0 0 15px rgba(136, 170, 255, 0.3);
+  animation: pulse-blue 3s infinite ease-in-out;
+  transition: all 0.3s;
+  cursor: none;
+}
+#wa-donasi-btn svg {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  fill: #aae0ff;
+}
+#wa-donasi-btn:hover {
+  transform: scale(1.05);
+  animation-play-state: paused;
+}
+
+
 /* Gerbang Password */
 #password-gate {
-  margin-top: 15px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -234,7 +366,6 @@ footer{
   color: #d3b96f;
   opacity: 0.7;
 }
-/* [IDE BARU] Animasi Shake */
 #password-input.shake {
   animation: shake 0.5s ease-in-out;
 }
@@ -380,6 +511,103 @@ body:hover #stardust-cursor {
   line-height: 1.6;
 }
 
+/* Styling Fitur Ajib */
+#birth-calculator, #abjad-calculator, #jodoh-calculator {
+  padding: 10px 0;
+}
+#birth-date-input, #abjad-name-input, .jodoh-input {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1em;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid #d8c471;
+  border-radius: 8px;
+  color: #f5e8b8;
+  padding: 8px;
+  margin: 5px 10px;
+  width: 150px;
+}
+#birth-calculator button, #abjad-calculator button, #jodoh-calculator button {
+  font-size: 0.9em !important;
+  margin-top: 10px !important;
+}
+#birth-result, #abjad-result, #jodoh-result {
+  margin-top: 15px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid #88aaff;
+  color: #aae0ff;
+  line-height: 1.6;
+  text-align: left;
+}
+.jodoh-group {
+  border: 1px dashed rgba(255, 196, 113, 0.3);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.jodoh-group h4 {
+  margin: 0 0 10px 0;
+  color: #ffd8a8;
+}
+.jodoh-input { width: 90%; box-sizing: border-box; }
+#jodoh-result h5 {
+  color: #ffd8a8;
+  margin: 10px 0 5px 0;
+  font-size: 1.1em;
+}
+
+/* [BARU] Styling Fitur Doa */
+#doa-hajat-input {
+  width: 90%;
+  max-width: 300px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid #d8c471;
+  border-radius: 8px;
+  color: #f5e8b8;
+  padding: 8px 12px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1em;
+}
+#doa-result {
+  margin-top: 15px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #ffb8d0;
+  color: #ffcee0;
+  line-height: 1.6;
+  text-align: right;
+  font-size: 1.2em;
+  direction: rtl;
+}
+
+/* [BARU] Loader */
+.loader {
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-left-color: #aae0ff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  margin: 15px auto 0 auto;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+/* Petuah */
+.petuah {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 196, 113, 0.3);
+  color: #ffd8a8;
+  font-style: italic;
+}
+
+
 /* [MIND BLOWING] Tombol Live Chat WA */
 #live-chat-btn {
   position: fixed;
@@ -406,16 +634,7 @@ body:hover #stardust-cursor {
   box-shadow: 0 0 20px #fcefb5;
   animation-play-state: paused;
 }
-@keyframes pulse-gold {
-  0%, 100% {
-    box-shadow: 0 0 15px rgba(240, 230, 178, 0.4);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 25px rgba(240, 230, 178, 0.8);
-    transform: scale(1.05);
-  }
-}
+
 
 /* responsif */
 @media (max-width:600px){
@@ -435,13 +654,13 @@ body:hover #stardust-cursor {
     padding-bottom: 2vh;
   }
   #intro {
-    justify-content: center;
-    padding: 0;
+    justify-content: flex-start; /* Mulai dari atas */
+    padding: 10vh 0; /* Kasih padding atas-bawah */
   }
   
   #stardust-cursor { display: none; }
   body { cursor: auto; }
-  button, #audioBtn, #live-chat-btn { cursor: pointer; }
+  button, #audioBtn, #live-chat-btn, #wa-donasi-btn { cursor: pointer; }
   canvas { cursor: default; }
 
   #live-chat-btn {
@@ -449,6 +668,28 @@ body:hover #stardust-cursor {
     height: 45px;
     bottom: 20px;
     right: 20px;
+  }
+  
+  #donation-info {
+    max-width: 90%;
+  }
+  
+  #birth-calculator, #abjad-calculator, #jodoh-calculator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #birth-date-input, #abjad-name-input, .jodoh-input {
+    width: 90%;
+    margin: 5px 0 10px 0;
+  }
+  .feature-btn-set {
+    flex-direction: column;
+    max-width: 90%;
+  }
+  button.feature-btn, button.ai-btn {
+    width: 100%;
+    margin-bottom: 5px;
   }
 }
 </style>
@@ -474,6 +715,30 @@ body:hover #stardust-cursor {
     ✦ Jumlah Ruh yang Telah Menatap Langit Ini: <span id="visitor-count">...</span> ✦
   </div>
   
+  <!-- [BARU] Info Donasi -->
+  <div id="donation-info">
+    <h3 style="font-family:'Cinzel Decorative',serif; color:#aae0ff; margin:0 0 10px 0;">Donasi untuk Kode Rahasia</h3>
+    <p style="font-size: 0.9em; margin:0 0 10px 0; line-height: 1.5;">Untuk mendapat Kode Rahasia, silakan donasi seikhlasnya. Anda akan menerima Kode via WhatsApp setelah mengirim bukti transfer.</p>
+    
+    <div class="donation-account">
+      <p>
+        <b>Seabank:</b> 901311854079 (Endri)
+        <button class="copy-btn" onclick="copyToClipboard('901311854079')">Salin</button>
+      </p>
+    </div>
+    <div class="donation-account">
+      <p>
+        <b>Dana:</b> 085173262649 (Empi Sopiah)
+        <button class="copy-btn" onclick="copyToClipboard('085173262649')">Salin</button>
+      </p>
+    </div>
+
+    <a id="wa-donasi-btn" href="https://wa.me/6285173262649?text=Assalamu'alaikum,%20saya%20sudah%20donasi%20untuk%20Langit%20Falaqyah.%20Ini%20bukti%20transfernya." target="_blank">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>
+      Kirim Bukti via WhatsApp
+    </a>
+  </div>
+
   <div id="password-gate">
     <input type="password" id="password-input" placeholder="Masukkan Kode Rahasia...">
     <button id="unlock-btn">Buka Tabir</button>
@@ -517,7 +782,19 @@ body:hover #stardust-cursor {
 
       <div id="button-container" style="margin-top:20px;">
         
-        <!-- [PERBAIKAN] Tombol Kalkulator dipindah ke atas -->
+        <!-- [PERBAIKAN] Tombol Fitur Ajib dipindah ke Halaman Utama -->
+        <div class="feature-btn-set">
+          <button class="feature-btn">🌟 Kalkulator Energi Lahir</button>
+          <button class="feature-btn">🧭 Kalkulator Arah Hajat</button>
+        </div>
+        <div class="feature-btn-set">
+          <button class="feature-btn">🔢 Hisab Nama (Abjad)</button>
+          <button class="ai-btn">💘 Hisab Jodoh</button> <!-- Tombol Baru -->
+        </div>
+        <div class="feature-btn-set">
+          <button class="ai-btn">✨ Buat Do'a Hajat</button> <!-- Tombol AI diganti nama -->
+        </div>
+        
         <button class="calculator-button">🔮 Kalkulator Sa'at</button> 
 
         <div id="button-set-1" class="button-set">
@@ -535,17 +812,16 @@ body:hover #stardust-cursor {
           <button>✨ Asma' Falakiyah</button>
           <button>📜 Wafaq & Rajah</button>
           <button>💬 Konsultasi Batin</button>
-          <!-- Tombol kalkulator sudah pindah -->
           <button class="nav-button">❮ Halaman Utama</button>
         </div>
 
       </div>
 
       <div class="author">Diprakarsai oleh : Endry Arya</div>
+      <footer>© CBA2025</footer> <!-- Footer dipindah ke sini -->
     </div>
   </div> 
   
-  <footer>© CBA2025</footer>
 </div>
 
 <!-- ✦ Tombol Musik ✦ -->
@@ -575,6 +851,54 @@ function setDynamicViewportHeight() {
 }
 window.addEventListener('load', setDynamicViewportHeight);
 window.addEventListener('resize', setDynamicViewportHeight);
+
+// [BARU] Notifikasi Copy (Anti-Alert)
+function showCopyNotification(text) {
+  const notif = document.createElement('div');
+  notif.style = `
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fcefb5;
+    color: #0a1025;
+    padding: 10px 20px;
+    border-radius: 8px;
+    z-index: 10001;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1em;
+    box-shadow: 0 0 15px rgba(255,255,255,0.5);
+    opacity: 0;
+    transition: all 0.5s;
+    pointer-events: none;
+  `;
+  notif.textContent = text;
+  document.body.appendChild(notif);
+  
+  setTimeout(() => { notif.style.opacity = '1'; notif.style.top = '30px'; }, 10);
+  setTimeout(() => {
+    notif.style.opacity = '0';
+    notif.style.top = '20px';
+    setTimeout(() => notif.remove(), 500);
+  }, 3000);
+}
+
+// [BARU] Fungsi Copy
+function copyToClipboard(text) {
+  const el = document.createElement('textarea');
+  el.value = text;
+  el.style.position = 'absolute';
+  el.style.left = '-9999px';
+  document.body.appendChild(el);
+  el.select();
+  try {
+    document.execCommand('copy');
+    showCopyNotification('Nomor rekening disalin: ' + text);
+  } catch (err) {
+    showCopyNotification('Gagal menyalin. Salin manual.');
+  }
+  document.body.removeChild(el);
+}
 
 const music=document.getElementById("music");
 const audioBtn=document.getElementById("audioBtn");
@@ -680,7 +1004,7 @@ function initQuotes(){
 }
 
 // ==================================================
-// [ROMBAKAN TOTAL] MESIN HISAB HAQIQI v3.3
+// [ROMBAKAN TOTAL] MESIN HISAB HAQIQI v3.5
 // ==================================================
 
 const planetHari = ["Syams","Qamar","Marīkh","Utārid","Musytarī","Zuhrah","Zuhal"]; 
@@ -695,7 +1019,7 @@ const ijtimaTafsir = {
     "Syams": "Energi Wibawa (Hari) bertemu Energi Wibawa (Jam). *Sa'at al-Sultan* (Waktu Raja). Ini adalah Puncak Kewibawaan. Waktu terbaik menghadap penguasa, memohon jabatan, atau amalan kemuliaan tertinggi.",
     "Zuhrah": "Energi Wibawa (Hari) bertemu Energi Harmoni (Jam). *Sa'at al-Jamal* (Waktu Keindahan & Wibawa). Sangat baik untuk 'Pelet' (Mahabbah) tingkat tinggi, agar dicintai sekaligus disegani.",
     "Utārid": "Energi Wibawa (Hari) bertemu Energi Komunikasi (Jam). *Sa'at al-Khitabah* (Waktu Pidato). Waktu terbaik untuk pidato, presentasi, negosiasi, agar ucapan didengar dan berwibawa.",
-    "Qamar": "Energi Wibawa (Hari) bertemu Energi Perasaan (Jam). *Sa'at al-Kasyf* (Waktu Penyingkapan). Baik untuk membuka mata batin (Kasyf) atau memohon agar rahasia-rahasia kemuliaan dibukakan."
+    "Qamar": "Energi Wibawa (Hari) bertemu Energi Perasaan (Jam). *Sa'at al-Kasyf* (Waktu Penyingkapan). Baik untuk membuka mata batin (Kasyf) atau memohon agar rahsia-rahsia kemuliaan dibukakan."
   },
   "Qamar": { // Hari Perasaan
     "Zuhal": "Energi Perasaan (Hari) bertemu Energi Keras (Jam). *Sa'at al-Qabdh* (Waktu Kesempitan). Hati bisa terasa berat/was-was. Sangat baik untuk penjagaan batin, membuat pagar gaib, atau ritual *pemisah* (Tafriq).",
@@ -979,6 +1303,38 @@ const planetInfo = {
   "♄ Zuhal": {
     title: "♄ Zuhal (Saturnus)",
     desc: "Energi Struktur & Batasan. Aspek: Kesabaran, Fondasi, Disiplin, Penjagaan Gaib, tapi juga urusan keras: Halak (penghancuran), pemisah, & serangan balik. Tabiat: Dingin & Kering. Logam: Timbal."
+  }
+};
+
+// [UPGRADE AJIB] Obyek baru untuk tafsir lahir (bug "tafsir tidak ditemukan")
+const planetTafsirLahir = {
+  "Syams": { 
+    desc: "Energi Inti Ruh. Aspek: Kewibawaan, Kepemimpinan, Kemuliaan, Pusat Kekuatan Batin, Cahaya Ilahi.",
+    petuah: "Petuah Anda: Pimpinlah. Energi Anda adalah Wibawa Inti. Jangan ragu mengambil tanggung jawab, takdir Anda adalah menjadi pusat perhatian."
+  },
+  "Qamar": { 
+    desc: "Energi Perasaan & Batin. Aspek: Intuisi, Kelembutan, Imajinasi, Perubahan, Hal-hal Tersembunyi, Koneksi Ruhani.",
+    petuah: "Petuah Anda: Percaya Intuisi. Energi Anda adalah Perasaan Halus. Gunakan kepekaan batin Anda untuk melihat yang tak terlihat. Hati Anda adalah kompas."
+  },
+  "Marīkh": { 
+    desc: "Energi Kekuatan & Ketegasan. Aspek: Keberanian, Energi Fisik, Ketajaman, Memutus Perkara, Proteksi, Kekuatan Tempur.",
+    petuah: "Petuah Anda: Bertindak Tegas. Energi Anda adalah Kekuatan. Jangan ragu memutus perkara. Selesaikan apa yang Anda mulai dengan keberanian."
+  },
+  "Utārid": { 
+    desc: "Energi Akal & Komunikasi. Aspek: Kecerdasan, Ilmu, Penulisan, Perdagangan, Kefasihan Lidah, Perantara.",
+    petuah: "Petuah Anda: Berpikirlah. Energi Anda adalah Akal & Komunikasi. Gunakan kecerdasan lisan dan tulisan Anda. Ilmu adalah senjata Anda."
+  },
+  "Musytarī": { 
+    desc: "Energi Kelimpahan & Keberuntungan. Aspek: Rezeki, Ekspansi, Ilmu Hikmah, Guru Spiritual, Keberkahan, Keadilan.",
+    petuah: "Petuah Anda: Sebarkan Berkah. Energi Anda adalah Keberuntungan. Jangan takut memulai hal besar. Rezeki Anda akan datang dari membantu orang lain."
+  },
+  "Zuhrah": { 
+    desc: "Energi Harmoni & Kasih. Aspek: Cinta, Keindahan, Seni, Kesenangan, Diplomasi, Penerimaan, Kesuburan.",
+    petuah: "Petuah Anda: Ciptakan Harmoni. Energi Anda adalah Kasih Sayang. Gunakan pesona Anda untuk mendamaikan. Hindari konflik, cari keindahan."
+  },
+  "Zuhal": { 
+    desc: "Energi Struktur & Batasan. Aspek: Kesabaran, Fondasi, Disiplin, Penjagaan Gaib, tapi juga urusan keras: Halak, pemisah, & serangan balik.",
+    petuah: "Petuah Anda: Bangun Fondasi. Energi Anda adalah Keteguhan. Jangan terburu-buru. Kesabaran dan disiplin adalah kunci Anda. Anda adalah pelindung."
   }
 };
 
@@ -1281,7 +1637,7 @@ modalOverlay.addEventListener('click',e=>{if(e.target===modalOverlay)closeModal(
 const buttonSet1 = document.getElementById('button-set-1');
 const buttonSet2 = document.getElementById('button-set-2');
 
-// [ROMBAKAN TOTAL] Logika Kalkulator Sa'at (Haqiqi)
+// [ROMBAKAN TOTAL v2] Logika Kalkulator Sa'at (Haqiqi)
 function calculateSaat(planetName, hajat) {
   let jamListSiang = [];
   let jamListMalam = [];
@@ -1336,6 +1692,408 @@ const calculatorModalContent = `
   </div>
 `;
 
+// [MIND BLOWING 1] Konten Modal Kalkulator Lahir
+const birthModalContent = `
+  <p>Masukkan tanggal lahir Anda untuk melihat Planet Lahir (Penguasa Hari Lahir) Anda.</p>
+  <div id="birth-calculator">
+    <input type="date" id="birth-date-input">
+    <button id="calc-birth-btn">Hitung</button>
+  </div>
+  <div id="birth-result" style="display:none;"></div>
+`;
+
+function calculateBirthEnergy() {
+  const input = document.getElementById('birth-date-input');
+  const resultDiv = document.getElementById('birth-result');
+  if (!input.value) {
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `<p style="color: #ff8888;">Silakan masukkan tanggal lahir Anda.</p>`;
+    return;
+  }
+  
+  const birthDate = new Date(input.value + 'T12:00:00');
+  const dayIndex = birthDate.getDay(); // 0=Minggu, 1=Senin...
+  const hariLahir = ["Ahad (Minggu)", "Itsnain (Senin)", "Tsulatsa (Selasa)", "Arbi'a (Rabu)", "Khamis (Kamis)", "Jum'at", "Sabt (Sabtu)"][dayIndex];
+  const planetLahir = planetHari[dayIndex];
+  
+  // [PERBAIKAN BUG] Menggunakan obyek planetTafsirLahir yang baru
+  const tafsirData = planetTafsirLahir[planetLahir];
+  const tafsir = tafsirData ? tafsirData.desc : "Tafsir tidak ditemukan.";
+  const petuah = tafsirData ? tafsirData.petuah : "Petuah tidak ditemukan.";
+  
+  resultDiv.style.display = 'block';
+  resultDiv.innerHTML = `
+    <p><b>Hari Lahir Anda:</b> ${hariLahir}</p>
+    <p><b>Planet Lahir Anda:</b> ${planetLahir}</p>
+    <hr style="border-color: #d8c471; opacity: 0.3;">
+    <p style="font-size: 0.9em;"><b>Tafsir Energi Dasar:</b><br>${tafsir}</p>
+    <p class="petuah"><b>Petuah Penting:</b><br>${petuah}</p>
+  `;
+}
+
+// [MIND BLOWING 2] Konten Kalkulator Arah Hajat
+const arahHajatMap = {
+  "Syams": { arah: "Timur (Masyriq)", hajat: "Kewibawaan, jabatan, menghadap penguasa." },
+  "Qamar": { arah: "Utara (Syamal)", hajat: "Intuisi, rahasia, amalan batin, perjalanan air." },
+  "Marīkh": { arah: "Selatan (Janub)", hajat: "Kekuatan, keberanian, mengalahkan musuh, perang." },
+  "Utārid": { arah: "Barat Laut", hajat: "Ilmu, kecerdasan, perdagangan, surat-menyurat." },
+  "Musytarī": { arah: "Barat (Maghrib)", hajat: "Rezeki, keberuntungan, memulai usaha, keadilan." },
+  "Zuhrah": { arah: "Timur Laut", hajat: "Cinta (Mahabbah), harmoni, kesenian, perdamaian." },
+  "Zuhal": { arah: "Tenggara", hajat: "Urusan keras (Halak, Tafriq), penjagaan, urusan tanah/properti." }
+};
+
+function calculateArahHajat() {
+  const hariIni = getPenguasaHari(new Date());
+  const info = arahHajatMap[hariIni];
+  let resultText = `
+    <div id="direction-result">
+      <p>Hari ini adalah Hari <b>${hariIni}</b>.</p>
+      <p>Arah Hajat (Qiblat al-Hajat) yang mustajab hari ini adalah:</p>
+      <h2 style="font-family:'Cinzel Decorative',serif; color:#aae0ff; margin: 10px 0;">${info.arah}</h2>
+      <p style="font-size: 0.95em; color: #f0e6b2;">Arah ini sangat baik untuk berdoa, ritual, atau memulai hajat yang bersifat: <b>${info.hajat}</b></p>
+    </div>
+  `;
+  openModal("🧭 Arah Hajat Mustajab", resultText);
+}
+
+// [MIND BLOWING 3] Logika Hisab Nama (Abjad)
+// Peta Abjad Hawwaz
+const abjadHawwaz = {
+    'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 80, 'G': 3, 'H': 5, 'I': 10,
+    'J': 3, 'K': 20, 'L': 30, 'M': 40, 'N': 50, 'O': 70, 'P': 80, 'Q': 100, 'R': 200,
+    'S': 60, 'T': 9, 'U': 6, 'V': 6, 'W': 6, 'X': 60, 'Y': 10, 'Z': 7
+};
+
+// [UPGRADE AJIB] Tafsir Angka Dasar
+const tafsirAngkaDasar = {
+  1: {
+    nama: "1 (Matahari/Syams)",
+    desc: "Energi Awal, Kepemimpinan, Ego, dan Individualitas.",
+    petuah: "Petuah Anda: Anda adalah Pemimpin. Energi Anda kuat dan mandiri. Jangan hanya mengikuti, tapi ciptakan jalan Anda sendiri. Hati-hati dengan ego yang terlalu tinggi."
+  },
+  2: {
+    nama: "2 (Bulan/Qamar)",
+    desc: "Energi Keseimbangan, Intuisi, Diplomasi, dan Perasaan.",
+    petuah: "Petuah Anda: Anda adalah Diplomat. Energi Anda sensitif dan penuh intuisi. Gunakan kelembutan Anda untuk mendamaikan, jangan terhanyut dalam dualitas keraguan."
+  },
+  3: {
+    nama: "3 (Jupiter/Musytarī)",
+    desc: "Energi Ekspansi, Kreativitas, Komunikasi, dan Keberuntungan.",
+    petuah: "Petuah Anda: Anda adalah Kreator. Energi Anda ekspansif dan sosial. Gunakan kreativitas dan kemampuan komunikasi Anda untuk menyebarkan kebahagiaan dan menarik rezeki."
+  },
+  4: {
+    nama: "4 (Saturnus/Zuhal)",
+    desc: "Energi Struktur, Fondasi, Kerja Keras, dan Batasan.",
+    petuah: "Petuah Anda: Anda adalah Pembangun. Energi Anda stabil dan terstruktur. Kesabaran dan disiplin adalah kunci Anda. Bangun fondasi yang kuat, jangan takut kerja keras."
+  },
+  5: {
+    nama: "5 (Merkurius/Utārid)",
+    desc: "Energi Perubahan, Kebebasan, Kecerdasan, dan Petualangan.",
+    petuah: "Petuah Anda: Anda adalah Petualang. Energi Anda dinamis dan cerdas. Anda butuh kebebasan dan perubahan. Gunakan kecerdasan Anda untuk beradaptasi."
+  },
+  6: {
+    nama: "6 (Venus/Zuhrah)",
+    desc: "Energi Harmoni, Cinta, Keluarga, dan Tanggung Jawab.",
+    petuah: "Petuah Anda: Anda adalah Perawat. Energi Anda penuh cinta dan harmoni. Fokus Anda adalah keluarga dan komunitas. Ciptakan keindahan dan kedamaian."
+  },
+  7: {
+    nama: "7 (Bulan/Qamar)",
+    desc: "Energi Spiritual, Analisis, Misteri, dan Pengetahuan Batin.",
+    petuah: "Petuah Anda: Anda adalah Pertapa. Energi Anda spiritual dan analitis. Anda butuh waktu menyendiri untuk merenung. Cari kebenaran dan pengetahuan batin."
+  },
+  8: {
+    nama: "8 (Mars/Marīkh)",
+    desc: "Energi Kekuatan, Kekuasaan, Materi, dan Karma.",
+    petuah: "Petuah Anda: Anda adalah Eksekutor. Energi Anda kuat dan material. Anda punya kekuatan untuk sukses besar di dunia materi, tapi hati-hati dengan karma. Gunakan kekuatan dengan bijak."
+  },
+  9: {
+    nama: "9 (Mars/Marīkh)",
+    desc: "Energi Penyelesaian, Kemanusiaan, dan Transformasi.",
+    petuah: "Petuah Anda: Anda adalah Humanis. Energi Anda universal. Anda di sini untuk menyelesaikan siklus dan membantu banyak orang. Lepaskan masa lalu, fokus pada gambaran besar."
+  }
+};
+
+function getAngkaDasar(n) {
+  let sum = n;
+  while (sum > 9) {
+    sum = sum.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
+  }
+  return sum;
+}
+
+function calculateAbjad() {
+  const input = document.getElementById('abjad-name-input');
+  const resultDiv = document.getElementById('abjad-result');
+  const name = input.value.toUpperCase().replace(/[^A-Z]/g, ''); 
+  
+  if (!name) {
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `<p style="color: #ff8888;">Silakan masukkan nama.</p>`;
+    return;
+  }
+  
+  let total = 0;
+  for (let char of name) {
+    total += abjadHawwaz[char] || 0;
+  }
+  
+  const angkaDasar = getAngkaDasar(total);
+  const tafsir = tafsirAngkaDasar[angkaDasar];
+  
+  resultDiv.style.display = 'block';
+  resultDiv.innerHTML = `
+    <p><b>Nama Dianalisis:</b> ${name}</p>
+    <p><b>Nilai Hisab (Abjad):</b> ${total}</p>
+    <p><b>Angka Dasar (Nasib):</b> ${angkaDasar} (${tafsir.nama})</p>
+    <hr style="border-color: #d8c471; opacity: 0.3;">
+    <p style="font-size: 0.9em;"><b>Tafsir Angka Dasar:</b><br>${tafsir.desc}</p>
+    <p class="petuah"><b>Petuah Penting:</b><br>${tafsir.petuah}</p>
+  `;
+}
+
+const abjadModalContent = `
+  <p>Masukkan nama (Arab/Latin) untuk dihitung nilai Abjad (Hisab al-Jumal) nya.</p>
+  <div id="abjad-calculator">
+    <input type="text" id="abjad-name-input" placeholder="Masukkan Nama...">
+    <button id="calc-abjad-btn">Hitung</button>
+  </div>
+  <div id="abjad-result" style="display:none;"></div>
+`;
+
+// [BARU] Logika Hisab Jodoh
+const jodohModalContent = `
+  <p>Masukkan data Anda dan pasangan untuk melihat tafsir kecocokan (Watak & Nasib).</p>
+  <div id="jodoh-calculator">
+    <div class="jodoh-group">
+      <h4>Pihak 1 (Anda)</h4>
+      <input type="text" id="jodoh-nama-1" class="jodoh-input" placeholder="Nama Lengkap Anda...">
+      <input type="date" id="jodoh-tgl-1" class="jodoh-input">
+    </div>
+    <div class="jodoh-group">
+      <h4>Pihak 2 (Pasangan)</h4>
+      <input type="text" id="jodoh-nama-2" class="jodoh-input" placeholder="Nama Lengkap Pasangan...">
+      <input type="date" id="jodoh-tgl-2" class="jodoh-input">
+    </div>
+    <button id="calc-jodoh-btn">Hitung Kecocokan</button>
+  </div>
+  <div id="jodoh-result" style="display:none;"></div>
+`;
+
+function getPlanetLahir(tgl) {
+  const birthDate = new Date(tgl + 'T12:00:00');
+  const dayIndex = birthDate.getDay();
+  return planetHari[dayIndex];
+}
+function getAngkaLahir(nama) {
+  const name = nama.toUpperCase().replace(/[^A-Z]/g, '');
+  let total = 0;
+  for (let char of name) {
+    total += abjadHawwaz[char] || 0;
+  }
+  return getAngkaDasar(total);
+}
+function getTafsirWatak(planet1, planet2) {
+  return ijtimaTafsir[planet1][planet2];
+}
+function getTafsirNasib(angka1, angka2) {
+  // Ini tafsir dasar, tafsir AI akan lebih dalam
+  const total = getAngkaDasar(angka1 + angka2);
+  return `Angka ${angka1} bertemu Angka ${angka2}. Menghasilkan Angka Gabungan <b>${total} (${tafsirAngkaDasar[total].nama})</b>. ${tafsirAngkaDasar[total].petuah}`;
+}
+
+function calculateJodoh() {
+  const nama1 = document.getElementById('jodoh-nama-1').value;
+  const tgl1 = document.getElementById('jodoh-tgl-1').value;
+  const nama2 = document.getElementById('jodoh-nama-2').value;
+  const tgl2 = document.getElementById('jodoh-tgl-2').value;
+  const resultDiv = document.getElementById('jodoh-result');
+  
+  if (!nama1 || !tgl1 || !nama2 || !tgl2) {
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `<p style="color: #ff8888;">Silakan isi semua 4 data.</p>`;
+    return;
+  }
+
+  const planet1 = getPlanetLahir(tgl1);
+  const angka1 = getAngkaLahir(nama1);
+  const planet2 = getPlanetLahir(tgl2);
+  const angka2 = getAngkaLahir(nama2);
+  
+  const tafsirWatak = getTafsirWatak(planet1, planet2);
+  const tafsirNasib = getTafsirNasib(angka1, angka2);
+
+  resultDiv.style.display = 'block';
+  resultDiv.innerHTML = `
+    <p><b>Pihak 1:</b> ${planet1} (Watak) & Angka ${angka1} (Nasib)</p>
+    <p><b>Pihak 2:</b> ${planet2} (Watak) & Angka ${angka2} (Nasib)</p>
+    <hr style="border-color: #d8c471; opacity: 0.3;">
+    <h5>1. Tafsir Watak (Planet vs Planet)</h5>
+    <p style="font-size: 0.9em;">${tafsirWatak}</p>
+    <h5>2. Tafsir Nasib (Angka vs Angka)</h5>
+    <p style="font-size: 0.9em;">${tafsirNasib}</p>
+    <hr style="border-color: #d8c471; opacity: 0.3;">
+    <p class="petuah"><b>Petuah Final (Dasar):</b><br>Tafsir di atas adalah gambaran dasar. Untuk tafsir lebih mendalam yang memperhitungkan nama lengkap dan energi Ijtima' Anda, silakan klik di bawah.</p>
+    
+    <button id="ai-jodoh-btn" class="ai-btn" style="width: 100%; margin: 10px 0;">✨ Minta Tafsir Mendalam</button>
+    <div id="ai-jodoh-result"></div>
+  `;
+  
+  document.getElementById('ai-jodoh-btn').onclick = () => {
+    callGeminiJodoh(nama1, planet1, angka1, nama2, planet2, angka2);
+  };
+}
+
+// [BARU] Logika Doa Hajat
+const doaModalContent = `
+  <p>Tuliskan hajat Anda (singkat & jelas). Mesin falak akan membantu merangkai do'a yang selaras dengan energi waktu saat ini.</p>
+  <div id="doa-calculator">
+    <input type="text" id="doa-hajat-input" placeholder="Contoh: Minta kelancaran rezeki...">
+    <button id="calc-doa-btn">Buat Do'a</button>
+  </div>
+  <div id="doa-result" style="display:none;"></div>
+`;
+
+function calculateDoa() {
+  const input = document.getElementById('doa-hajat-input').value;
+  const resultDiv = document.getElementById('doa-result');
+  const hariIni = getPenguasaHari(new Date());
+  const jamIni = getPlanetJam(new Date(), hariIni);
+  
+  if (!input) {
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `<p style="color: #ff8888; direction: ltr; text-align: left;">Silakan tulis hajat Anda.</p>`;
+    return;
+  }
+  
+  resultDiv.style.display = 'block';
+  resultDiv.innerHTML = `<div class="loader"></div>`; // Tampilkan loader
+  
+  const prompt = `
+    Anda adalah seorang ahli Ilmu Hikmah dan Falaqiyah. 
+    Hari ini adalah Hari ${hariIni} (energi ${ijtimaTafsir[hariIni][jamIni].split('.')[0]}).
+    Jam ini adalah Jam ${jamIni} (energi ${ijtimaTafsir[hariIni][jamIni].split('.')[1]}).
+    
+    Tugas Anda: Buatkan satu do'a dalam bahasa Arab yang fasih (lengkap dengan harakat) untuk hajat berikut: "${input}". 
+    
+    PENTING:
+    1. Do'a HARUS menggabungkan Asma'/Sifat Allah yang selaras dengan energi Hari ${hariIni} dan Jam ${jamIni}.
+    2. Awali do'a dengan Basmallah dan Sholawat.
+    3. Buat do'a-nya indah, puitis, dan khusyuk.
+    4. JANGAN TAMBAHKAN TULISAN LATIN ATAU PENJELASAN APAPUN.
+    5. Berikan HANYA teks Arab-nya saja.
+  `;
+  
+  callGemini(prompt, resultDiv);
+}
+
+// ==================================================
+// [PERBAIKAN BUG] MESIN GEMINI API (Anti Gagal)
+// ==================================================
+
+const API_KEY = ""; // KOSONGKAN SAJA
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
+
+// [PERBAIKAN] Fungsi Fetch dengan Exponential Backoff
+async function fetchWithBackoff(apiUrl, payload, retries = 3, delay = 1000) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (response.ok) {
+        return await response.json();
+      }
+      // Jangan retry untuk bad request (4xx)
+      if (response.status >= 400 && response.status < 500) {
+        throw new Error(`Client Error: ${response.status}`);
+      }
+      // Retry untuk server errors (5xx) or throttling (429)
+    } catch (error) {
+      if (i === retries - 1) throw error; // Gagal terakhir, lempar error
+    }
+    // Tunggu sebelum retry
+    await new Promise(res => setTimeout(res, delay * Math.pow(2, i)));
+  }
+}
+
+// [PERBAIKAN] Fungsi panggil Gemini untuk Do'a
+async function callGemini(prompt, resultElement) {
+  const payload = {
+    contents: [{ parts: [{ text: prompt }] }],
+    safetySettings: [
+        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
+    ]
+  };
+  
+  try {
+    const result = await fetchWithBackoff(API_URL, payload);
+    const text = result.candidates[0].content.parts[0].text;
+    resultElement.innerHTML = text.replace(/\n/g, '<br>'); // Tampilkan doa
+  } catch (error) {
+    console.error("Gemini API Gagal:", error);
+    resultElement.innerHTML = `<p style="color: #ff8888; direction: ltr; text-align: center;">Gagal memuat do'a. Coba lagi nanti.</p>`;
+  }
+}
+
+// [PERBAIKAN] Fungsi panggil Gemini untuk Jodoh (JSON)
+async function callGeminiJodoh(nama1, planet1, angka1, nama2, planet2, angka2) {
+  const resultElement = document.getElementById('ai-jodoh-result');
+  resultElement.innerHTML = `<div class="loader"></div>`;
+  
+  const systemPrompt = `Anda adalah ahli Hisab Jodoh Falaqiyah. Analisis 2 pasangan berikut. Berikan 1 paragraf tafsir watak (planet vs planet), 1 paragraf tafsir nasib (angka vs angka), dan 1 paragraf petuah final. Gunakan bahasa Indonesia yang puitis dan mistis.`;
+  const userQuery = `Pihak 1: ${nama1} (Planet ${planet1}, Angka ${angka1}). Pihak 2: ${nama2} (Planet ${planet2}, Angka ${angka2}).`;
+
+  const payload = {
+    contents: [{ parts: [{ text: userQuery }] }],
+    systemInstruction: { parts: [{ text: systemPrompt }] },
+    generationConfig: {
+      responseMimeType: "application/json",
+      responseSchema: {
+        type: "OBJECT",
+        properties: {
+          "tafsir_watak": { "type": "STRING" },
+          "tafsir_nasib": { "type": "STRING" },
+          "petuah_final": { "type": "STRING" }
+        },
+        required: ["tafsir_watak", "tafsir_nasib", "petuah_final"]
+      }
+    },
+    safetySettings: [
+        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
+    ]
+  };
+
+  try {
+    const result = await fetchWithBackoff(API_URL, payload);
+    const jsonText = result.candidates[0].content.parts[0].text;
+    const tafsir = JSON.parse(jsonText);
+    
+    resultElement.innerHTML = `
+      <hr style="border-color: #ffb8d0; opacity: 0.3;">
+      <h5 style="color: #ffcee0;">Tafsir Mendalam</h5>
+      <p style="font-size: 0.9em;"><b>Watak (Planet):</b> ${tafsir.tafsir_watak}</p>
+      <p style="font-size: 0.9em;"><b>Nasib (Angka):</b> ${tafsir.tafsir_nasib}</p>
+      <p class="petuah" style="color: #ffcee0; border-top-color: #ffb8d0;"><b>Petuah Final:</b><br>${tafsir.petuah_final}</p>
+    `;
+    document.getElementById('ai-jodoh-btn').style.display = 'none'; // Sembunyikan tombol setelah berhasil
+  } catch (error) {
+    console.error("Gemini Jodoh API Gagal:", error);
+    resultElement.innerHTML = `<p style="color: #ff8888; text-align: center;">Gagal memuat tafsir mendalam. Coba lagi nanti.</p>`;
+  }
+}
+// ==================================================
+// AKHIR DARI MESIN GEMINI API
+// ==================================================
+
+
 document.querySelectorAll('button').forEach(btn=>{
   btn.addEventListener('click',()=>{
     if(btn.id === 'audioBtn' || btn.id === 'unlock-btn' || btn.id === 'modalCloseBtn') return;
@@ -1349,7 +2107,8 @@ document.querySelectorAll('button').forEach(btn=>{
       case 'Amalan Lanjutan ❯':
         buttonSet1.classList.remove('button-set');
         buttonSet1.classList.add('button-set-inactive');
-        document.querySelector('.calculator-button').style.display = 'none'; // Sembunyikan kalkulator
+        document.querySelector('.calculator-button').style.display = 'none'; 
+        document.querySelectorAll('.feature-btn-set').forEach(el => el.style.display = 'none'); // Sembunyikan fitur
         buttonSet2.classList.remove('button-set-inactive');
         buttonSet2.classList.add('button-set');
         return;
@@ -1358,7 +2117,8 @@ document.querySelectorAll('button').forEach(btn=>{
         buttonSet2.classList.add('button-set-inactive');
         buttonSet1.classList.remove('button-set-inactive');
         buttonSet1.classList.add('button-set');
-        document.querySelector('.calculator-button').style.display = 'block'; // Tampilkan lagi kalkulator
+        document.querySelector('.calculator-button').style.display = 'block'; 
+        document.querySelectorAll('.feature-btn-set').forEach(el => el.style.display = 'flex'); // Tampilkan fitur
         return;
       case '🔮 Kalkulator Sa\'at':
         openModal("🔮 Kalkulator Sa'at", calculatorModalContent);
@@ -1368,6 +2128,30 @@ document.querySelectorAll('button').forEach(btn=>{
           };
         });
         return; 
+      // [MIND BLOWING 1] Event Kalkulator Lahir
+      case '🌟 Kalkulator Energi Lahir':
+        openModal('🌟 Kalkulator Energi Lahir', birthModalContent);
+        document.getElementById('calc-birth-btn').onclick = calculateBirthEnergy;
+        return;
+      // [MIND BLOWING 2] Event Arah Hajat
+      case '🧭 Kalkulator Arah Hajat':
+        calculateArahHajat();
+        return;
+      // [MIND BLOWING 3] Event Hisab Nama
+      case '🔢 Hisab Nama (Abjad)':
+        openModal('🔢 Hisab Nama (Abjad)', abjadModalContent);
+        document.getElementById('calc-abjad-btn').onclick = calculateAbjad;
+        return;
+      // [MIND BLOWING 4] Event Hisab Jodoh
+      case '💘 Hisab Jodoh':
+        openModal('💘 Hisab Jodoh', jodohModalContent);
+        document.getElementById('calc-jodoh-btn').onclick = calculateJodoh;
+        return;
+      // [MIND BLOWING 5] Event Do'a Hajat
+      case '✨ Buat Do\'a Hajat':
+        openModal('✨ Buat Do\'a Hajat Khusus', doaModalContent);
+        document.getElementById('calc-doa-btn').onclick = calculateDoa;
+        return;
     }
 
     const waIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#25D366" viewBox="0 0 16 16" style="vertical-align: -0.125em; margin-right: 5px;"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>`;
@@ -1398,8 +2182,7 @@ document.querySelectorAll('button').forEach(btn=>{
       case '🕊 Do’a & Niat':
         openModal('🕊 Do‘a & Niat',`
         <p><b>Do‘a Tahsin CBA</b></p>
-        <!-- [PERBAIKAN] Typo Arab final -->
-        <p style="font-size: 1.2em; line-height: 1.8; direction: rtl; text-align: right;">اللّٰهُمَّ اجْعَلْنِي مِنَ الَّذِينَ نَظَرْتَ إِلَيْهِمْ بِنَظَرَةِ الرَّحْمَةِ، وَفَتَحْتَ لَهُمْ أَبْوَابَ الْحِكْمَةِ، وَصَرَفْتَ عَنْهُمُ الْفِتْنَةَ.</p>
+        <p style="font-size: 1.2em; line-height: 1.8; direction: rtl; text-align: right;">اللّٰهُمَّ اجْعَلْنِي مِنَ الَّذِينَ نَظَرْتَ إِلَيْهِمْ بِنَظَرَةِ الرَّحْمَةِ، وَفَتَحْتَ لَهُمْ أَبْوَابَ الْحِكْمَةِ، وَصَرَفْتَ عَنْهُمُ الْفِTْنَةَ.</p>
         <p><i>“Ya Allah, jadikan aku termasuk hamba yang Engkau pandang dengan rahmat-Mu, Engkau bukakan baginya pintu hikmah, dan Engkau jauhkan dari fitnah.”</i></p>
         ${contactBlock}
         `);break;
@@ -1442,15 +2225,12 @@ document.querySelectorAll('button').forEach(btn=>{
   });
 });
 
-window.addEventListener('load',async()=>{
-  // Mulai inisialisasi falak (termasuk geolocation)
-  await initFalak(); 
-
-  // Pelacak Ruh (setelah falak siap)
+// [PERBAIKAN] Counter dipisah agar tidak memblokir initFalak
+async function loadVisitorCount() {
   try{
     const el=document.getElementById("visitor-count");
     if (!el) return;
-    const r=await fetch("https://api.countapi.xyz/hit/langitfalaqyahcba/v3-ruh"); 
+    const r=await fetch("https://api.countapi.xyz/hit/langitfalaqyahcba/v4-ruh"); // Endpoint baru
     const data=await r.json();
     const total=data.value;
     el.textContent=total.toLocaleString("id-ID");
@@ -1463,6 +2243,12 @@ window.addEventListener('load',async()=>{
     const el=document.getElementById("visitor-count");
     if(el) el.textContent = '✦'; 
   }
+}
+
+window.addEventListener('load',async()=>{
+  // Jalankan keduanya secara paralel
+  initFalak(); 
+  loadVisitorCount();
 });
 
 const stardustCursorEl = document.getElementById('stardust-cursor');
