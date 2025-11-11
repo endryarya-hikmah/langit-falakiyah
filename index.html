@@ -2156,7 +2156,7 @@ async function callGeminiJodoh(nama1, planet1, angka1, nama2, planet2, angka2) {
   const resultElement = document.getElementById('ai-jodoh-result');
   resultElement.innerHTML = `<div class="loader"></div>`;
   
-  const systemPrompt = `Anda adalah ahli Hisab Jodoh Falaqiyah. Analisis 2 pasangan berikut. Berikan 1 paragraf tafsir watak (planet vs planet), 1 paragraf tafsir nasib (angka vs angka), dan 1 paragraf petuah final. Gunakan bahasa Indonesia yang puitis dan mistis.`;
+  const systemPrompt = `Anda adalah ahli Hisab Jodoh Falaqiyah. Analisis 2 pasangan berikut. Berikan 1 paragraf tafsir watak (planet vs planet), 1 paragraf tafsir nasib (angka vs angka), dan 1 paragraf petuah final. Gunakan bahasa Indonesia  mistis tapi tidak puitis, tidak lebay dan tidak berlebihan, menjawab kecocokan pasangan, memberikan solusi terbaik.`;
   const userQuery = `Pihak 1: ${nama1} (Planet ${planet1}, Angka ${angka1}). Pihak 2: ${nama2} (Planet ${planet2}, Angka ${angka2}).`;
 
   const payload = {
