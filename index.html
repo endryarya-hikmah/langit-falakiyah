@@ -180,6 +180,66 @@ button.ai-btn:hover {
   transform: scale(1.05);
 }
 
+/* [BARU] Styling Fitur Q&A Baru (Warna Cosmic Ungu/Indigo) */
+.ai-qa-group {
+  width: 90%;
+  max-width: 320px;
+  margin-bottom: 20px; /* Jarak ke tombol di bawahnya */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #7a42f5;
+  border-radius: 12px;
+  padding: 10px;
+  background: linear-gradient(145deg, rgba(122, 66, 245, 0.1), rgba(122, 66, 245, 0.05));
+  box-shadow: 0 0 20px rgba(122, 66, 245, 0.4);
+}
+.ai-question-input {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1em;
+  text-align: center;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid #c8aaff;
+  border-radius: 8px;
+  color: #f5e8b8;
+  padding: 8px 12px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  backdrop-filter: blur(3px);
+}
+.ai-question-input::placeholder {
+  color: #c8aaff;
+  opacity: 0.8;
+  font-style: italic;
+}
+button.super-ai-btn {
+  border-color: #c8aaff;
+  color: #e0ceff;
+  text-shadow: 0 0 10px #c8aaff;
+  width: 100%;
+  font-weight: 700;
+  background: linear-gradient(145deg, rgba(200, 170, 255, 0.2), rgba(200, 170, 255, 0.1));
+  box-shadow: 0 0 15px rgba(200, 170, 255, 0.5);
+  animation: pulse-purple 2.8s infinite ease-in-out;
+  margin: 0;
+}
+button.super-ai-btn:hover {
+  transform: scale(1.02);
+}
+.ai-result-box {
+  margin-top: 15px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #7a42f5;
+  color: #e0ceff;
+  line-height: 1.6;
+  text-align: left;
+  font-size: 0.95em;
+  width: 100%;
+  box-sizing: border-box;
+}
 
 @keyframes pulse-blue {
   0%, 100% {
@@ -209,6 +269,16 @@ button.ai-btn:hover {
   50% {
     box-shadow: 0 0 25px rgba(255, 184, 208, 0.6);
     transform: scale(1.02);
+  }
+}
+@keyframes pulse-purple {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(200, 170, 255, 0.5);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(200, 170, 255, 0.8);
+    transform: scale(1.01);
   }
 }
 
@@ -691,12 +761,20 @@ body:hover #stardust-cursor {
     width: 100%;
     margin-bottom: 5px;
   }
+  
+  /* Responsive untuk QA Group */
+  .ai-qa-group {
+    max-width: 90%;
+    padding: 8px;
+  }
+  .ai-question-input, button.super-ai-btn, .ai-result-box {
+    width: 100%;
+  }
 }
 </style>
 </head>
 <body>
-  <!-- ✦ Pembuka Awal (7 detik) ✦ -->
-<div id="opening-screen">
+  <div id="opening-screen">
   <h1>✦ SEDANG MEMBUKA LANGIT DAN WAKTU ✦</h1>
   <p>TUNGGULAH SEJENAK HINGGA TABIR FALAK TERBUKA...</p>
   <div id="loading-container">
@@ -706,7 +784,6 @@ body:hover #stardust-cursor {
 
 <canvas id="universe"></canvas>
 
-<!-- ✦ Halaman Basmallah ✦ -->
 <div id="intro" style="opacity:0;pointer-events:none;">
   <h1>بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</h1>
   <p class="quote">"Langit dan waktu adalah cermin ketetapan, tempat ruh menapaki garis takdir."</p>
@@ -715,7 +792,6 @@ body:hover #stardust-cursor {
     ✦ Jumlah Ruh yang Telah Menatap Langit Ini: <span id="visitor-count">...</span> ✦
   </div>
   
-  <!-- [BARU] Info Donasi -->
   <div id="donation-info">
     <h3 style="font-family:'Cinzel Decorative',serif; color:#aae0ff; margin:0 0 10px 0;">Donasi untuk Kode Rahasia</h3>
     <p style="font-size: 0.9em; margin:0 0 10px 0; line-height: 1.5;">Untuk mendapat Kode Rahasia, silakan donasi seikhlasnya. Anda akan menerima Kode via WhatsApp setelah mengirim bukti transfer.</p>
@@ -746,11 +822,9 @@ body:hover #stardust-cursor {
   </div>
 </div>
 
-<!-- ✦ Halaman Utama ✦ -->
 <div id="main" style="opacity:0;pointer-events:none;">
   
   <div id="ui-container">
-    <!-- Grup konten atas -->
     <div id="top-group">
       <h1 style="margin-top:0;">Perhitungan Falaqiyah <span style="white-space: nowrap;">Al-Hikmah</span></h1> 
       <h2>سر الوقت — Rahasia Waktu</h2>
@@ -763,7 +837,6 @@ body:hover #stardust-cursor {
       </div>
     </div>
 
-    <!-- Grup konten bawah -->
     <div id="bottom-group">
       <div id="timeInfo">
         <span id="hijriah">...</span><br> 
@@ -782,18 +855,20 @@ body:hover #stardust-cursor {
 
       <div id="button-container" style="margin-top:20px;">
         
-        <!-- [PERBAIKAN] Tombol Fitur Ajib dipindah ke Halaman Utama -->
+        <div id="new-ai-container" class="ai-qa-group"> 
+            <input type="text" id="falak-question-input" placeholder="Tanyakan apa saja tentang Waktu & Falakiyah..." class="ai-question-input">
+            <button id="ask-falak-btn" class="super-ai-btn">Tanya Langit ✦</button>
+            <div id="falak-result" class="ai-result-box" style="display:none;"></div>
+        </div>
         <div class="feature-btn-set">
           <button class="feature-btn">🌟 Kalkulator Energi Lahir</button>
           <button class="feature-btn">🧭 Kalkulator Arah Hajat</button>
         </div>
         <div class="feature-btn-set">
           <button class="feature-btn">🔢 Hisab Nama (Abjad)</button>
-          <button class="ai-btn">💘 Hisab Jodoh</button> <!-- Tombol Baru -->
-        </div>
+          <button class="ai-btn">💘 Hisab Jodoh</button> </div>
         <div class="feature-btn-set">
-          <button class="ai-btn">✨ Buat Do'a Hajat</button> <!-- Tombol AI diganti nama -->
-        </div>
+          <button class="ai-btn">✨ Buat Do'a Hajat</button> </div>
         
         <button class="calculator-button">🔮 Kalkulator Sa'at</button> 
 
@@ -818,16 +893,13 @@ body:hover #stardust-cursor {
       </div>
 
       <div class="author">Diprakarsai oleh : Endry Arya</div>
-      <footer>© CBA2025</footer> <!-- Footer dipindah ke sini -->
-    </div>
+      <footer>© CBA2025</footer> </div>
   </div> 
   
 </div>
 
-<!-- ✦ Tombol Musik ✦ -->
 <div id="audioBtn">🔊</div>
 
-<!-- [MIND BLOWING] Tombol Live Chat WA -->
 <a id="live-chat-btn" href="https://wa.me/6285173262649" target="_blank" title="Live Chat via WhatsApp">
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #fcefb5;">
     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
@@ -836,7 +908,6 @@ body:hover #stardust-cursor {
 
 <div id="stardust-cursor"></div>
 
-<!-- ✦ Audio Player ✦ -->
 <audio id="music" loop>
   <source src="music.mp3" type="audio/mpeg">
 </audio>
@@ -1060,7 +1131,7 @@ const ijtimaTafsir = {
   "Zuhrah": { // Hari Harmoni
     "Zuhal": "Energi Harmoni (Hari) bertemu Energi Keras (Jam). *Sa'at al-'Ahd* (Waktu Ikatan). Baik untuk amalan 'mengikat' pasangan (Zuhrah) secara 'keras' (Zuhal), atau membuat hubungan awet/tertutup.",
     "Musytarī": "Energi Harmoni (Hari) bertemu Energi Rezeki (Jam). *Sa'at al-Farah* (Waktu Kebahagiaan). Waktu terbaik untuk pernikahan, pesta, atau memulai bisnis yang berhubungan dengan keindahan/kesenangan.",
-    "Marīkh": "Energi Harmoni (Hari) bertemu Energi Kuat (Jam). *Sa'at al-Syahwah* (Waktu Syahwat). Energi Cinta (Zuhrah) bertemu Api (Marikh). Puncak energi 'Pelet' (Mahabbah) yang bersifat memaksa.",
+    "Marīkh": "Energi Harmoni (Hari) bertemu Energi Kuat (Jam). *Sa'at al-Syahwah* (Waktu Syahwat). Energi Api (Marikh) bertemu Cinta (Zuhrah). Sangat kuat untuk ritual 'Pelet' (Mahabbah) yang bersifat pemaksaan.",
     "Syams": "Energi Harmoni (Hari) bertemu Energi Wibawa (Jam). *Sa'at al-Zinah* (Waktu Perhiasan). Baik untuk amalan 'susuk', membuka aura (Zuhrah) agar terlihat agung (Syams) dan disukai pembesar.",
     "Zuhrah": "Energi Harmoni (Hari) bertemu Energi Harmoni (Jam). *Sa'at al-'Isyq* (Waktu Asmara). Puncak Energi Cinta. Waktu terbaik untuk amalan Mahabbah (pengasihan), perdamaian, atau bersolek.",
     "Utārid": "Energi Harmoni (Hari) bertemu Energi Akal (Jam). *Sa'at al-Lathifah* (Waktu Kelembutan). Baik untuk diplomasi, merayu (lisan/tulisan), atau menenangkan orang yang sedang marah.",
@@ -1957,7 +2028,7 @@ function calculateDoa() {
   const input = document.getElementById('doa-hajat-input').value;
   const resultDiv = document.getElementById('doa-result');
   const hariIni = getPenguasaHari(new Date());
-  const jamIni = getPlanetJam(new Date(), hariIni);
+  const planetJamIni = getPlanetJam(new Date(), hariIni); // Dapatkan Planet Jam
   
   if (!input) {
     resultDiv.style.display = 'block';
@@ -1970,13 +2041,13 @@ function calculateDoa() {
   
   const prompt = `
     Anda adalah seorang ahli Ilmu Hikmah dan Falaqiyah. 
-    Hari ini adalah Hari ${hariIni} (energi ${ijtimaTafsir[hariIni][jamIni].split('.')[0]}).
-    Jam ini adalah Jam ${jamIni} (energi ${ijtimaTafsir[hariIni][jamIni].split('.')[1]}).
+    Hari ini adalah Hari ${hariIni}.
+    Jam ini adalah Jam ${planetJamIni}.
     
     Tugas Anda: Buatkan satu do'a dalam bahasa Arab yang fasih (lengkap dengan harakat) untuk hajat berikut: "${input}". 
     
     PENTING:
-    1. Do'a HARUS menggabungkan Asma'/Sifat Allah yang selaras dengan energi Hari ${hariIni} dan Jam ${jamIni}.
+    1. Do'a HARUS menggabungkan Asma'/Sifat Allah yang selaras dengan energi Hari ${hariIni} dan Jam ${planetJamIni}.
     2. Awali do'a dengan Basmallah dan Sholawat.
     3. Buat do'a-nya indah, puitis, dan khusyuk.
     4. JANGAN TAMBAHKAN TULISAN LATIN ATAU PENJELASAN APAPUN.
@@ -1985,6 +2056,46 @@ function calculateDoa() {
   
   callGemini(prompt, resultDiv);
 }
+
+// [BARU] Logika Pertanyaan Falak (Q&A)
+function calculateFalakQA() {
+    const inputElement = document.getElementById('falak-question-input');
+    const question = inputElement.value;
+    const resultElement = document.getElementById('falak-result');
+    
+    if (!question) {
+        resultElement.style.display = 'block';
+        resultElement.innerHTML = `<p style="color: #ff8888; text-align: center;">Mohon tulis pertanyaan Anda, Guru.</p>`;
+        return;
+    }
+    
+    // Tampilkan loader dan bersihkan hasil sebelumnya
+    resultElement.style.display = 'block';
+    resultElement.innerHTML = `<div class="loader"></div>`;
+    
+    const hariIni = getPenguasaHari(new Date());
+    const planetJamIni = getPlanetJam(new Date(), hariIni);
+    const tafsirSaatIni = getTafsirIjtima(hariIni, planetJamIni);
+    
+    const prompt = `
+        Anda adalah asisten AI yang bertindak sebagai Guru Besar Ilmu Falaqiyah dan Hikmah.
+        
+        Konteks Waktu Saat Ini:
+        - Hari Penguasa: ${hariIni}
+        - Planet Jam Aktif: ${planetJamIni}
+        - Tafsir Energi Saat Ini: ${tafsirSaatIni}
+        
+        Tugas: Jawab pertanyaan berikut dengan bahasa Indonesia yang santun, puitis, dan kental dengan nuansa Hikmah/Falaqiyah.
+        1. Jawab pertanyaan berdasarkan ilmu Falakiyah (astronomi/numerologi) atau tafsir energi (seperti ijtima' planet).
+        2. Masukkan referensi ke Hari Penguasa dan Planet Jam saat ini dalam jawaban Anda.
+        3. JANGAN berikan jawaban yang bersifat prediksi masa depan (ramalan) atau diagnosis medis.
+        
+        Pertanyaan Murid: "${question}"
+    `;
+    
+    callGeminiFalak(prompt, resultElement);
+}
+
 
 // ==================================================
 // [PERBAIKAN BUG] MESIN GEMINI API (Anti Gagal)
@@ -2089,6 +2200,29 @@ async function callGeminiJodoh(nama1, planet1, angka1, nama2, planet2, angka2) {
     resultElement.innerHTML = `<p style="color: #ff8888; text-align: center;">Gagal memuat tafsir mendalam. Coba lagi nanti.</p>`;
   }
 }
+
+// [BARU] Fungsi panggil Gemini untuk Q&A Falak
+async function callGeminiFalak(prompt, resultElement) {
+  const payload = {
+    contents: [{ parts: [{ text: prompt }] }],
+    safetySettings: [
+        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
+    ]
+  };
+  
+  try {
+    const result = await fetchWithBackoff(API_URL, payload);
+    const text = result.candidates[0].content.parts[0].text;
+    resultElement.innerHTML = `<p>${text.replace(/\n/g, '<br>')}</p>`; // Tampilkan jawaban
+  } catch (error) {
+    console.error("Gemini Falak Q&A API Gagal:", error);
+    resultElement.innerHTML = `<p style="color: #ff8888; text-align: center;">Maaf Guru, tabir langit sedang tertutup. Coba lagi nanti.</p>`;
+  }
+}
+
 // ==================================================
 // AKHIR DARI MESIN GEMINI API
 // ==================================================
@@ -2097,6 +2231,12 @@ async function callGeminiJodoh(nama1, planet1, angka1, nama2, planet2, angka2) {
 document.querySelectorAll('button').forEach(btn=>{
   btn.addEventListener('click',()=>{
     if(btn.id === 'audioBtn' || btn.id === 'unlock-btn' || btn.id === 'modalCloseBtn') return;
+    
+    // [BARU] Event untuk tombol Q&A Falak
+    if(btn.id === 'ask-falak-btn') {
+        calculateFalakQA();
+        return;
+    }
     
     if (btn.classList.contains('saat-btn')) {
       calculateSaat(btn.dataset.planet, btn.dataset.hajat);
@@ -2109,6 +2249,7 @@ document.querySelectorAll('button').forEach(btn=>{
         buttonSet1.classList.add('button-set-inactive');
         document.querySelector('.calculator-button').style.display = 'none'; 
         document.querySelectorAll('.feature-btn-set').forEach(el => el.style.display = 'none'); // Sembunyikan fitur
+        document.getElementById('new-ai-container').style.display = 'none'; // Sembunyikan Q&A
         buttonSet2.classList.remove('button-set-inactive');
         buttonSet2.classList.add('button-set');
         return;
@@ -2119,6 +2260,7 @@ document.querySelectorAll('button').forEach(btn=>{
         buttonSet1.classList.add('button-set');
         document.querySelector('.calculator-button').style.display = 'block'; 
         document.querySelectorAll('.feature-btn-set').forEach(el => el.style.display = 'flex'); // Tampilkan fitur
+        document.getElementById('new-ai-container').style.display = 'flex'; // Tampilkan Q&A
         return;
       case '🔮 Kalkulator Sa\'at':
         openModal("🔮 Kalkulator Sa'at", calculatorModalContent);
@@ -2182,7 +2324,7 @@ document.querySelectorAll('button').forEach(btn=>{
       case '🕊 Do’a & Niat':
         openModal('🕊 Do‘a & Niat',`
         <p><b>Do‘a Tahsin CBA</b></p>
-        <p style="font-size: 1.2em; line-height: 1.8; direction: rtl; text-align: right;">اللّٰهُمَّ اجْعَلْنِي مِنَ الَّذِينَ نَظَرْتَ إِلَيْهِمْ بِنَظَرَةِ الرَّحْمَةِ، وَفَتَحْتَ لَهُمْ أَبْوَابَ الْحِكْمَةِ، وَصَرَفْتَ عَنْهُمُ الْفِTْنَةَ.</p>
+        <p style="font-size: 1.2em; line-height: 1.8; direction: rtl; text-align: right;">اللّٰهُمَّ اجْعَلْنِي مِنَ الَّذِينَ نَظَرْتَ إِلَيْهِمْ بِنَظَرَةِ الرَّحْمَةِ، وَفَتَحْتَ لَهُمْ أَبْوَابَ الْحِكْمَةِ، وَصَرَفْتَ عَنْهُمُ الْفِتْنَةَ.</p>
         <p><i>“Ya Allah, jadikan aku termasuk hamba yang Engkau pandang dengan rahmat-Mu, Engkau bukakan baginya pintu hikmah, dan Engkau jauhkan dari fitnah.”</i></p>
         ${contactBlock}
         `);break;
