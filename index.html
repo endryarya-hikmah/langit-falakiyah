@@ -1947,7 +1947,7 @@ function calculateJodoh() {
 const doaModalContent = `
   <p>Tuliskan hajat Anda (singkat & jelas). Mesin falak akan membantu merangkai do'a yang selaras dengan energi waktu saat ini.</p>
   <div id="doa-calculator">
-    <input type="text" id="doa-hajat-input" placeholder="Contoh: Minta kelancaran rezeki...">
+    <input type="text" id="doa-hajat-input" placeholder="Contoh: Minta kelancaran rezeki dan arti do'a ...">
     <button id="calc-doa-btn">Buat Do'a</button>
   </div>
   <div id="doa-result" style="display:none;"></div>
@@ -1990,7 +1990,7 @@ function calculateDoa() {
 // [PERBAIKAN BUG] MESIN GEMINI API (Anti Gagal)
 // ==================================================
 
-const API_KEY = "AIzaSyCuJeCUEYpspjCYRi0HJivJ1KaB1vbRreg"
+const API_KEY = "AIzaSyDsVs8DFaNqdfDBiUJWLliHzxg_3fmsGLg"
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
 
 // [PERBAIKAN] Fungsi Fetch dengan Exponential Backoff
