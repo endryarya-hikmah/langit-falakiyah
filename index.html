@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Langit Falaqyah CBA ✦ Al-Hikmah v3.5 (Hisab Lengkap)</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@500;700&display=swap" rel="stylesheet">
-
+/* CSS Donatur Fade */
+#donatur-dinamis {
+  transition: opacity 1.0s ease-in-out;
+  opacity: 0;
+}
 <style>
 :root {
   --dvh: 100vh;
@@ -786,6 +790,19 @@ body:hover #stardust-cursor {
 
 <div id="intro" style="opacity:0;pointer-events:none;">
   <h1>بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</h1>
+  <!-- MULAI: Donatur Section -->
+<div id="donatur-section" style="text-align: center; margin: 20px 0; padding: 15px; background-color: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid rgba(255,255,255,0.04);">
+  <p style="font-style: italic; font-size: 0.9em; margin: 5px 0; color: #f0e6b2;">
+    Donasi bersifat sukarela untuk biaya sistem, dan akan kami tampilkan di sini.
+  </p>
+  <div id="donatur-dinamis-container" style="font-weight: bold; color: #ffd88e; height: 1.5em; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 5px 0;">
+    <span id="donatur-dinamis"></span>
+  </div>
+  <p style="font-style: italic; font-size: 0.9em; margin-top: 10px; color: #f0e6b2;">
+    Terima kasih atas kunjungannya dan partisipasinya.
+  </p>
+</div>
+<!-- AKHIR: Donatur Section -->
   <p class="quote">"Langit dan waktu adalah cermin ketetapan, tempat ruh menapaki garis takdir."</p>
   
   <div id="visitor-counter" class="auratik-counter">
@@ -2424,6 +2441,53 @@ if (stardustCursorEl) {
   100%{opacity:0;transform:scale(0.6)rotate(360deg);}
 }
 </style>
+<script>
+// --- KODE DONATUR BERGANTIAN ---
+(function(){
+  const daftarDonatur = [
+    "Ade Sutisna, S.T - Rp. 50.000",
+    "Abdul Qodir - Rp. 20.000",
+    "Budi Santoso - Rp. 25.000",
+    "Citra Lestari - Rp. 75.000",
+    "Dewi Anggraini - Rp. 100.000",
+    "Eko Prasetyo - Rp. 15.000",
+    "Fajar Nugroho - Rp. 30.000",
+    "Gunawan Wibowo - Rp. 150.000",
+    "Hesti Rahayu - Rp. 10.000",
+    "Indra Maulana - Rp. 50.000",
+    "Joko Susilo - Rp. 200.000",
+    "Kartika Sari - Rp. 40.000",
+    "Lina Marlina - Rp. 80.000",
+    "Muhammad Rizky - Rp. 120.000",
+    "Nina Kurniawati - Rp. 60.000",
+    "Oscar Permadi - Rp. 90.000",
+    "Putri Handayani - Rp. 35.000",
+    "Rahmat Hidayat - Rp. 110.000",
+    "Siti Aminah - Rp. 55.000",
+    "Teguh Firmansyah - Rp. 175.000",
+    "Wulan Dari - Rp. 20.000"
+  ];
 
+  const elemen = document.getElementById('donatur-dinamis');
+  if (!elemen) return;
+  let i = 0;
+
+  function gantiDonatur() {
+    elemen.style.opacity = 0;
+    setTimeout(() => {
+      elemen.textContent = daftarDonatur[i];
+      i = (i + 1) % daftarDonatur.length;
+      elemen.style.opacity = 1;
+    }, 1000);
+    setTimeout(gantiDonatur, 5000);
+  }
+
+  elemen.textContent = daftarDonatur[i];
+  elemen.style.opacity = 1;
+  i++;
+  setTimeout(gantiDonatur, 5000);
+})();
+// --- AKHIR KODE DONATUR ---
+</script>
 </body>
 </html>
