@@ -1242,12 +1242,18 @@ async function initFalak() {
   const now = new Date();
   const tomorrow = new Date(now.getTime() + 86400000);
   
-  const todayTimes = calcSunTimes(now, lat, lon);
-  const tomorrowTimes = calcSunTimes(tomorrow, lat, lon);
-
-  sunriseTime = todayTimes.sunrise;
-  sunsetTime = todayTimes.sunset;
-  sunriseTomorrow = tomorrowTimes.sunrise;
+  // [PERBAIKAN CEPAT: NONAKTIFKAN PERHITUNGAN GEOLOCATION YANG GAGAL]
+  // Kita set waktu terbit yang pasti untuk Indonesia WIB (05:40 - 17:40)
+  sunriseTime = 5.666; // Pukul 05:40 WIB
+  sunsetTime = 17.666; // Pukul 17:40 WIB
+  sunriseTomorrow = 5.666; 
+  
+  // Baris-baris di bawah ini DINONAKTIFKAN karena sering gagal di HP:
+  // const todayTimes = calcSunTimes(now, lat, lon);
+  // const tomorrowTimes = calcSunTimes(tomorrow, lat, lon);
+  // // sunriseTime = todayTimes.sunrise;
+  // // sunsetTime = todayTimes.sunset;
+  // // sunriseTomorrow = tomorrowTimes.sunrise;
   
   const totalMenitSiang = (sunsetTime - sunriseTime) * 60;
   const totalMenitMalam = ((24 - sunsetTime) + sunriseTomorrow) * 60;
