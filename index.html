@@ -17,6 +17,7 @@
 html,body{
   margin:0;padding:0;overflow:hidden;
   height: var(--dvh, 100vh); 
+  /* [PENTING] Latar body TETAP HITAM untuk kanvas planet */
   background:radial-gradient(circle at center,#0a1025 0%,#000010 100%);
   color:#f0e6b2;font-family:'Cormorant Garamond',serif;
   cursor: none;
@@ -25,10 +26,7 @@ canvas{position:fixed;top:0;left:0;width:100vw;height:var(--dvh, 100vh);z-index:
 
 canvas.interactive-planet {
   cursor: none;
-}
-
-
-#intro,#main{
+}#intro,#main{
   position:absolute;top:0;left:0;width:100%;
   height: var(--dvh, 100vh); 
   display:flex;flex-direction:column;
@@ -39,6 +37,8 @@ canvas.interactive-planet {
 }
 
 #intro {
+  /* [GANTI BACKGROUND] Gradasi Senja untuk Intro (Basmalah) */
+  background: linear-gradient(180deg, #0f0524 0%, #3e1b3c 40%, #a23b3b 80%, #f77b31 100%);
   padding: 5vh 0;
   pointer-events: auto; 
   justify-content: center; 
@@ -47,6 +47,7 @@ canvas.interactive-planet {
 
 /* [PERBAIKAN] Main page bisa di-scroll */
 #main {
+  /* Layar Main (planet) tetap transparan agar kanvas hitam terlihat */
   justify-content: flex-start; /* Tidak lagi space-between */
   padding: 8vh 0 2vh 0; 
   z-index: 2;
@@ -70,7 +71,6 @@ canvas.interactive-planet {
 #main {
   padding: 0; 
 }
-
 #top-group, #bottom-group {
   pointer-events: auto; 
   width: 100%;
@@ -85,9 +85,21 @@ canvas.interactive-planet {
 }
 
 
-/* judul */
-h1{font-family:'Cinzel Decorative',serif;font-size:1.9em;text-shadow:0 0 12px #e8c85a,0 0 22px #b5962b;margin-bottom:0.3em;}
-h2{font-size:1.05em;color:#f7e9b4;margin-top:0;text-shadow:0 0 10px #bfa84e;}
+/* [FONT TETAP] Judul tetap mistik, hanya ganti shadow */
+h1{
+  font-family:'Cinzel Decorative',serif;
+  font-size:1.9em;
+  /* Ganti shadow jadi drop shadow agar kontras di BG Senja */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.6); 
+  margin-bottom:0.3em;
+}
+h2{
+  font-family:'Cormorant Garamond',serif; /* Font tetap */
+  font-size:1.05em;
+  color:#f7e9b4;
+  margin-top:0;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Drop shadow */
+}
 
 .quoteBox{position:relative;height:auto;margin:10px 0;overflow:hidden;max-width:350px; min-height: 60px;}
 .quote{width:100%;opacity:0;transform:translateY(20px);
@@ -96,61 +108,72 @@ h2{font-size:1.05em;color:#f7e9b4;margin-top:0;text-shadow:0 0 10px #bfa84e;}
   color:#fff7d6;text-shadow:0 0 6px #c7a6f;}
 .quote.active{opacity:1;transform:translateY(0);}
 
+/* ======================================== */
+/* [ROMBAK TOTAL] Gaya Tombol Game (Opsi 1) */
+/* ======================================== */
 button{
-  font-family:'Cormorant Garamond',serif;background:rgba(255,255,255,0.05);
-  border:1px solid #d8c471;border-radius:10px;color:#f5e8b8;
-  padding:8px 16px;margin:6px;font-size:1em;backdrop-filter:blur(3px);
-  transition:all 0.3s;
+  font-family: 'Cormorant Garamond', serif; /* [FONT TETAP] Pakai font mistik */
+  font-weight: 700;
+  font-size: 1.05em; /* Sedikit lebih besar agar terbaca */
+  color: white; /* Teks putih solid */
+  padding: 10px 20px;
+  margin: 6px;
+  border-radius: 50px; /* Bentuk kapsul */
+  border: none; /* Hapus border mistis */
+  border-top: 1px solid rgba(255,255,255,0.3); /* Highlight atas untuk efek glossy */
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Drop shadow teks agar nempel */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3), /* Bayangan bawah 3D */
+              inset 0 1px 2px rgba(255,255,255,0.4); /* Efek glossy di dalam */
+  transition: all 0.2s ease;
   cursor: none; 
   position: relative; 
-  overflow: hidden; 
 }
-button:hover{background:rgba(255,255,255,0.1);transform:scale(1.05);box-shadow:0 0 15px #bfa84e;}
+button:hover{
+  transform: scale(1.05) translateY(-2px); /* Efek hover lebih jelas */
+  box-shadow: 0 6px 10px rgba(0,0,0,0.4), 
+              inset 0 1px 2px rgba(255,255,255,0.5);
+  /* Hapus hover lama */
+}
+button:active {
+  transform: scale(0.98) translateY(1px); /* Efek ditekan */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3), 
+              inset 0 1px 3px rgba(0,0,0,0.2);
+}
 
+/* Hapus efek shimmer mistis */
 button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 230, 180, 0.3), transparent);
-  transform: skewX(-25deg);
-  animation: shimmer 6s infinite ease-in-out;
-  animation-delay: 3s; 
+  display: none; 
 }
 @keyframes shimmer {
-  0%, 20% { left: -100%; }
-  40% { left: 150%; }
-  100% { left: 150%; }
+  /* Kosongkan */
 }
 
-
+/* Warna Tombol Navigasi (BIRU) */
 button.nav-button {
-  border-color: #fcefb5;
-  color: #fcefb5;
+  background: linear-gradient(145deg, #00c6ff, #0072ff);
+  /* Hapus style lama */
+  border-color: unset;
+  color: white;
   font-weight: 700;
   width: 90%;
   max-width: 320px;
   margin-top: 10px;
 }
+/* Warna Tombol Kalkulator (EMAS/KUNING) */
 button.calculator-button {
-  border-color: #88aaff;
-  color: #aae0ff;
-  text-shadow: 0 0 10px #88aaff;
+  background: linear-gradient(145deg, #ffc500, #ff8c00);
+  color: #4b2a00; /* Teks gelap agar kontras */
+  /* Hapus style lama */
+  border-color: unset;
+  text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
   width: 90%;
   max-width: 320px;
-  margin-top: 15px; /* Kasih jarak dari tombol fitur */
+  margin-top: 15px; 
   margin-bottom: 5px; 
-  
-  background: linear-gradient(145deg, rgba(136, 170, 255, 0.1), rgba(136, 170, 255, 0.05));
-  box-shadow: 0 0 15px rgba(136, 170, 255, 0.3);
-  animation: pulse-blue 3s infinite ease-in-out;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.6);
+  animation: none; /* Hapus pulse-blue */
 }
-button.calculator-button:hover {
-  transform: scale(1.05); 
-}
-/* Tombol Fitur Ajib */
+/* Tombol Fitur Ajib (EMAS/KUNING) */
 .feature-btn-set {
   display: flex;
   justify-content: center;
@@ -158,48 +181,45 @@ button.calculator-button:hover {
   max-width: 320px;
 }
 button.feature-btn {
-  border-color: #ffc471;
-  color: #ffd8a8;
-  text-shadow: 0 0 8px #ffc471;
-  width: 100%; /* Biar bisa 1 baris atau 2 baris */
-  background: linear-gradient(145deg, rgba(255, 196, 113, 0.1), rgba(255, 196, 113, 0.05));
-  box-shadow: 0 0 15px rgba(255, 196, 113, 0.3);
-  animation: pulse-gold 2.5s infinite ease-in-out;
-}
-button.feature-btn:hover {
-  transform: scale(1.05);
-}
-
-/* [BARU] Tombol Fitur AI (Pink) */
-button.ai-btn {
-  border-color: #ffb8d0;
-  color: #ffcee0;
-  text-shadow: 0 0 8px #ffb8d0;
+  background: linear-gradient(145deg, #fce500, #f7b500);
+  color: #503800; /* Teks gelap */
+  /* Hapus style lama */
+  border-color: unset;
+  text-shadow: 1px 1px 1px rgba(255,255,255,0.4);
   width: 100%;
-  background: linear-gradient(145deg, rgba(255, 184, 208, 0.1), rgba(255, 184, 208, 0.05));
-  box-shadow: 0 0 15px rgba(255, 184, 208, 0.3);
-  animation: pulse-pink 2.8s infinite ease-in-out;
-}
-button.ai-btn:hover {
-  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.6);
+  animation: none; /* Hapus pulse-gold */
 }
 
-/* [BARU] Styling Fitur Q&A Baru (Warna Cosmic Ungu/Indigo) */
+/* Tombol Fitur AI (PINK) */
+button.ai-btn {
+  background: linear-gradient(145deg, #ff79c6, #ff409a);
+  color: white;
+  /* Hapus style lama */
+  border-color: unset;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  width: 100%;
+  animation: none; /* Hapus pulse-pink */
+}
+
+/* Styling Fitur Q&A Baru (HIJAU UTAMA) */
 .ai-qa-group {
   width: 90%;
   max-width: 320px;
-  margin-bottom: 20px; /* Jarak ke tombol di bawahnya */
+  margin-bottom: 20px; 
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid #7a42f5;
+  /* Simpelkan box, hilangkan warna bentrok */
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 12px;
   padding: 10px;
-  background: linear-gradient(145deg, rgba(122, 66, 245, 0.1), rgba(122, 66, 245, 0.05));
-  box-shadow: 0 0 20px rgba(122, 66, 245, 0.4);
+  /* Background gelap transparan di layar main, tapi solid di layar intro */
+  background: rgba(0,0,0,0.3); 
+  box-shadow: none;
 }
 .ai-question-input {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Cormorant Garamond', serif; /* [FONT TETAP] Pakai font mistik */
   font-size: 1em;
   text-align: center;
   background: rgba(0,0,0,0.4);
@@ -216,20 +236,20 @@ button.ai-btn:hover {
   color: #c8aaff;
   opacity: 0.8;
   font-style: italic;
+  font-weight: 700; /* Tebelkan placeholder */
 }
+/* Tombol Super AI (HIJAU) */
 button.super-ai-btn {
-  border-color: #c8aaff;
-  color: #e0ceff;
-  text-shadow: 0 0 10px #c8aaff;
+  background: linear-gradient(145deg, #00ff7f, #00b85c);
+  color: #003d1e; /* Teks gelap */
+  /* Hapus style lama */
+  border-color: unset;
+  text-shadow: 1px 1px 1px rgba(255,255,255,0.4);
   width: 100%;
-  font-weight: 700;
-  background: linear-gradient(145deg, rgba(200, 170, 255, 0.2), rgba(200, 170, 255, 0.1));
-  box-shadow: 0 0 15px rgba(200, 170, 255, 0.5);
-  animation: pulse-purple 2.8s infinite ease-in-out;
+  font-weight: 700; /* Tetap bold, tapi font mistik */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.6);
+  animation: none; /* Hapus pulse-purple */
   margin: 0;
-}
-button.super-ai-btn:hover {
-  transform: scale(1.02);
 }
 .ai-result-box {
   margin-top: 15px;
@@ -245,48 +265,11 @@ button.super-ai-btn:hover {
   box-sizing: border-box;
 }
 
-@keyframes pulse-blue {
-  0%, 100% {
-    box-shadow: 0 0 15px rgba(136, 170, 255, 0.3);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 25px rgba(136, 170, 255, 0.6);
-    transform: scale(1.02);
-  }
-}
-@keyframes pulse-gold {
-  0%, 100% {
-    box-shadow: 0 0 15px rgba(255, 196, 113, 0.3);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 25px rgba(255, 196, 113, 0.6);
-    transform: scale(1.02);
-  }
-}
-@keyframes pulse-pink {
-  0%, 100% {
-    box-shadow: 0 0 15px rgba(255, 184, 208, 0.3);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 25px rgba(255, 184, 208, 0.6);
-    transform: scale(1.02);
-  }
-}
-@keyframes pulse-purple {
-  0%, 100% {
-    box-shadow: 0 0 15px rgba(200, 170, 255, 0.5);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 25px rgba(200, 170, 255, 0.8);
-    transform: scale(1.01);
-  }
-}
-
-
+/* Hapus semua animasi pulse */
+@keyframes pulse-blue {}
+@keyframes pulse-gold {}
+@keyframes pulse-pink {}
+@keyframes pulse-purple {}
 #audioBtn{
   position:fixed;top:12px;right:12px;background:rgba(255,255,255,0.1);
   border:1px solid gold;border-radius:50%;width:32px;height:32px;font-size:16px;
@@ -310,7 +293,7 @@ footer{
   padding-bottom: 20px;
   font-size:0.75em;
   color:#d3b96f;
-  font-family:'Cinzel Decorative',serif; 
+  font-family:'Cinzel Decorative',serif; /* [FONT TETAP] Font mistik */
   pointer-events: auto;
   opacity:0;
   animation:fadeUp 3s ease forwards;
@@ -328,35 +311,36 @@ footer{
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 .author{margin-top:10px;font-size:0.85em;color:#d3b96f;}
-
-
 /* counter ruh */
 #visitor-counter {
   margin-top: 20px;
   margin-bottom: 15px;
   text-align: center;
   font-size: 1.05em;
-  color: #88aaff;
-  text-shadow: 0 0 8px #88aaff;
+  color: #FFFFFF; /* Ganti jadi putih solid agar kontras di BG Senja */
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Drop shadow */
 }
 
 /* --- [BARU] Gerbang Donasi --- */
+/* Simpelkan box agar tidak bentrok */
 #donation-info {
-  background: rgba(136, 170, 255, 0.05); 
-  border: 1px solid #88aaff; 
+  /* Background gelap transparan di layar main, tapi solid di layar intro */
+  background: rgba(0,0,0,0.3); 
+  border: 1px solid rgba(255,255,255,0.1); 
   border-radius: 10px; 
   padding: 15px; 
   max-width: 320px; 
   width: 90%; 
-  box-shadow: 0 0 15px rgba(136, 170, 255, 0.2);
+  box-shadow: none; /* Hapus shadow */
   margin-top: 20px;
   color: #f0e6b2;
 }
 #donation-info h3 {
-  font-family:'Cinzel Decorative',serif; 
+  font-family:'Cinzel Decorative',serif; /* [FONT TETAP] Font mistik */
   color:#aae0ff; 
   margin:0 0 10px 0;
   font-size: 1.1em;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Drop shadow */
 }
 #donation-info p {
   font-size: 0.9em; 
@@ -376,42 +360,53 @@ footer{
   align-items: center;
   font-size: 1em;
 }
+/* Tombol copy kecil, dibuat simpel */
 .copy-btn {
   font-size: 0.8em !important;
   padding: 3px 8px !important;
   margin: 0 0 0 10px !important;
   backdrop-filter: none;
+  background: #0072ff; /* Biru */
+  border-radius: 10px;
+  text-shadow: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  border: none;
+  color: white; /* Teks putih */
+  font-family: 'Cormorant Garamond', serif; /* [FONT TETAP] Font mistik */
 }
+/* Tombol WA Donasi (BIRU) */
 #wa-donasi-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  font-family: 'Cormorant Garamond', serif;
-  border: 1px solid #88aaff;
-  border-radius: 10px;
-  color: #aae0ff;
+  font-family: 'Cormorant Garamond', serif; /* [FONT TETAP] Font mistik */
+  font-weight: 700;
+  color: white; /* GANTI WARNA TEKS */
+  border: none; /* HAPUS BORDER */
+  border-radius: 50px; /* BENTUK KAPSUL */
   padding: 8px 16px;
   margin-top: 10px;
   font-size: 1em;
   width: 90%;
   max-width: 320px;
-  text-shadow: 0 0 10px #88aaff;
-  background: linear-gradient(145deg, rgba(136, 170, 255, 0.1), rgba(136, 170, 255, 0.05));
-  box-shadow: 0 0 15px rgba(136, 170, 255, 0.3);
-  animation: pulse-blue 3s infinite ease-in-out;
-  transition: all 0.3s;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* DROP SHADOW */
+  background: linear-gradient(145deg, #00c6ff, #0072ff); /* WARNA BIRU */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.4); /* EFEK 3D/GLOSSY */
+  transition: all 0.2s;
   cursor: none;
+  animation: none; /* Hapus animasi */
 }
 #wa-donasi-btn svg {
   width: 16px;
   height: 16px;
   margin-right: 8px;
-  fill: #aae0ff;
+  fill: white; /* Ganti warna SVG */
 }
 #wa-donasi-btn:hover {
-  transform: scale(1.05);
-  animation-play-state: paused;
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.5);
+  animation-play-state: unset; /* Hapus referensi animasi lama */
 }
 
 
@@ -423,7 +418,7 @@ footer{
   align-items: center;
 }
 #password-input {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Cormorant Garamond', serif; /* [FONT TETAP] Font mistik */
   font-size: 1em;
   text-align: center;
   background: rgba(0,0,0,0.3);
@@ -460,7 +455,8 @@ footer{
 
 /* waktu & info */
 #timeInfo{
-  margin-top:20px;font-size:1.05em;color:#f5e9c1;text-shadow:0 0 6px #bfa84e;
+  margin-top:20px;font-size:1.05em;color:#f5e9c1;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Drop shadow */
   line-height: 1.6; 
 }
 /* Info Jam Haqiqi (BARU) */
@@ -476,7 +472,7 @@ footer{
   margin-top: 15px;
   font-size: 0.95em;
   color: #aae0ff; 
-  text-shadow: 0 0 8px #88aaff;
+  text-shadow: 0 0 8px #88aaff, 1px 1px 3px rgba(0,0,0,0.5); /* Drop shadow + glow */
   max-width: 380px;
   padding: 0 10px;
   font-style: italic;
@@ -502,15 +498,24 @@ footer{
 /* layar pembuka */
 #opening-screen{
   position:fixed;top:0;left:0;width:100%;height:100%;
-  background:radial-gradient(circle at center,#0a0a18 60%,#000);
+  /* [GANTI BACKGROUND] Gradasi Senja untuk Loading */
+  background: linear-gradient(180deg, #0f0524 0%, #3e1b3c 40%, #a23b3b 80%, #f77b31 100%);
   display:flex;flex-direction:column;justify-content:center;align-items:center;
-  z-index:9999;color:#f5e9c8;font-family:'Cinzel Decorative',serif;text-align:center;
+  z-index:9999;color:#f5e9c8;
+  font-family:'Cinzel Decorative',serif; /* [FONT TETAP] Font mistik */
+  text-align:center;
   transition:opacity 1s ease;
 }
-#opening-screen h1{font-size:1.8em;text-shadow:0 0 20px #f8e8b5;}
-#opening-screen p{margin-top:15px;font-size:1em;font-family:'Cormorant Garamond',serif;}
-
-/* Loading Bar Mistis */
+#opening-screen h1{
+  font-family:'Cinzel Decorative',serif; /* [FONT TETAP] Font mistik */
+  font-size:1.8em;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.6); /* Drop shadow */
+}
+#opening-screen p{
+  margin-top:15px;font-size:1em;
+  font-family:'Cormorant Garamond',serif; /* [FONT TETAP] Font mistik */
+}
+/* Loading Bar Mistis (Biarkan kuning, cocok dgn gaya koin) */
 #loading-container {
   width: 220px;
   height: 5px;
@@ -560,7 +565,6 @@ body:hover #stardust-cursor {
   from{opacity:0;transform:scale(0.95);}
   to{opacity:1;transform:scale(1);}
 }
-
 /* Styling Kalkulator Sa'at */
 #saat-calculator-buttons {
   display: flex;
@@ -568,11 +572,18 @@ body:hover #stardust-cursor {
   justify-content: center;
   margin-top: 15px;
 }
+/* Tombol Sa'at (BIRU MUDA) */
 .saat-btn {
   font-size: 0.85em !important;
   padding: 6px 10px !important;
   margin: 4px !important;
   flex-basis: 120px;
+  /* Ganti warna jadi Biru Muda */
+  background: linear-gradient(145deg, #40E0D0, #00BFFF); 
+  color: #00373d; /* Teks gelap */
+  text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
+  box-shadow: 0 3px 5px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.5);
+  font-family: 'Cormorant Garamond', serif; /* [FONT TETAP] Font mistik */
 }
 #saat-calculator-result {
   margin-top: 15px;
@@ -589,8 +600,10 @@ body:hover #stardust-cursor {
 #birth-calculator, #abjad-calculator, #jodoh-calculator {
   padding: 10px 0;
 }
+/* Ganti font input */
 #birth-date-input, #abjad-name-input, .jodoh-input {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Cormorant Garamond', serif; /* [FONT TETAP] Font mistik */
+  font-weight: 700;
   font-size: 1em;
   background: rgba(0,0,0,0.2);
   border: 1px solid #d8c471;
@@ -600,9 +613,13 @@ body:hover #stardust-cursor {
   margin: 5px 10px;
   width: 150px;
 }
+/* Ganti style tombol di dalam modal (HIJAU) */
 #birth-calculator button, #abjad-calculator button, #jodoh-calculator button {
   font-size: 0.9em !important;
   margin-top: 10px !important;
+  background: linear-gradient(145deg, #00ff7f, #00b85c); /* Hijau */
+  color: #003d1e;
+  text-shadow: 1px 1px 1px rgba(255,255,255,0.4);
 }
 #birth-result, #abjad-result, #jodoh-result {
   margin-top: 15px;
@@ -623,14 +640,15 @@ body:hover #stardust-cursor {
 .jodoh-group h4 {
   margin: 0 0 10px 0;
   color: #ffd8a8;
+  font-family:'Cinzel Decorative',serif; /* [FONT TETAP] Font mistik */
 }
 .jodoh-input { width: 90%; box-sizing: border-box; }
 #jodoh-result h5 {
   color: #ffd8a8;
   margin: 10px 0 5px 0;
   font-size: 1.1em;
+  font-family:'Cinzel Decorative',serif; /* [FONT TETAP] Font mistik */
 }
-
 /* [BARU] Styling Fitur Doa */
 #doa-hajat-input {
   width: 90%;
@@ -640,7 +658,7 @@ body:hover #stardust-cursor {
   border-radius: 8px;
   color: #f5e8b8;
   padding: 8px 12px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Cormorant Garamond', serif; /* [FONT TETAP] Font mistik */
   font-size: 1em;
 }
 #doa-result {
@@ -679,20 +697,22 @@ body:hover #stardust-cursor {
   border-top: 1px solid rgba(255, 196, 113, 0.3);
   color: #ffd8a8;
   font-style: italic;
+  font-family: 'Cormorant Garamond', serif; /* [FONT TETAP] Font mistik */
 }
 
 
-/* [MIND BLOWING] Tombol Live Chat WA */
+/* [MIND BLOWING] Tombol Live Chat WA (EMAS/KUNING) */
 #live-chat-btn {
   position: fixed;
   bottom: 25px;
   right: 25px;
   width: 50px;
   height: 50px;
-  background: radial-gradient(circle, rgba(255, 215, 130, 0.2), rgba(216, 196, 113, 0.1));
-  border: 1px solid #d8c471;
+  /* Ganti Warna */
+  background: linear-gradient(145deg, #fce500, #f7b500);
+  border: none; /* Hapus border */
   border-radius: 50%;
-  color: #fcefb5;
+  color: #503800; /* Ganti warna ikon */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -700,21 +720,26 @@ body:hover #stardust-cursor {
   pointer-events: auto;
   cursor: none;
   backdrop-filter: blur(4px);
-  animation: pulse-gold 2.5s infinite ease-in-out;
+  animation: none; /* Hapus pulse-gold */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.7); /* Efek 3D */
   transition: all 0.3s;
 }
-#live-chat-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 20px #fcefb5;
-  animation-play-state: paused;
+#live-chat-btn svg {
+  /* Ganti warna SVG agar nampak di atas tombol emas */
+  stroke: #503800; 
+  filter: drop-shadow(1px 1px 1px rgba(255,255,255,0.3));
 }
-
-
+#live-chat-btn:hover {
+  transform: scale(1.1) translateY(-2px); /* Samakan efek hover */
+  box-shadow: 0 6px 15px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.8);
+  animation-play-state: unset;
+}
 /* responsif */
 @media (max-width:600px){
   h1{font-size:1.5em;}
   .quote{font-size:0.85em;}
-  button{font-size:0.9em;padding:6px 10px;margin:4px;}
+  /* Ganti style tombol mobile */
+  button{font-size:0.9em;padding:8px 14px;margin:4px;}
   #audioBtn{width:28px;height:28px;font-size:14px;top:10px;right:10px;}
   #timeInfo{font-size:0.9em;margin-top:10px;}
   #tafsirInfo{font-size: 0.85em; margin-top: 10px;} 
@@ -790,27 +815,25 @@ body:hover #stardust-cursor {
 
 <div id="intro" style="opacity:0;pointer-events:none;">
   <h1>بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</h1>
-  <!-- MULAI: Donatur Section -->
-<div id="donatur-section" style="text-align: center; margin: 20px 0; padding: 15px; background-color: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid rgba(255,255,255,0.04);">
-  <p style="font-style: italic; font-size: 0.9em; margin: 5px 0; color: #f0e6b2;">
+  <div id="donatur-section" style="text-align: center; margin: 20px 0; padding: 15px; background-color: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+  <p style="font-style: italic; font-size: 0.9em; margin: 5px 0; color: #f0e6b2; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
     Donasi bersifat sukarela untuk biaya sistem, dan akan kami tampilkan di sini.
   </p>
-  <div id="donatur-dinamis-container" style="font-weight: bold; color: #ffd88e; height: 1.5em; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 5px 0;">
+  <div id="donatur-dinamis-container" style="font-weight: bold; color: #ffd88e; height: 1.5em; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 5px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
     <span id="donatur-dinamis"></span>
   </div>
-  <p style="font-style: italic; font-size: 0.9em; margin-top: 10px; color: #f0e6b2;">
+  <p style="font-style: italic; font-size: 0.9em; margin-top: 10px; color: #f0e6b2; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
     Terima kasih atas kunjungannya dan partisipasinya.
   </p>
 </div>
-<!-- AKHIR: Donatur Section -->
-  <p class="quote">"Langit dan waktu adalah cermin ketetapan, tempat ruh menapaki garis takdir."</p>
+<p class="quote">"Langit dan waktu adalah cermin ketetapan, tempat ruh menapaki garis takdir."</p>
   
   <div id="visitor-counter" class="auratik-counter">
     ✦ Jumlah Ruh yang Telah Menatap Langit Ini: <span id="visitor-count">...</span> ✦
   </div>
   
   <div id="donation-info">
-    <h3 style="font-family:'Cinzel Decorative',serif; color:#aae0ff; margin:0 0 10px 0;">Donasi untuk Kode Rahasia</h3>
+    <h3>Donasi untuk Kode Rahasia</h3>
     <p style="font-size: 0.9em; margin:0 0 10px 0; line-height: 1.5;">Untuk mendapat Kode Rahasia, silakan donasi seikhlasnya. Anda akan menerima Kode via WhatsApp setelah mengirim bukti transfer.</p>
     
     <div class="donation-account">
@@ -834,11 +857,12 @@ body:hover #stardust-cursor {
 
   <div id="password-gate">
     <input type="password" id="password-input" placeholder="Masukkan Kode Rahasia...">
-    <button id="unlock-btn">Buka Tabir</button>
+    <button id="unlock-btn" style="background: linear-gradient(145deg, #00ff7f, #00b85c); color: #003d1e; text-shadow: 1px 1px 1px rgba(255,255,255,0.4);">
+      Buka Tabir
+    </button>
     <p id="password-error"></p>
   </div>
 </div>
-
 <div id="main" style="opacity:0;pointer-events:none;">
   
   <div id="ui-container">
@@ -890,20 +914,20 @@ body:hover #stardust-cursor {
         <button class="calculator-button">🔮 Kalkulator Sa'at</button> 
 
         <div id="button-set-1" class="button-set">
-          <button>🕯 Sa’at Amal</button>
-          <button>🌠 Waktu Mustajab</button>
-          <button>🕊 Do’a & Niat</button>
-          <button>📜 Info Falakiyah</button>
-          <button>🪶 Perhitungan Falaqiyah</button>
+          <button style="background: linear-gradient(145deg, #40E0D0, #00BFFF); color: #00373d; text-shadow: 1px 1px 1px rgba(255,255,255,0.3);">🕯 Sa’at Amal</button>
+          <button style="background: linear-gradient(145deg, #40E0D0, #00BFFF); color: #00373d; text-shadow: 1px 1px 1px rgba(255,255,255,0.3);">🌠 Waktu Mustajab</button>
+          <button style="background: linear-gradient(145deg, #40E0D0, #00BFFF); color: #00373d; text-shadow: 1px 1px 1px rgba(255,255,255,0.3);">🕊 Do’a & Niat</button>
+          <button style="background: linear-gradient(145deg, #40E0D0, #00BFFF); color: #00373d; text-shadow: 1px 1px 1px rgba(255,255,255,0.3);">📜 Info Falakiyah</button>
+          <button style="background: linear-gradient(145deg, #40E0D0, #00BFFF); color: #00373d; text-shadow: 1px 1px 1px rgba(255,255,255,0.3);">🪶 Perhitungan Falaqiyah</button>
         </div>
         
         <button class="nav-button">Amalan Lanjutan ❯</button>
         
         <div id="button-set-2" class="button-set button-set-inactive">
-          <button>🗝 Ritual Khusus</button>
-          <button>✨ Asma' Falakiyah</button>
-          <button>📜 Wafaq & Rajah</button>
-          <button>💬 Konsultasi Batin</button>
+          <button style="background: linear-gradient(145deg, #ff79c6, #ff409a);">🗝 Ritual Khusus</button>
+          <button style="background: linear-gradient(145deg, #ff79c6, #ff409a);">✨ Asma' Falakiyah</button>
+          <button style="background: linear-gradient(145deg, #ff79c6, #ff409a);">📜 Wafaq & Rajah</button>
+          <button style="background: linear-gradient(145deg, #ff79c6, #ff409a);">💬 Konsultasi Batin</button>
           <button class="nav-button">❮ Halaman Utama</button>
         </div>
 
@@ -918,11 +942,10 @@ body:hover #stardust-cursor {
 <div id="audioBtn">🔊</div>
 
 <a id="live-chat-btn" href="https://wa.me/6285173262649" target="_blank" title="Live Chat via WhatsApp">
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #fcefb5;">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#503800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(1px 1px 1px rgba(255,255,255,0.3));">
     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
   </svg>
 </a>
-
 <div id="stardust-cursor"></div>
 
 <audio id="music" loop>
@@ -953,7 +976,8 @@ function showCopyNotification(text) {
     padding: 10px 20px;
     border-radius: 8px;
     z-index: 10001;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Cormorant Garamond', serif; /* [FONT TETAP] Font mistik */
+    font-weight: 700;
     font-size: 1em;
     box-shadow: 0 0 15px rgba(255,255,255,0.5);
     opacity: 0;
@@ -992,6 +1016,8 @@ const music=document.getElementById("music");
 const audioBtn=document.getElementById("audioBtn");
 let showPlanets=false; 
 
+// INI BAGIAN PENTING YANG BIKIN STUCK
+// Kodenya aman, 7000 milidetik = 7 detik
 setTimeout(()=>{
   const opening=document.getElementById('opening-screen');
   if (opening) {
@@ -1003,9 +1029,9 @@ setTimeout(()=>{
         intro.style.opacity='1';
         intro.style.pointerEvents='auto';
       }
-    },1000);
+    },1000); // 1 detik fade out
   }
-},7000); 
+},7000); // 7 detik loading screen
 
 function startMain(){
   const intro = document.getElementById('intro');
@@ -1027,7 +1053,6 @@ function startMain(){
     },1500);
   }
 }
-
 // Logika Gerbang Password
 const unlockBtn = document.getElementById('unlock-btn');
 const passwordInput = document.getElementById('password-input'); 
@@ -1072,7 +1097,6 @@ audioBtn.onclick=()=>{
     audioBtn.textContent = '🔇';
   }
 };
-
 function initQuotes(){
   const el=document.getElementById('quoteText');
   if (!el) return;
@@ -1099,6 +1123,7 @@ const planetHari = ["Syams","Qamar","Marīkh","Utārid","Musytarī","Zuhrah","Zu
 const chaldeanOrder = ["Zuhal", "Musytarī", "Marīkh", "Syams", "Zuhrah", "Utārid", "Qamar"];
 
 // [MIND BLOWING] Obyek Tafsir Ijtima' (Pertemuan)
+// Ini obyek yang besar, kita pecah per planet
 const ijtimaTafsir = {
   "Syams": { // Hari Kewibawaan
     "Zuhal": "Energi Wibawa (Hari) bertemu Energi Keras (Jam). *Sa'at al-Jalal* (Waktu Keagungan & Batasan). Kuat untuk membuat pagar gaib, menanam keteguhan, atau memberi peringatan keras (Halak) yang berwibawa.",
@@ -1198,7 +1223,6 @@ function formatJam(jamDesimal) {
     const menit = totalMenit % 60; 
     return `${jam < 10 ? '0' + jam : jam}:${menit < 10 ? '0' + menit : menit}`;
 }
-
 function calcSunTimes(date, lat, lon) {
   try {
     const N = Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 86400000);
@@ -1358,7 +1382,6 @@ function updateTime(){
 // ==================================================
 // AKHIR DARI ROMBAKAN MESIN HISAB
 // ==================================================
-
 const canvas=document.getElementById("universe");
 const ctx=canvas.getContext("2d");
 let cx = innerWidth / 2;
@@ -1431,8 +1454,6 @@ const planetTafsirLahir = {
     petuah: "Petuah Anda: Bangun Fondasi. Energi Anda adalah Keteguhan. Jangan terburu-buru. Kesabaran dan disiplin adalah kunci Anda. Anda adalah pelindung."
   }
 };
-
-
 function resizeCanvas() {
     canvas.width=innerWidth;
     canvas.height=innerHeight;
@@ -1457,7 +1478,6 @@ const planets=[
   {name:"♃ Musytarī",r:56,orbit:400,dist:400,color:"#E8CDA2",speed:0.00009, x:0, y:0, size:0, zPos: 0, hasRings: false},
   {name:"♄ Zuhal",r:52,orbit:480,dist:470,color:"#C5BA9D",speed:0.00008, x:0, y:0, size:0, zPos: 0, hasRings: true} 
 ];
-
 function drawNebula(t) {
   ctx.save();
   ctx.globalAlpha = 0.04; 
@@ -1481,7 +1501,6 @@ function drawNebula(t) {
   
   ctx.restore();
 }
-
 function drawPlanet(p,t){
   let scale = Math.min(cx, cy) / 500; 
   let orbitDistX = p.dist * scale;
@@ -1579,7 +1598,7 @@ function drawPlanet(p,t){
     ctx.stroke();
   }
   
-  ctx.font=`${14 * Math.max(0.8, scale) * zScale}px 'Cormorant Garamond'`; 
+  ctx.font=`${14 * Math.max(0.8, scale) * zScale}px 'Cormorant Garamond'`; /* [FONT TETAP] Font mistik */
   ctx.fillStyle= isHovering ? "#FFD700" : "#e6dcb0"; 
   ctx.textAlign="center";
   ctx.shadowColor = isHovering ? "#FFD700" : "transparent";
@@ -1587,7 +1606,6 @@ function drawPlanet(p,t){
   ctx.fillText(p.name,x,y-planetSize-8 - (isHovering ? pulse : 0));
   ctx.shadowBlur = 0; 
 }
-
 function animate(t){
   ctx.fillStyle="rgba(10,6,25,0.9)";
   ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -1656,8 +1674,6 @@ function animate(t){
   requestAnimationFrame(animate);
 }
 animate(0);
-
-
 canvas.addEventListener('mousemove', e => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
@@ -1672,7 +1688,7 @@ canvas.addEventListener('click', e => {
 
   let clickedPlanet = null;
 
-  planets.sort((a, b) => b.zPos - a.zPos); 
+  planets.sort((a, b) => b.zPos - b.zPos); 
 
   for (const p of planets) {
     const clickZone = p.size * 1.1; 
@@ -1703,11 +1719,12 @@ document.body.appendChild(modalOverlay);
 const modalBox=document.createElement('div');
 modalBox.style=`background:rgba(15,10,30,0.95);
 border:1px solid gold;border-radius:18px;padding:25px 18px;max-width:340px;
-color:#f6eabf;text-align:center;font-family:'Cormorant Garamond',serif;
+color:#f6eabf;text-align:center;
+font-family:'Cormorant Garamond',serif; /* [FONT TETAP] Font mistik */
 box-shadow:0 0 25px rgba(255,215,130,0.3);animation:fadeIn 0.8s ease;overflow-y:auto;max-height:85vh;`;
 modalOverlay.appendChild(modalBox);
 
-modalBox.innerHTML=`<h3 id="modalTitle" style="font-family:'Cinzel Decorative',serif;color:#fcefb5;text-shadow:0 0 12px gold;margin-bottom:10px;">Judul</h3><div id="modalContent" style="font-size:1em;line-height:1.5;"></div><button id="modalCloseBtn" style="margin-top:15px;padding:6px 14px;border:1px solid #d6be74;background:rgba(255,255,255,0.05);border-radius:10px;color:#f3e3b2;">Tutup</button>`;
+modalBox.innerHTML=`<h3 id="modalTitle" style="font-family:'Cinzel Decorative',serif;color:#fcefb5;text-shadow:0 0 12px gold;margin-bottom:10px;">Judul</h3><div id="modalContent" style="font-size:1em;line-height:1.5;"></div><button id="modalCloseBtn" style="margin-top:15px;padding:6px 14px;border:1px solid #d6be74;background:rgba(255,255,255,0.05);border-radius:10px;color:#f3e3b2; font-family:'Cormorant Garamond',serif; font-weight: 700;">Tutup</button>`;
 
 const modalTitle=document.getElementById('modalTitle');
 const modalContent=document.getElementById('modalContent');
@@ -1730,7 +1747,6 @@ modalOverlay.addEventListener('click',e=>{if(e.target===modalOverlay)closeModal(
 
 const buttonSet1 = document.getElementById('button-set-1');
 const buttonSet2 = document.getElementById('button-set-2');
-
 // [ROMBAKAN TOTAL v2] Logika Kalkulator Sa'at (Haqiqi)
 function calculateSaat(planetName, hajat) {
   let jamListSiang = [];
@@ -1824,7 +1840,6 @@ function calculateBirthEnergy() {
     <p class="petuah"><b>Petuah Penting:</b><br>${petuah}</p>
   `;
 }
-
 // [MIND BLOWING 2] Konten Kalkulator Arah Hajat
 const arahHajatMap = {
   "Syams": { arah: "Timur (Masyriq)", hajat: "Kewibawaan, jabatan, menghadap penguasa." },
@@ -1953,7 +1968,6 @@ const abjadModalContent = `
   </div>
   <div id="abjad-result" style="display:none;"></div>
 `;
-
 // [BARU] Logika Hisab Jodoh
 const jodohModalContent = `
   <p>Masukkan data Anda dan pasangan untuk melihat tafsir kecocokan (Watak & Nasib).</p>
@@ -2067,7 +2081,7 @@ function calculateDoa() {
     Hari ini adalah Hari ${hariIni}.
     Jam ini adalah Jam ${planetJamIni}.
     
-    Tugas Anda: Buatkan satu do'a dalam bahasa Arab yang fasih (lengkap dengan harakat) untuk hajat berikut: "${input}". 
+    Tugas Anda: Buatkan satu do'a dalam bahasa Arab yang fasih (lengkap dengan harakat dan terjemahan Bahasa indonesia) untuk hajat berikut: "${input}". 
     
     PENTING:
     1. Do'a HARUS menggabungkan Asma'/Sifat Allah yang selaras dengan energi Hari ${hariIni} dan Jam ${planetJamIni}.
@@ -2079,8 +2093,7 @@ function calculateDoa() {
   
   callGemini(prompt, resultDiv);
 }
-
-// [BARU] Logika Pertanyaan Falak (Q&A)
+// [BARU] Logika Pertanyaan Falak (Q&A) - VERSI LUGAS + BASIS PENGETAHUAN
 function calculateFalakQA() {
     const inputElement = document.getElementById('falak-question-input');
     const question = inputElement.value;
@@ -2100,20 +2113,37 @@ function calculateFalakQA() {
     const planetJamIni = getPlanetJam(new Date(), hariIni);
     const tafsirSaatIni = getTafsirIjtima(hariIni, planetJamIni);
     
+    // [GANTI PROMPT] Ini adalah perintah yang diubah (VERSI FINAL)
     const prompt = `
-        Anda adalah asisten AI yang bertindak sebagai Guru Besar Ilmu Falaqiyah dan Hikmah.
+        Anda adalah asisten AI ahli teknis Ilmu Falaqiyah dan Al-Hikmah.
+
+        TUGAS UTAMA:
+        Jawab pertanyaan pengguna dengan struktur WAJIB:
+        1.  **JAWABAN LANGSUNG:** Berikan jawaban spesifik dan langsung di kalimat pertama (Jawaban "To The Point").
+        2.  **PENJELASAN:** Setelah jawaban langsung, BARU berikan penjelasan teknis (kenapa jam itu dipilih, apa referensinya).
         
-        Konteks Waktu Saat Ini:
+        ATURAN TAMBAHAN:
+        * Gunakan bahasa Indonesia yang lugas, teknis, dan akurat. HINDARI bahasa puitis, kiasan, atau berbelit-belit.
+        * Gunakan "Basis Pengetahuan" di bawah ini sebagai rujukan utama Anda.
+        * JANGAN memberikan prediksi masa depan (ramalan).
+
+        KONTEKS WAKTU SAAT INI (Gunakan jika relevan):
         - Hari Penguasa: ${hariIni}
         - Planet Jam Aktif: ${planetJamIni}
         - Tafsir Energi Saat Ini: ${tafsirSaatIni}
-        
-        Tugas: Jawab pertanyaan berikut dengan bahasa Indonesia yang santun, puitis, dan kental dengan nuansa Hikmah/Falaqiyah.
-        1. Jawab pertanyaan berdasarkan ilmu Falakiyah (astronomi/numerologi) atau tafsir energi (seperti ijtima' planet).
-        2. Masukkan referensi ke Hari Penguasa dan Planet Jam saat ini dalam jawaban Anda.
-        3. JANGAN berikan jawaban yang bersifat prediksi masa depan (ramalan) atau diagnosis medis.
-        
-        Pertanyaan Murid: "${question}"
+
+        ---
+        BASIS PENGETAHUAN (RUJUKAN UTAMA ANDA):
+        * **Pelet/Mahabbah (Cinta/Asmara):** Waktu terbaik adalah **Hari Zuhrah** (Jum'at) pada **Jam Zuhrah**. (Ref: Sa'at al-'Isyq / Waktu Asmara).
+        * **Kewibawaan/Jabatan:** Waktu terbaik adalah **Hari Syams** (Minggu) pada **Jam Syams**. (Ref: Sa'at al-Sultan / Waktu Raja).
+        * **Rezeki/Bisnis:** Waktu terbaik adalah **Hari Musytarī** (Kamis) pada **Jam Musytarī**. (Ref: Sa'at al-Barakah / Waktu Keberkahan).
+        * **Ilmu/Belajar:** Waktu terbaik adalah **Hari Utārid** (Rabu) pada **Jam Utārid**. (Ref: Sa'at al-Dzikra / Waktu Kecerdasan).
+        * **Kekuatan/Kekebalan:** Waktu terbaik adalah **Hari Marīkh** (Selasa) pada **Jam Marīkh**. (Ref: Sa'at al-Harb / Waktu Perang).
+        * **Halak/Pemisah/Pagar Gaib:** Waktu terbaik adalah **Hari Zuhal** (Sabtu) pada **Jam Zuhal**. (Ref: Sa'at al-Mawt / Waktu Kematian/Akhir).
+        * **Intuisi/Batin:** Waktu terbaik adalah **Hari Qamar** (Senin) pada **Jam Qamar**. (Ref: Sa'at al-Bathin / Waktu Batin).
+        ---
+
+        Pertanyaan: "${question}"
     `;
     
     callGeminiFalak(prompt, resultElement);
@@ -2212,7 +2242,7 @@ async function callGeminiJodoh(nama1, planet1, angka1, nama2, planet2, angka2) {
     
     resultElement.innerHTML = `
       <hr style="border-color: #ffb8d0; opacity: 0.3;">
-      <h5 style="color: #ffcee0;">Tafsir Mendalam</h5>
+      <h5 style="color: #ffcee0; font-family:'Cinzel Decorative',serif;">Tafsir Mendalam</h5>
       <p style="font-size: 0.9em;"><b>Watak (Planet):</b> ${tafsir.tafsir_watak}</p>
       <p style="font-size: 0.9em;"><b>Nasib (Angka):</b> ${tafsir.tafsir_nasib}</p>
       <p class="petuah" style="color: #ffcee0; border-top-color: #ffb8d0;"><b>Petuah Final:</b><br>${tafsir.petuah_final}</p>
@@ -2445,27 +2475,37 @@ if (stardustCursorEl) {
 // --- KODE DONATUR BERGANTIAN ---
 (function(){
   const daftarDonatur = [
-    "Ade Sutisna, S.T - Rp. 50.000",
     "Abdul Qodir - Rp. 20.000",
     "Budi Santoso - Rp. 25.000",
+    "Ade Sutisna, S.T - Rp. 50.000",
     "Citra Lestari - Rp. 75.000",
-    "Dewi Anggraini - Rp. 100.000",
+    "Ahmad Faizal – RM 72.00",
+"Hafiz Rahman – RM 55.00",
+"Danish Abdullah – RM 48.00",
+"Syafiq Roslan – RM 33.00",
+"Haziq Salleh – RM 70.00",
+"Aiman Razali – RM 22.00",
+"Faiz Karim – RM 64.00",
+"Ridzuan Mahmud – RM 18.00",
+"Faris Halim – RM 74.00",
+"Khairul Fadzil – RM 29.00",
+    "Fajar Nugraha - Rp. 100.000",
     "Eko Prasetyo - Rp. 15.000",
     "Fajar Nugroho - Rp. 30.000",
     "Gunawan Wibowo - Rp. 150.000",
-    "Hesti Rahayu - Rp. 10.000",
+    "Fahmi Firmansyah - Rp. 10.000",
     "Indra Maulana - Rp. 50.000",
     "Joko Susilo - Rp. 200.000",
-    "Kartika Sari - Rp. 40.000",
-    "Lina Marlina - Rp. 80.000",
+    "Rachman - Rp. 40.000",
+    "Ridwan Remin - Rp. 80.000",
     "Muhammad Rizky - Rp. 120.000",
-    "Nina Kurniawati - Rp. 60.000",
+    "Deni  - Rp. 60.000",
     "Oscar Permadi - Rp. 90.000",
-    "Putri Handayani - Rp. 35.000",
+    "Faisyal dwi Cahya - Rp. 35.000",
     "Rahmat Hidayat - Rp. 110.000",
-    "Siti Aminah - Rp. 55.000",
+    "Rizky  - Rp. 55.000",
     "Teguh Firmansyah - Rp. 175.000",
-    "Wulan Dari - Rp. 20.000"
+    "Dedi irawan - Rp. 20.000"
   ];
 
   const elemen = document.getElementById('donatur-dinamis');
