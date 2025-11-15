@@ -2477,6 +2477,7 @@ if (stardustCursorEl) {
   const daftarDonatur = [
     "Abdul Qodir - Rp. 20.000",
     "Budi Santoso - Rp. 25.000",
+    "Tarhadi  - Rp. 50.000",
     "Ade Sutisna, S.T - Rp. 50.000",
     "Citra Lestari - Rp. 75.000",
     "Ahmad Faizal – RM 72.00",
@@ -2529,5 +2530,736 @@ if (stardustCursorEl) {
 })();
 // --- AKHIR KODE DONATUR ---
 </script>
+<!-- Waktu Falakiyah (container) -->
+<div id="falaq-times" style="min-width:320px;margin:12px 0;font-family:Cinzel,serif;"></div>
+<script>
+  // Inisialisasi: tampilkan di div id="falaq-times"
+  FalaqTimesAdvanced.init({
+    containerId: 'falaq-times',
+    hourLengthMinutes: 60,    // biasanya 60; ubah kalau mau
+    showJsonBlock: true,      // tampilkan JSON (bisa dimatikan)
+    // forceUsePageLocation: false, // aktifkan kalau mau paksa pakai lokasi page saja
+    onJson: function(json){
+      console.log('Falaq JSON', json);
+    }
+  });
+</script>
+/* FalaqTimesAdvanced.js
+   - Versi lanjutan: auratic highlights (sa'at 1/2/3), JSON output, overrides
+   - Works offline (no external libs). Compatible with Acode/local.
+   - Auto-uses existing page location vars if present.
+*/
+
+const FalaqTimesAdvanced = (function(){
+  // ---------- Utilities ----------
+  function toRad(d){ return d*Math.PI/180; }
+  function toDeg(r){ return r*180/Math.PI; }
+  function fixAngle(a){ return (a%360+360)%360; }
+  function pad(n){ return (n<10? '0':'') + n; }
+
+  // Julian / NOAA helpers (same robust algo as before)
+  function dateToJulian(date){
+    const y = date.getUTCFullYear();
+    const m = date.getUTCMonth() + 1;
+    const D = date.getUTCDate() + (date.getUTCHours() + date.getUTCMinutes()/60 + date.getUTCSeconds()/3600)/24;
+    let A = Math.floor(y/100);
+    let B = 2 - A + Math.floor(A/4);
+    let Y = y;
+    let M = m;
+    if (m <= 2) { Y = y - 1; M = m + 12; }
+    const JD = Math.floor(365.25*(Y+4716)) + Math.floor(30.6001*(M+1)) + D + B - 1524.5;
+    return JD;
+  }
+  function julianCenturies(jd){ return (jd - 2451545.0) / 36525.0; }
+  function geomMeanLongSun(T){ return fixAngle(280.46646 + T*(36000.76983 + T*0.0003032)); }
+  function geomMeanAnomalySun(T){ return 357.52911 + T*(35999.05029 - 0.0001537*T); }
+  function eccentricityEarthOrbit(T){ return 0.016708634 - T*(0.000042037 + 0.0000001267*T); }
+  function sunEqOfCenter(T,M){ const Mr = toRad(M); return Math.sin(Mr)*(1.914602 - T*(0.004817 + 0.000014*T)) + Math.sin(2*Mr)*(0.019993 - 0.000101*T) + Math.sin(3*Mr)*0.000289; }
+  function sunTrueLong(L0,C){ return L0 + C; }
+  function sunApparentLong(T,theta){ const omega = 125.04 - 1934.136 * T; return theta - 0.00569 - 0.00478 * Math.sin(toRad(omega)); }
+  function meanObliquityOfEcliptic(T){ return 23 + (26 + ((21.448 - T*(46.815 + T*(0.00059 - T*0.001813))))/60)/60; }
+  function obliquityCorrection(T, eps0){ const omega = 125.04 - 1934.136 * T; return eps0 + 0.00256 * Math.cos(toRad(omega)); }
+  function sunDeclination(eps, lambda){ return toDeg(Math.asin(Math.sin(toRad(eps)) * Math.sin(toRad(lambda)))); }
+  function eqOfTime(T, L0, e, M, eps) {
+    const y = Math.tan(toRad(eps/2)) * Math.tan(toRad(eps/2));
+    const L0r = toRad(L0), Mr = toRad(M);
+    const term1 = y * Math.sin(2*L0r);
+    const term2 = -2 * e * Math.sin(Mr);
+    const term3 = 4 * e * y * Math.sin(Mr) * Math.cos(2*L0r);
+    const term4 = -0.5 * y*y * Math.sin(4*L0r);
+    const term5 = -1.25 * e*e * Math.sin(2*Mr);
+    return 4 * toDeg(term1 + term2 + term3 + term4 + term5); // minutes
+  }
+  function hourAngleSunrise(lat, decl){
+    const latR = toRad(lat), declR = toRad(decl);
+    const HA = Math.acos( Math.cos(toRad(90.833)) / (Math.cos(latR)*Math.cos(declR)) - Math.tan(latR)*Math.tan(declR) );
+    return toDeg(HA);
+  }
+  function computeSunriseSunsetUTC(dateLocalMidnightUTC, lat, lng){
+    const jd = dateToJulian(dateLocalMidnightUTC);
+    const T = julianCenturies(jd);
+    const L0 = geomMeanLongSun(T);
+    const M = geomMeanAnomalySun(T);
+    const e = eccentricityEarthOrbit(T);
+    const C = sunEqOfCenter(T, M);
+    const theta = sunTrueLong(L0, C);
+    const lambda = sunApparentLong(T, theta);
+    const eps0 = meanObliquityOfEcliptic(T);
+    const eps = obliquityCorrection(T, eps0);
+    const decl = sunDeclination(eps, lambda);
+    const eqt = eqOfTime(T, L0, e, M, eps);
+    const ha = hourAngleSunrise(lat, decl);
+    const solarNoonUTC = (720 - 4*lng - eqt);
+    const sunriseUTCmin = solarNoonUTC - ha*4;
+    const sunsetUTCmin  = solarNoonUTC + ha*4;
+    return { sunriseUTCmin, sunsetUTCmin, decl, eqt, solarNoonUTC };
+  }
+  function minutesToLocalDate(baseDateLocal, minutesUTC){
+    const tzOffsetMin = baseDateLocal.getTimezoneOffset();
+    const utcMidnight = new Date(Date.UTC(baseDateLocal.getFullYear(), baseDateLocal.getMonth(), baseDateLocal.getDate(), 0, 0, 0) - tzOffsetMin*60000);
+    const dt = new Date(utcMidnight.getTime() + Math.round(minutesUTC*60000));
+    return dt;
+  }
+  function formatHM(d){ return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+
+  // ---------- Helper: find location from page globals ----------
+  function findLocationFromPage(){
+    // common names developers use for stored user location
+    if (window.USER_LAT && window.USER_LNG) return { lat: +window.USER_LAT, lng: +window.USER_LNG };
+    if (window.userLat && window.userLng) return { lat: +window.userLat, lng: +window.userLng };
+    if (window.userLocation && typeof window.userLocation === 'object' && window.userLocation.lat && window.userLocation.lng) return { lat: +window.userLocation.lat, lng: +window.userLocation.lng };
+    // check dataset on body or meta tags optionally
+    const body = document.body;
+    if (body && body.dataset && body.dataset.lat && body.dataset.lng) return { lat: +body.dataset.lat, lng: +body.dataset.lng };
+    // not found -> return null (caller may fallback to geolocation)
+    return null;
+  }
+
+  // Build saats with configurable length (minutes)
+  function buildSaatsWithLength(sunriseDate, sunsetDate, hourLengthMinutes){
+    const saats = [];
+    const msLen = hourLengthMinutes * 60000;
+    for (let i=0;i<12;i++){
+      const start = new Date(sunriseDate.getTime() + i*msLen);
+      const end = new Date(sunriseDate.getTime() + (i+1)*msLen);
+      saats.push({ idx: i+1, start, end, origin: 'sunrise' });
+    }
+    for (let i=0;i<12;i++){
+      const start = new Date(sunsetDate.getTime() + i*msLen);
+      const end = new Date(sunsetDate.getTime() + (i+1)*msLen);
+      saats.push({ idx: 13+i, start, end, origin: 'sunset' });
+    }
+    return saats;
+  }
+
+  // Render table with auratic highlights (gold for sa'at 1..3)
+  function render(container, info, opts){
+    const { lat, lng, sunriseDate, sunsetDate, saats, dateStr } = info;
+    const el = (typeof container === 'string') ? document.getElementById(container) : container;
+    if (!el) return;
+    // style variables (keemasan auratik)
+    const goldStyle = "background:linear-gradient(90deg,#fff6d1,#f9e0a6);color:#1b1b12;padding:4px 8px;border-radius:6px;font-weight:700;";
+    const faint = "color:rgba(255,255,255,0.9);";
+    let html = '';
+    html += `<div style="padding:14px;border-radius:12px;background:linear-gradient(180deg, rgba(10,8,12,0.85), rgba(6,6,8,0.8));color:#efe9d9;font-family:Cinzel, serif;">`;
+    html += `<h3 style="margin:4px 0 8px 0;">Waktu Falakiyah — ${dateStr}</h3>`;
+    html += `<div style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:10px">`;
+    html += `<div><strong>Latitude</strong><div style="${faint}">${lat.toFixed(5)}</div></div>`;
+    html += `<div><strong>Longitude</strong><div style="${faint}">${lng.toFixed(5)}</div></div>`;
+    html += `<div><strong>Syurūq</strong><div style="font-size:1.1em">${formatHM(sunriseDate)}</div></div>`;
+    html += `<div><strong>Maghrib</strong><div style="font-size:1.1em">${formatHM(sunsetDate)}</div></div>`;
+    html += `</div><hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:8px 0;">`;
+    html += `<table style="width:100%;border-collapse:collapse;">`;
+    html += `<thead><tr style="text-align:left"><th style="padding:6px 4px">Sa'at</th><th style="padding:6px 4px">Mulai</th><th style="padding:6px 4px">Selesai</th><th style="padding:6px 4px">Catatan</th></tr></thead><tbody>`;
+    saats.forEach(s => {
+      let note = '';
+      if (s.idx === 1) note = `<span style="${goldStyle}">Puncak (Syurūq)</span>`;
+      else if (s.idx === 2) note = `<span style="background:#ffdca8;padding:4px 6px;border-radius:6px;font-weight:700;">Sa'at Ke-2 (Sekunder)</span>`;
+      else if (s.idx === 3) note = `<span style="background:#ffecd6;padding:4px 6px;border-radius:6px;font-weight:600;">Sa'at Ke-3 (Tersier)</span>`;
+      else if (s.idx === 13) note = `<span style="background:rgba(220,220,255,0.06);padding:4px 6px;border-radius:6px;">Awal Malam (Maghrib)</span>`;
+      html += `<tr style="border-top:1px solid rgba(255,255,255,0.03)"><td style="padding:6px 4px">Sa'at ${s.idx}</td><td style="padding:6px 4px">${formatHM(s.start)}</td><td style="padding:6px 4px">${formatHM(s.end)}</td><td style="padding:6px 4px">${note}</td></tr>`;
+    });
+    html += `</tbody></table>`;
+    // JSON area (hidden) if requested
+    if (opts && opts.showJsonBlock) {
+      const jsonId = (typeof container === 'string' ? container + '-json' : 'falaq-json');
+      html += `<details style="margin-top:12px;color:#ddd"><summary style="cursor:pointer">Tampilkan Data JSON (untuk integrasi)</summary><pre id="${jsonId}" style="background:#0b0b0b;color:#cfc9b9;padding:8px;border-radius:8px;max-height:320px;overflow:auto;"></pre></details>`;
+    }
+    html += `<p style="margin-top:10px;font-size:0.9em;color:#d6cfbd">Catatan: Sa'at 1 = Puncak syurūq (penguasa hari). Sa'at 2 & 3 diberi prioritas sekunder & tersier.</p>`;
+    html += `</div>`;
+    el.innerHTML = html;
+  }
+
+  // Build a JSON structure for external usage
+  function buildOutputJson(info, meta){
+    // info contains saats etc.
+    return {
+      dateLocal: meta.dateLocalISO,
+      lat: info.lat,
+      lng: info.lng,
+      sunrise: info.sunriseDate.toISOString(),
+      sunset: info.sunsetDate.toISOString(),
+      hourLengthMinutes: meta.hourLengthMinutes,
+      saats: info.saats.map(s => ({
+        index: s.idx,
+        startIso: s.start.toISOString(),
+        endIso: s.end.toISOString(),
+        startLocal: `${pad(s.start.getHours())}:${pad(s.start.getMinutes())}`,
+        endLocal: `${pad(s.end.getHours())}:${pad(s.end.getMinutes())}`,
+        origin: s.origin
+      }))
+    };
+  }
+
+  // Main compute function with overrides and callback
+  async function computeAndRenderAdvanced(opts){
+    // opts: { containerId, dateLocal (Date), hourLengthMinutes, overrideSunriseIso, overrideSunsetIso, onJson (fn), showJsonBlock }
+    const containerId = opts.containerId || 'falaq-times';
+    const container = (typeof containerId === 'string') ? document.getElementById(containerId) : containerId;
+    if (!container) { console.warn('FalaqTimesAdvanced: container not found'); return; }
+
+    // Find location from page first
+    let loc = findLocationFromPage();
+    if (!loc && opts.forceUsePageLocation) {
+      container.innerHTML = `<div style="padding:10px;background:#2b2b2b;color:#fff;border-radius:8px">Lokasi tidak ditemukan di halaman. Tambahkan window.USER_LAT / USER_LNG atau userLat / userLng, atau non-aktifkan 'forceUsePageLocation'.</div>`;
+      return;
+    }
+    if (!loc) {
+      // fallback to geolocation
+      if (!navigator.geolocation) {
+        container.innerHTML = `<div style="padding:12px;background:#2b2b2b;color:#fff;border-radius:8px">Geolocation tidak tersedia. Pastikan lokasi tersedia di halaman atau browser mendukung Geolocation.</div>`;
+        return;
+      }
+      try {
+        const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy:true, timeout:30000 }));
+        loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      } catch (e) {
+        container.innerHTML = `<div style="padding:12px;background:#2b2b2b;color:#fff;border-radius:8px">Izin lokasi ditolak atau waktu habis. Pastikan halaman memiliki akses lokasi.</div>`;
+        return;
+      }
+    }
+
+    const dateLocal = opts.dateLocal instanceof Date ? opts.dateLocal : new Date();
+    const hourLengthMinutes = (typeof opts.hourLengthMinutes === 'number' && opts.hourLengthMinutes>0) ? opts.hourLengthMinutes : 60;
+
+    // If user provided override sunrise/sunset (ISO strings), use them; else compute
+    let sunriseDateLocal, sunsetDateLocal;
+    if (opts.overrideSunriseIso && opts.overrideSunsetIso) {
+      sunriseDateLocal = new Date(opts.overrideSunriseIso);
+      sunsetDateLocal = new Date(opts.overrideSunsetIso);
+    } else {
+      // Compute using NOAA algorithm
+      // Build UTC midnight Date for that local date:
+      const utcYear = dateLocal.getUTCFullYear();
+      const utcMonth = dateLocal.getUTCMonth();
+      const utcDay = dateLocal.getUTCDate();
+      const dateUTCmidnight = new Date(Date.UTC(utcYear, utcMonth, utcDay, 0, 0, 0));
+      const sun = computeSunriseSunsetUTC(dateUTCmidnight, loc.lat, loc.lng);
+      if (isNaN(sun.sunriseUTCmin) || isNaN(sun.sunsetUTCmin)) {
+        container.innerHTML = `<div style="padding:12px;background:#2b2b2b;color:#fff;border-radius:8px">Fenomena polar: matahari tidak terbit/terbenam pada tanggal ini di lokasi Anda.</div>`;
+        return;
+      }
+      sunriseDateLocal = minutesToLocalDate(dateLocal, sun.sunriseUTCmin);
+      sunsetDateLocal  = minutesToLocalDate(dateLocal, sun.sunsetUTCmin);
+    }
+
+    // Build saats with configurable length (minutes)
+    const saats = buildSaatsWithLength(sunriseDateLocal, sunsetDateLocal, hourLengthMinutes);
+    const dateStr = dateLocal.toLocaleDateString();
+
+    // Render HTML
+    render(container, { lat: loc.lat, lng: loc.lng, sunriseDate: sunriseDateLocal, sunsetDate: sunsetDateLocal, saats, dateStr }, { showJsonBlock: !!opts.showJsonBlock });
+
+    // Build JSON
+    const meta = { dateLocalISO: dateLocal.toISOString(), hourLengthMinutes };
+    const outJson = buildOutputJson({ lat: loc.lat, lng: loc.lng, sunriseDate: sunriseDateLocal, sunsetDate: sunsetDateLocal, saats }, meta);
+
+    // Post JSON to callback if present
+    if (typeof opts.onJson === 'function') {
+      try { opts.onJson(outJson); } catch(e){ console.warn('onJson callback error', e); }
+    }
+
+    // Also write JSON to details block if requested
+    if (opts.showJsonBlock) {
+      const jsonId = (typeof containerId === 'string' ? containerId + '-json' : 'falaq-json');
+      const pre = document.getElementById(jsonId);
+      if (pre) pre.textContent = JSON.stringify(outJson, null, 2);
+    }
+
+    return outJson;
+  }
+
+  // Public API
+  return {
+    init: function(initOpts){
+      // initOpts defaults
+      const opts = Object.assign({
+        containerId: 'falaq-times',
+        dateLocal: new Date(),
+        hourLengthMinutes: 60,
+        overrideSunriseIso: null,
+        overrideSunsetIso: null,
+        onJson: null,
+        showJsonBlock: false,
+        forceUsePageLocation:false
+      }, initOpts || {});
+      // initial placeholder
+      const container = (typeof opts.containerId === 'string') ? document.getElementById(opts.containerId) : opts.containerId;
+      if (!container) { console.warn('FalaqTimesAdvanced: container not found'); return; }
+      container.innerHTML = `<div style="padding:12px;background:rgba(0,0,0,0.6);color:#eee;border-radius:8px;font-family:Cinzel, serif">Menghitung waktu falakiyah... (memanfaatkan lokasi halaman jika ada).</div>`;
+      // compute
+      computeAndRenderAdvanced(opts).then(result => {
+        // result is JSON if success
+        // optionally you can handle result here
+      }).catch(err => {
+        console.error(err);
+      });
+    },
+    computeForDate: function(opts){
+      // same options as init but required: dateLocal
+      return computeAndRenderAdvanced(opts);
+    }
+  };
+})();
+<!-- Waktu Falakiyah (container) -->
+<div id="falaq-times" style="min-width:320px;margin:12px 0;font-family:Cinzel,serif;"></div>
+
+<!-- Panel ringkasan (akan diisi otomatis) -->
+<div id="falaq-answer" style="font-family:Cinzel,serif;color:#efe9d9;background:rgba(5,4,8,0.6);padding:12px;border-radius:10px;margin:12px 0;">
+  <h3 style="margin:0 0 8px 0">Waktu Thalsim Pelet (Mahabbah)</h3>
+  <p><strong>Hari:</strong> Zuhrah (Jum'at)</p>
+  <p><strong>Syurūq (puncak):</strong> <span id="falaq-sunrise">--:--</span></p>
+  <table style="width:100%;border-collapse:collapse;color:#efe9d9;">
+    <tbody>
+      <tr><td style="padding:6px 4px">Sa'at 1 (Puncak)</td><td id="falaq-s1">--:-- – --:--</td></tr>
+      <tr><td style="padding:6px 4px">Sa'at 2 (Sekunder)</td><td id="falaq-s2">--:-- – --:--</td></tr>
+      <tr><td style="padding:6px 4px">Sa'at 3 (Tersier)</td><td id="falaq-s3">--:-- – --:--</td></tr>
+    </tbody>
+  </table>
+  <pre id="falaq-brief" style="white-space:pre-wrap;margin-top:8px;color:#e9dfc6"></pre>
+</div>
+
+<script>
+(function(){
+  function safeSet(id, text){ const e = document.getElementById(id); if(e) e.textContent = text; }
+
+  function renderFalaqAnswerFromJson(outJson){
+    if(!outJson || !outJson.saats || outJson.saats.length < 1){
+      safeSet('falaq-brief','Data falak tidak tersedia.');
+      return;
+    }
+    const s1 = outJson.saats[0] || null;
+    const s2 = outJson.saats[1] || null;
+    const s3 = outJson.saats[2] || null;
+
+    const sunrise = s1 ? s1.startLocal : (outJson.sunrise ? (new Date(outJson.sunrise)).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '--:--');
+    safeSet('falaq-sunrise', sunrise);
+
+    safeSet('falaq-s1', s1 ? (s1.startLocal + ' – ' + s1.endLocal) : '--:-- – --:--');
+    safeSet('falaq-s2', s2 ? (s2.startLocal + ' – ' + s2.endLocal) : '--:-- – --:--');
+    safeSet('falaq-s3', s3 ? (s3.startLocal + ' – ' + s3.endLocal) : '--:-- – --:--');
+
+    const lines = [
+      "Hari: Zuhrah (Jum'at)",
+      "Puncak (Sa'at 1 / Syurūq): " + sunrise,
+      "Alternatif: Sa'at 2: " + (s2 ? (s2.startLocal + ' – ' + s2.endLocal) : '--'),
+      "Sa'at 3: " + (s3 ? (s3.startLocal + ' – ' + s3.endLocal) : '--'),
+      "Protokol Awal: Tahsin CBA → Tawassul 4-Rantai → Niat → Thalsim pada Sa'at 1."
+    ];
+    safeSet('falaq-brief', lines.join('\n'));
+  }
+
+  // Attach to existing FalaqTimesAdvanced if present, else wait short
+  function attachOrWait(retries){
+    retries = retries === undefined ? 6 : retries;
+    if(window.FalaqTimesAdvanced && typeof window.FalaqTimesAdvanced.init === 'function'){
+      window.FalaqTimesAdvanced.init({
+        containerId: 'falaq-times',
+        hourLengthMinutes: 60,
+        showJsonBlock: false,
+        onJson: function(json){
+          try{ renderFalaqAnswerFromJson(json); }catch(e){ console.error(e); }
+        }
+      });
+    } else if(retries > 0){
+      setTimeout(function(){ attachOrWait(retries-1); }, 800);
+    } else {
+      safeSet('falaq-brief', 'FalaqTimesAdvanced tidak ditemukan. Paste kode FalaqTimesAdvanced.js di halaman sebelum blok ini.');
+    }
+  }
+  attachOrWait();
+})();
+</script>
+/* FalaqTimesAdvanced - chunk 1/4 */
+const FalaqTimesAdvanced = (function(){
+  function toRad(d){ return d*Math.PI/180; }
+  function toDeg(r){ return r*180/Math.PI; }
+  function fixAngle(a){ return (a%360+360)%360; }
+  function pad(n){ return (n<10? '0':'') + n; }
+
+  function dateToJulian(date){
+    const y = date.getUTCFullYear();
+    const m = date.getUTCMonth() + 1;
+    const D = date.getUTCDate() + (date.getUTCHours() + date.getUTCMinutes()/60 + date.getUTCSeconds()/3600)/24;
+    let A = Math.floor(y/100);
+    let B = 2 - A + Math.floor(A/4);
+    let Y = y;
+    let M = m;
+    if (m <= 2) { Y = y - 1; M = m + 12; }
+    const JD = Math.floor(365.25*(Y+4716)) + Math.floor(30.6001*(M+1)) + D + B - 1524.5;
+    return JD;
+  }
+  function julianCenturies(jd){ return (jd - 2451545.0) / 36525.0; }
+  function geomMeanLongSun(T){ return fixAngle(280.46646 + T*(36000.76983 + T*0.0003032)); }
+  function geomMeanAnomalySun(T){ return 357.52911 + T*(35999.05029 - 0.0001537*T); }
+  function eccentricityEarthOrbit(T){ return 0.016708634 - T*(0.000042037 + 0.0000001267*T); }
+  function sunEqOfCenter(T,M){
+    const Mr = toRad(M);
+    return Math.sin(Mr)*(1.914602 - T*(0.004817 + 0.000014*T))
+         + Math.sin(2*Mr)*(0.019993 - 0.000101*T)
+         + Math.sin(3*Mr)*0.000289;
+  }
+  function sunTrueLong(L0,C){ return L0 + C; }
+  function sunApparentLong(T,theta){
+    const omega = 125.04 - 1934.136 * T;
+    return theta - 0.00569 - 0.00478 * Math.sin(toRad(omega));
+  }
+  function meanObliquityOfEcliptic(T){
+    return 23 + (26 + ((21.448 - T*(46.815 + T*(0.00059 - T*0.001813))))/60)/60;
+  }
+  function obliquityCorrection(T, eps0){
+    const omega = 125.04 - 1934.136 * T;
+    return eps0 + 0.00256 * Math.cos(toRad(omega));
+  }
+  function sunDeclination(eps, lambda){
+    return toDeg(Math.asin(Math.sin(toRad(eps)) * Math.sin(toRad(lambda))));
+  }
+  function eqOfTime(T, L0, e, M, eps) {
+    const y = Math.tan(toRad(eps/2)) * Math.tan(toRad(eps/2));
+    const L0r = toRad(L0), Mr = toRad(M);
+    const term1 = y * Math.sin(2*L0r);
+    const term2 = -2 * e * Math.sin(Mr);
+    const term3 = 4 * e * y * Math.sin(Mr) * Math.cos(2*L0r);
+    const term4 = -0.5 * y*y * Math.sin(4*L0r);
+    const term5 = -1.25 * e*e * Math.sin(2*Mr);
+    return 4 * toDeg(term1 + term2 + term3 + term4 + term5); // minutes
+  }
+  function hourAngleSunrise(lat, decl){
+    const latR = toRad(lat), declR = toRad(decl);
+    const HA = Math.acos( Math.cos(toRad(90.833)) / (Math.cos(latR)*Math.cos(declR)) - Math.tan(latR)*Math.tan(declR) );
+    return toDeg(HA);
+  }
+  function computeSunriseSunsetUTC(dateLocalMidnightUTC, lat, lng){
+    const jd = dateToJulian(dateLocalMidnightUTC);
+    const T = julianCenturies(jd);
+    const L0 = geomMeanLongSun(T);
+    const M = geomMeanAnomalySun(T);
+    const e = eccentricityEarthOrbit(T);
+    const C = sunEqOfCenter(T, M);
+    const theta = sunTrueLong(L0, C);
+    const lambda = sunApparentLong(T, theta);
+    const eps0 = meanObliquityOfEcliptic(T);
+    const eps = obliquityCorrection(T, eps0);
+    const decl = sunDeclination(eps, lambda);
+    const eqt = eqOfTime(T, L0, e, M, eps);
+    const ha = hourAngleSunrise(lat, decl);
+    const solarNoonUTC = (720 - 4*lng - eqt);
+    const sunriseUTCmin = solarNoonUTC - ha*4;
+    const sunsetUTCmin  = solarNoonUTC + ha*4;
+    return { sunriseUTCmin, sunsetUTCmin, decl, eqt, solarNoonUTC };
+  }
+  function minutesToLocalDate(baseDateLocal, minutesUTC){
+    const tzOffsetMin = baseDateLocal.getTimezoneOffset();
+    const utcMidnight = new Date(
+      Date.UTC(
+        baseDateLocal.getFullYear(),
+        baseDateLocal.getMonth(),
+        baseDateLocal.getDate(),
+        0,0,0
+      ) - tzOffsetMin*60000
+    );
+    const dt = new Date(utcMidnight.getTime() + Math.round(minutesUTC*60000));
+    return dt;
+  }
+
+  function formatHM(d){
+    const hh = d.getHours();
+    const mm = d.getMinutes();
+    return (hh<10?"0":"")+hh+":"+(mm<10?"0":"")+mm;
+  }
+
+  /* -------------------------
+     Cari lokasi dari halaman
+     ------------------------- */
+  function findLocationFromPage(){
+    if(window.USER_LAT && window.USER_LNG)
+      return {lat:+window.USER_LAT,lng:+window.USER_LNG};
+
+    if(window.userLat && window.userLng)
+      return {lat:+window.userLat,lng:+window.userLng};
+
+    if(window.userLocation &&
+       typeof window.userLocation==="object" &&
+       window.userLocation.lat && window.userLocation.lng)
+      return {lat:+window.userLocation.lat,lng:+window.userLocation.lng};
+
+    const body = document.body;
+    if(body && body.dataset && body.dataset.lat && body.dataset.lng)
+      return {lat:+body.dataset.lat,lng:+body.dataset.lng};
+
+    return null;
+  }
+
+  /* -----------------------
+     Bangun Sa'at siang/malam
+     ----------------------- */
+  function buildSaatsWithLength(sunriseDate, sunsetDate, hourLengthMinutes){
+    const saats = [];
+    const msLen = hourLengthMinutes * 60000;
+
+    // Sa'at 1–12 (siang)
+    for(let i=0; i<12; i++){
+      const start = new Date(sunriseDate.getTime() + i*msLen);
+      const end   = new Date(sunriseDate.getTime() + (i+1)*msLen);
+      saats.push({idx:i+1, start, end, origin:"sunrise"});
+    }
+
+    // Sa'at 13–24 (malam)
+    for(let i=0; i<12; i++){
+      const start = new Date(sunsetDate.getTime() + i*msLen);
+      const end   = new Date(sunsetDate.getTime() + (i+1)*msLen);
+      saats.push({idx:13+i, start, end, origin:"sunset"});
+    }
+
+    return saats;
+  }
+
+  /* -----------------------
+     HTML render utama
+     ----------------------- */
+  function render(container, info, opts){
+    const { lat, lng, sunriseDate, sunsetDate, saats, dateStr } = info;
+    const el = (typeof container==="string")
+              ? document.getElementById(container)
+              : container;
+    if(!el) return;
+
+    const goldStyle = "background:linear-gradient(90deg,#fff6d1,#f9e0a6);color:#1b1b12;padding:4px 8px;border-radius:6px;font-weight:700;";
+    const softGold = "background:#ffdca8;padding:4px 6px;border-radius:6px;font-weight:700;";
+    const paleGold = "background:#ffecd6;padding:4px 6px;border-radius:6px;font-weight:600;";
+
+    let html = "";
+    html += `<div style="padding:14px;border-radius:12px;
+              background:linear-gradient(180deg,rgba(10,8,12,0.85),rgba(6,6,8,0.8));
+              color:#efe9d9;font-family:Cinzel,serif;">`;
+
+    html += `<h3 style="margin:4px 0 8px 0;">Waktu Falakiyah — ${dateStr}</h3>`;
+
+    html += `<div style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:10px">
+              <div><strong>Latitude</strong><div>${lat.toFixed(5)}</div></div>
+              <div><strong>Longitude</strong><div>${lng.toFixed(5)}</div></div>
+              <div><strong>Syurūq</strong><div style="font-size:1.1em">${formatHM(sunriseDate)}</div></div>
+              <div><strong>Maghrib</strong><div style="font-size:1.1em">${formatHM(sunsetDate)}</div></div>
+             </div>`;
+
+    html += `<hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:8px 0;">`;
+
+    html += `<table style="width:100%;border-collapse:collapse;">
+               <thead>
+                 <tr style="text-align:left">
+                   <th style="padding:6px 4px">Sa'at</th>
+                   <th style="padding:6px 4px">Mulai</th>
+                   <th style="padding:6px 4px">Selesai</th>
+                   <th style="padding:6px 4px">Catatan</th>
+                 </tr>
+               </thead><tbody>`;
+
+    saats.forEach(s=>{
+      let note="";
+      if(s.idx===1) note = `<span style="${goldStyle}">Puncak (Syurūq)</span>`;
+      else if(s.idx===2) note = `<span style="${softGold}">Sa'at 2 (Sekunder)</span>`;
+      else if(s.idx===3) note = `<span style="${paleGold}">Sa'at 3 (Tersier)</span>`;
+      else if(s.idx===13) note = `<span style="background:rgba(220,220,255,0.06);
+                                    padding:4px 6px;border-radius:6px;">Awal Malam</span>`;
+
+      html += `<tr style="border-top:1px solid rgba(255,255,255,0.03)">
+                 <td style="padding:6px 4px">Sa'at ${s.idx}</td>
+                 <td style="padding:6px 4px">${formatHM(s.start)}</td>
+                 <td style="padding:6px 4px">${formatHM(s.end)}</td>
+                 <td style="padding:6px 4px">${note}</td>
+               </tr>`;
+    });
+
+    html += `</tbody></table>`;
+
+    if(opts && opts.showJsonBlock){
+      const jsonId = (typeof container==="string") ? container+"-json" : "falaq-json";
+      html += `<details style="margin-top:12px;color:#ddd">
+                 <summary style="cursor:pointer">Data JSON</summary>
+                 <pre id="${jsonId}" 
+                      style="background:#0b0b0b;color:#cfc9b9;padding:8px;
+                             border-radius:8px;max-height:320px;overflow:auto;"></pre>
+               </details>`;
+    }
+
+    html += `<p style="margin-top:10px;font-size:0.9em;color:#d6cfbd">
+               Catatan: Sa'at 1 = Puncak Syurūq (penguasa hari).
+               Sa'at 2 & 3 = sekunder & tersier.
+             </p>`;
+
+    html += `</div>`;
+    el.innerHTML = html;
+  }
+  /* -----------------------
+     Build JSON output
+     ----------------------- */
+  function buildOutputJson(info, meta){
+    return {
+      dateLocal: meta.dateLocalISO,
+      lat: info.lat,
+      lng: info.lng,
+      sunrise: info.sunriseDate.toISOString(),
+      sunset: info.sunsetDate.toISOString(),
+      hourLengthMinutes: meta.hourLengthMinutes,
+      saats: info.saats.map(s => ({
+        index: s.idx,
+        startIso: s.start.toISOString(),
+        endIso: s.end.toISOString(),
+        startLocal: formatHM(s.start),
+        endLocal: formatHM(s.end),
+        origin: s.origin
+      }))
+    };
+  }
+
+  /* -----------------------
+     Compute & Render Main
+     ----------------------- */
+  async function computeAndRenderAdvanced(opts){
+    // opts: { containerId, dateLocal, hourLengthMinutes, overrideSunriseIso, overrideSunsetIso, onJson, showJsonBlock, forceUsePageLocation }
+    const containerId = opts.containerId || 'falaq-times';
+    const container = (typeof containerId === 'string') ? document.getElementById(containerId) : containerId;
+    if(!container){
+      console.warn('FalaqTimesAdvanced: container not found');
+      return null;
+    }
+
+    // find location from page
+    let loc = findLocationFromPage();
+    if(!loc && opts.forceUsePageLocation){
+      container.innerHTML = `<div style="padding:10px;background:#2b2b2b;color:#fff;border-radius:8px">Lokasi tidak ditemukan di halaman. Tambahkan window.USER_LAT / USER_LNG atau non-aktifkan forceUsePageLocation.</div>`;
+      return null;
+    }
+
+    if(!loc){
+      if(!navigator.geolocation){
+        container.innerHTML = `<div style="padding:12px;background:#2b2b2b;color:#fff;border-radius:8px">Geolocation tidak tersedia di browser ini.</div>`;
+        return null;
+      }
+      try {
+        const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy:true, timeout:30000 }));
+        loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      } catch(e){
+        container.innerHTML = `<div style="padding:12px;background:#2b2b2b;color:#fff;border-radius:8px">Izin lokasi ditolak atau waktu habis. Pastikan akses lokasi diberikan.</div>`;
+        return null;
+      }
+    }
+
+    const dateLocal = (opts.dateLocal instanceof Date) ? opts.dateLocal : new Date();
+    const hourLengthMinutes = (typeof opts.hourLengthMinutes === 'number' && opts.hourLengthMinutes>0) ? opts.hourLengthMinutes : 60;
+
+    // compute sunrise/sunset (or use overrides)
+    let sunriseDateLocal, sunsetDateLocal;
+    if(opts.overrideSunriseIso && opts.overrideSunsetIso){
+      sunriseDateLocal = new Date(opts.overrideSunriseIso);
+      sunsetDateLocal  = new Date(opts.overrideSunsetIso);
+    } else {
+      // build UTC midnight for the dateLocal
+      const utcYear = dateLocal.getUTCFullYear();
+      const utcMonth = dateLocal.getUTCMonth();
+      const utcDay = dateLocal.getUTCDate();
+      const dateUTCmidnight = new Date(Date.UTC(utcYear, utcMonth, utcDay, 0,0,0));
+      const sun = computeSunriseSunsetUTC(dateUTCmidnight, loc.lat, loc.lng);
+      if(isNaN(sun.sunriseUTCmin) || isNaN(sun.sunsetUTCmin)){
+        container.innerHTML = `<div style="padding:12px;background:#2b2b2b;color:#fff;border-radius:8px">Fenomena polar: matahari tidak terbit/terbenam pada tanggal ini di lokasi Anda.</div>`;
+        return null;
+      }
+      sunriseDateLocal = minutesToLocalDate(dateLocal, sun.sunriseUTCmin);
+      sunsetDateLocal  = minutesToLocalDate(dateLocal, sun.sunsetUTCmin);
+    }
+
+    // build saats
+    const saats = buildSaatsWithLength(sunriseDateLocal, sunsetDateLocal, hourLengthMinutes);
+    const dateStr = dateLocal.toLocaleDateString();
+
+    // render html
+    render(container, { lat: loc.lat, lng: loc.lng, sunriseDate: sunriseDateLocal, sunsetDate: sunsetDateLocal, saats, dateStr }, { showJsonBlock: !!opts.showJsonBlock });
+
+    // build json
+    const meta = { dateLocalISO: dateLocal.toISOString(), hourLengthMinutes };
+    const outJson = buildOutputJson({ lat: loc.lat, lng: loc.lng, sunriseDate: sunriseDateLocal, sunsetDate: sunsetDateLocal, saats }, meta);
+
+    // callback
+    if(typeof opts.onJson === 'function'){
+      try{ opts.onJson(outJson); } catch(e){ console.warn('onJson callback error', e); }
+    }
+
+    // write json block if present
+    if(opts.showJsonBlock){
+      const jsonId = (typeof containerId === 'string') ? containerId + '-json' : 'falaq-json';
+      const pre = document.getElementById(jsonId);
+      if(pre) pre.textContent = JSON.stringify(outJson, null, 2);
+    }
+
+    return outJson;
+  }
+  /* -----------------------
+     PUBLIC API
+     ----------------------- */
+  return {
+
+    init: function(initOpts){
+      const opts = Object.assign({
+        containerId: 'falaq-times',
+        dateLocal: new Date(),
+        hourLengthMinutes: 60,
+        overrideSunriseIso: null,
+        overrideSunsetIso: null,
+        onJson: null,
+        showJsonBlock: false,
+        forceUsePageLocation:false
+      }, initOpts || {});
+
+      const container =
+        (typeof opts.containerId === 'string')
+          ? document.getElementById(opts.containerId)
+          : opts.containerId;
+
+      if(!container){
+        console.warn('FalaqTimesAdvanced: container not found');
+        return;
+      }
+
+      container.innerHTML =
+        `<div style="padding:12px;background:rgba(0,0,0,0.6);
+                     color:#eee;border-radius:8px;
+                     font-family:Cinzel,serif">
+            Menghitung waktu falakiyah...
+            (menggunakan lokasi halaman bila tersedia)
+         </div>`;
+
+      computeAndRenderAdvanced(opts)
+        .then(result => {})
+        .catch(err => console.error(err));
+    },
+
+    computeForDate: function(opts){
+      // sama seperti init tapi wajib ada dateLocal
+      return computeAndRenderAdvanced(opts);
+    }
+
+  };
+
+})();   // END FalaqTimesAdvanced
 </body>
 </html>
