@@ -495,47 +495,137 @@ footer{
 }
 
 
-/* layar pembuka */
+/* ===== Opening screen — Colorful & Cheerful (paste menggantikan block lama) ===== */
 #opening-screen{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  /* [GANTI BACKGROUND] Gradasi Senja untuk Loading */
-  background: linear-gradient(180deg, #0f0524 0%, #3e1b3c 40%, #a23b3b 80%, #f77b31 100%);
-  display:flex;flex-direction:column;justify-content:center;align-items:center;
-  z-index:9999;color:#f5e9c8;
-  font-family:'Cinzel Decorative',serif; /* [FONT TETAP] Font mistik */
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  z-index:9999;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
   text-align:center;
-  transition:opacity 1s ease;
+  font-family:'Cinzel Decorative', serif;
+  transition:opacity .9s ease;
+
+  /* Layered colorful background (cerah, tapi tetap elegan) */
+  background:
+    radial-gradient(circle at 10% 20%, rgba(255,200,120,0.12), transparent 15%),
+    radial-gradient(circle at 90% 80%, rgba(180,150,255,0.10), transparent 18%),
+    linear-gradient(135deg, #2b0f3b 0%, #4a1f5b 25%, #6b2a74 40%, #7e3a5f 60%, #ff7aa2 85%, #ffd37a 100%);
+  overflow:hidden;
+  color:#fff;
 }
+
+/* soft animated overlay for cheerful aurora */
+#opening-screen::before{
+  content:'';
+  position:absolute; inset:0;
+  background: linear-gradient(90deg,
+    rgba(255,115,150,0.06) 0%,
+    rgba(255,210,120,0.06) 25%,
+    rgba(160,200,255,0.06) 50%,
+    rgba(190,140,255,0.06) 75%,
+    rgba(255,130,190,0.06) 100%);
+  pointer-events:none;
+  mix-blend-mode:screen;
+  animation: rainbowShift 10s linear infinite;
+  opacity:0.95;
+}
+@keyframes rainbowShift {
+  0% { transform: translateX(-10%); filter: hue-rotate(0deg); }
+  50% { transform: translateX(10%); filter: hue-rotate(18deg); }
+  100% { transform: translateX(-10%); filter: hue-rotate(0deg); }
+}
+
+/* Judul — lebih cerah & sedikit berwarna */
 #opening-screen h1{
-  font-family:'Cinzel Decorative',serif; /* [FONT TETAP] Font mistik */
-  font-size:1.8em;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.6); /* Drop shadow */
+  font-family:'Cinzel Decorative', serif;
+  font-size:2.0em;
+  line-height:1.1;
+  margin:0;
+  padding:0 18px;
+  background: linear-gradient(90deg, #fff7df 0%, #ffe6b3 40%, #ffd6a8 60%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 4px 18px rgba(0,0,0,0.35);
 }
+
+/* Subtext */
 #opening-screen p{
-  margin-top:15px;font-size:1em;
-  font-family:'Cormorant Garamond',serif; /* [FONT TETAP] Font mistik */
+  margin-top:12px;
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.02em;
+  color: rgba(255,255,255,0.95);
+  opacity:0.95;
+  text-shadow: 0 2px 8px rgba(10,6,12,0.45);
 }
-/* Loading Bar Mistis (Biarkan kuning, cocok dgn gaya koin) */
-#loading-container {
-  width: 220px;
-  height: 5px;
-  border: 1px solid #d8c471;
-  margin-top: 25px;
-  border-radius: 5px;
-  overflow: hidden;
-  background: rgba(0,0,0,0.2);
+
+/* Branding block (jangan hapus, hanya styling) */
+#opening-screen .branding {
+  margin-top:20px;
+  font-size:0.95em;
+  color: #fff8ea;
+  opacity:0.95;
+  letter-spacing:0.3px;
+  line-height:1.35;
+  font-family:'Cormorant Garamond', serif;
 }
-#loading-bar {
-  width: 0%;
-  height: 100%;
-  background: linear-gradient(90deg, #f0e6b2, #b5962b);
-  box-shadow: 0 0 10px #f0e6b2;
-  border-radius: 5px;
-  animation: fillLoading 7s linear forwards;
+
+/* Loading bar container and bar (cerah & fun) */
+#loading-container{
+  width:72%;
+  max-width:520px;
+  margin-top:28px;
+  height:12px;
+  background: rgba(255,255,255,0.08);
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.45) inset;
 }
-@keyframes fillLoading {
-  from { width: 0%; }
-  to { width: 100%; }
+
+/* animated colorful bar */
+#loading-bar{
+  height:100%;
+  width:0%;
+  border-radius:12px;
+  background: linear-gradient(90deg, #ffb86b 0%, #ffd86b 30%, #8ee7ff 60%, #b98eff 100%);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35), 0 0 12px rgba(255,210,120,0.18);
+  animation: loadGrow 6s forwards ease-in-out;
+}
+
+/* if you want longer progress animation (matching 15s), add modifier */
+.loading-slow #loading-bar{ animation-duration:14s; }
+
+/* small bounce shine for bar */
+#loading-bar::after{
+  content:'';
+  position:absolute;
+  top:0; left:0;
+  width:30%;
+  height:100%;
+  pointer-events:none;
+  background: linear-gradient(90deg, rgba(255,255,255,0.35), rgba(255,255,255,0.06));
+  transform: translateX(-120%);
+  animation: slideShine 2.4s infinite linear;
+  mix-blend-mode: overlay;
+  opacity:0.6;
+}
+@keyframes slideShine {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(220%); }
+}
+@keyframes loadGrow {
+  0% { width:0%; }
+  60% { width:78%; }
+  100% { width:100%; }
+}
+
+/* small responsiveness tweak */
+@media (max-width:480px){
+  #opening-screen h1{ font-size:1.5em; padding:0 12px; }
+  #loading-container{ width:86%; }
 }
 
 /* Stardust Cursor */
@@ -803,13 +893,34 @@ body:hover #stardust-cursor {
 </style>
 </head>
 <body>
-  <div id="opening-screen">
+  <!-- ===== opening-screen (safe block) ===== -->
+<div id="opening-screen">
   <h1>✦ SEDANG MEMBUKA LANGIT DAN WAKTU ✦</h1>
   <p>TUNGGULAH SEJENAK HINGGA TABIR FALAK TERBUKA...</p>
+
+  <div style="
+      margin-top:15px;
+      font-family: 'Cinzel', serif;
+      font-size:0.85em;
+      color:#eef2f7;
+      opacity:0.95;
+      text-align:center;
+      letter-spacing:0.5px;
+      text-shadow:0 0 10px rgba(255,255,255,0.25);
+  ">
+      <div><strong>Falaqyah Digital Al-Hikmah</strong></div>
+      <div>Sistem Falakiyah Ruhaniyah digital pertama di dunia</div>
+      <div style="margin-top:4px;">Akurat • Presisi • Terverifikasi</div>
+      <div style="margin-top:8px; font-size:0.9em; opacity:0.9;">
+          Founder & System Architect: <strong>Endry Arya</strong>
+      </div>
+  </div>
+
   <div id="loading-container">
     <div id="loading-bar"></div>
   </div>
 </div>
+<!-- ===== end opening-screen ===== -->
 
 <canvas id="universe"></canvas>
 
@@ -933,7 +1044,17 @@ body:hover #stardust-cursor {
 
       </div>
 
-      <div class="author">Diprakarsai oleh : Endry Arya</div>
+      <!-- Branding Falaqyah -->
+<div style="text-align:center; margin-top:40px; font-family:Cinzel, serif; color:#e8e3d8; font-size:14px; opacity:0.9;">
+  <div>Falaqyah Digital Al-Hikmah</div>
+  <div>Sistem Falakiyah Ruhaniyah digital pertama di dunia</div>
+  <div>Akurat • Presisi • Terverifikasi</div>
+  <br>
+  <div style="font-size:13px;">Founder & System Architect:</div>
+  <div style="font-weight:600;">Endry Arya</div>
+</div>
+
+</body>
       <footer>© CBA2025</footer> </div>
   </div> 
   
@@ -1017,7 +1138,7 @@ const audioBtn=document.getElementById("audioBtn");
 let showPlanets=false; 
 
 // INI BAGIAN PENTING YANG BIKIN STUCK
-// Kodenya aman, 7000 milidetik = 7 detik
+// Kodenya aman, 15000 milidetik = 15 detik
 setTimeout(()=>{
   const opening=document.getElementById('opening-screen');
   if (opening) {
@@ -1031,7 +1152,7 @@ setTimeout(()=>{
       }
     },1000); // 1 detik fade out
   }
-},7000); // 7 detik loading screen
+},15000); // 15 detik loading screen
 
 function startMain(){
   const intro = document.getElementById('intro');
@@ -3261,5 +3382,27 @@ const FalaqTimesAdvanced = (function(){
   };
 
 })();   // END FalaqTimesAdvanced
+<!-- Branding Falaqyah -->
+<div style="text-align:center; margin-top:40px; font-family:Cinzel, serif; color:#e8e3d8; font-size:14px; opacity:0.9;">
+  <div>Falaqyah Digital Al-Hikmah</div>
+  <div>Sistem Falakiyah Ruhaniyah digital pertama di dunia</div>
+  <div>Akurat • Presisi • Terverifikasi</div>
+  <br>
+  <div style="font-size:13px;">Founder & System Architect:</div>
+  <div style="font-weight:600;">Endry Arya</div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(() => {
+        const op = document.getElementById('opening-screen');
+        if(op) op.style.opacity = "0";
+        setTimeout(() => {
+            if(op) op.style.display = "none";
+        }, 600); // fade out
+    }, 15000); // 15 detik
+});
+</script>
+<body class="loading-slow">
+</body>
 </body>
 </html>
