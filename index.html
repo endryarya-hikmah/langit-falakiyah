@@ -909,7 +909,7 @@ body:hover #stardust-cursor {
       text-shadow:0 0 10px rgba(255,255,255,0.25);
   ">
       <div><strong>Falaqyah Digital Al-Hikmah</strong></div>
-      <div>Sistem Falakiyah Ruhaniyah digital pertama di dunia</div>
+      <div>Sistem Falakiyah Ruhaniyah Digital Pertama di Dunia</div>
       <div style="margin-top:4px;">Akurat • Presisi • Terverifikasi</div>
       <div style="margin-top:8px; font-size:0.9em; opacity:0.9;">
           Founder & System Architect: <strong>Endry Arya</strong>
@@ -1047,7 +1047,7 @@ body:hover #stardust-cursor {
       <!-- Branding Falaqyah -->
 <div style="text-align:center; margin-top:40px; font-family:Cinzel, serif; color:#e8e3d8; font-size:14px; opacity:0.9;">
   <div>Falaqyah Digital Al-Hikmah</div>
-  <div>Sistem Falakiyah Ruhaniyah digital pertama di dunia</div>
+  <div>Sistem Falakiyah Ruhaniyah Digital Pertama di Dunia</div>
   <div>Akurat • Presisi • Terverifikasi</div>
   <br>
   <div style="font-size:13px;">Founder & System Architect:</div>
@@ -1055,7 +1055,7 @@ body:hover #stardust-cursor {
 </div>
 
 </body>
-      <footer>© CBA2025</footer> </div>
+      <footer>© CAKRABUANAALHIKMAH2025</footer> </div>
   </div> 
   
 </div>
@@ -2222,7 +2222,7 @@ function calculateFalakQA() {
     
     if (!question) {
         resultElement.style.display = 'block';
-        resultElement.innerHTML = `<p style="color: #ff8888; text-align: center;">Mohon tulis pertanyaan Anda, Guru.</p>`;
+        resultElement.innerHTML = `<p style="color: #ff8888; text-align: center;">Mohon tulis pertanyaan Anda, Wahai Anggota Cakra Buana Al-Hikmah.</p>`;
         return;
     }
     
@@ -3385,11 +3385,11 @@ const FalaqTimesAdvanced = (function(){
 <!-- Branding Falaqyah -->
 <div style="text-align:center; margin-top:40px; font-family:Cinzel, serif; color:#e8e3d8; font-size:14px; opacity:0.9;">
   <div>Falaqyah Digital Al-Hikmah</div>
-  <div>Sistem Falakiyah Ruhaniyah digital pertama di dunia</div>
+  <div>Sistem Falakiyah Ruhaniyah Digital Pertama di Dunia</div>
   <div>Akurat • Presisi • Terverifikasi</div>
   <br>
   <div style="font-size:13px;">Founder & System Architect:</div>
-  <div style="font-weight:600;">Endry Arya</div>
+  <div style="font-weight:600;">Endry Arya Hukama</div>
 </div>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -3404,5 +3404,304 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 <body class="loading-slow">
 </body>
+<!-- WIDGET AL-HIKMAH (Versi Premium Cosmic Glow & Auto-Hide) -->
+<!-- PENTING: Letakkan kode ini tepat DI ATAS tag </body> -->
+
+<!-- Load Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+    /* --- 1. KONTAINER UTAMA & POSISI --- */
+    #ai-widget-container {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        position: fixed;
+        bottom: 25px; left: 25px;
+        z-index: 2147483647;
+        display: none; /* Default sembunyi (dikontrol JS) */
+        opacity: 0;
+        transition: opacity 1s ease, transform 1s ease;
+        filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+    }
+
+    /* --- 2. TOMBOL PEMICU (Tombol Emas Berdenyut) --- */
+    @keyframes pulse-gold-glow {
+        0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7); }
+        70% { box-shadow: 0 0 0 15px rgba(251, 191, 36, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
+    }
+
+    #ai-trigger-btn {
+        background: linear-gradient(135deg, #1e293b, #0f172a);
+        color: #fbbf24; /* Warna Emas */
+        border: 2px solid #fbbf24;
+        border-radius: 50px;
+        padding: 14px 24px;
+        cursor: pointer;
+        display: flex; align-items: center; gap: 12px;
+        font-weight: 700; font-size: 14px; letter-spacing: 1px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative; overflow: hidden;
+        animation: pulse-gold-glow 2s infinite;
+    }
+    
+    /* Efek Kilau saat Hover */
+    #ai-trigger-btn::after {
+        content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+        background: linear-gradient(to right, transparent, rgba(251,191,36,0.4), transparent);
+        transform: rotate(45deg) translate(-100%, -100%); transition: transform 0.6s;
+    }
+    #ai-trigger-btn:hover::after { transform: rotate(45deg) translate(100%, 100%); }
+    #ai-trigger-btn:hover { transform: translateY(-3px) scale(1.02); background: #fbbf24; color: #0f172a; }
+
+    /* Dot Status Hijau */
+    .ai-status-dot {
+        width: 8px; height: 8px; background-color: #10b981; border-radius: 50%;
+        box-shadow: 0 0 10px #10b981, 0 0 20px #10b981;
+    }
+
+    /* --- 3. JENDELA CHAT (PREMIUM COSMIC STYLE) --- */
+    /* Animasi Latar Belakang Nebula Bergerak */
+    @keyframes nebula-shift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    /* Animasi Pinggiran Kelap-Kelip (Emas ke Hijau Magis) */
+    @keyframes mystical-border-pulse {
+        0% {
+            border-color: #fbbf24;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.5), inset 0 0 20px rgba(251, 191, 36, 0.2);
+        }
+        50% {
+            border-color: #10b981;
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.7), inset 0 0 30px rgba(16, 185, 129, 0.3);
+        }
+        100% {
+            border-color: #fbbf24;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.5), inset 0 0 20px rgba(251, 191, 36, 0.2);
+        }
+    }
+
+    #ai-chat-window {
+        display: none; 
+        position: fixed; bottom: 90px; left: 25px;
+        width: 90vw; max-width: 360px; height: 550px; max-height: 75vh;
+        border-radius: 20px;
+        flex-direction: column; overflow: hidden;
+        z-index: 2147483647;
+        
+        /* SETUP BACKGROUND PREMIUM */
+        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); /* Gradien Kosmik */
+        background-size: 400% 400%;
+        
+        /* SETUP BORDER & ANIMASI KELAP-KELIP */
+        border: 2px solid #fbbf24;
+        animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
+                   mystical-border-pulse 4s infinite alternate ease-in-out, /* Border Kelap Kelip */
+                   nebula-shift 15s ease infinite; /* Background Bergerak */
+    }
+
+    /* Header (Glassmorphism) */
+    .ai-header {
+        background: rgba(15, 23, 42, 0.7); /* Transparan */
+        backdrop-filter: blur(10px); /* Efek Kaca Buram */
+        color: #fbbf24; padding: 16px;
+        display: flex; justify-content: space-between; align-items: center;
+        border-bottom: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    /* Area Pesan (Dengan Pola Bintang Halus) */
+    .ai-messages {
+        flex: 1; padding: 16px; overflow-y: auto;
+        /* Pola bintang halus di atas background nebula */
+        background-image: radial-gradient(circle at center, rgba(255,255,255,0.1) 0.5px, transparent 0.5px);
+        background-size: 24px 24px;
+        font-size: 14px; line-height: 1.6; color: #e2e8f0;
+    }
+
+    /* Input Area (Glassmorphism) */
+    .ai-input-area {
+        padding: 16px;
+        background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid rgba(251, 191, 36, 0.3);
+        display: flex; gap: 10px;
+    }
+
+    .ai-input-box {
+        flex: 1; padding: 12px 16px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(251, 191, 36, 0.3);
+        color: #fbbf24; border-radius: 12px; outline: none; font-size: 14px;
+        transition: all 0.3s;
+    }
+    .ai-input-box:focus { 
+        border-color: #fbbf24; background: rgba(251, 191, 36, 0.1); 
+        box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+    }
+    .ai-input-box::placeholder { color: rgba(251, 191, 36, 0.5); }
+
+    .ai-send-btn {
+        background: linear-gradient(135deg, #fbbf24, #d97706);
+        color: #0f172a; border: none; padding: 0 16px; border-radius: 12px;
+        cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .ai-send-btn:hover { box-shadow: 0 0 15px rgba(251, 191, 36, 0.6); }
+    .ai-send-btn:active { transform: scale(0.95); }
+
+    /* Bubble Chat Styles */
+    .msg-row { display: flex; margin-bottom: 16px; gap: 10px; animation: fadeIn 0.3s ease; }
+    .msg-row.user { flex-direction: row-reverse; }
+    
+    .msg-bubble {
+        padding: 12px 18px; border-radius: 16px; max-width: 88%; word-wrap: break-word;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    /* Bubble User (Emas Mewah) */
+    .msg-bubble.user { 
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        color: #0f172a; border-bottom-right-radius: 4px; font-weight: 700;
+    }
+    /* Bubble Bot (Kaca Gelap) */
+    .msg-bubble.bot { 
+        background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: blur(5px);
+        color: #e2e8f0; 
+        border: 1px solid rgba(251, 191, 36, 0.2);
+        border-bottom-left-radius: 4px; 
+    }
+    
+    /* Markdown Highlight (Teks Penting Emas) */
+    .msg-bubble.bot strong { color: #fbbf24; font-weight: 800; letter-spacing: 0.5px; text-shadow: 0 0 10px rgba(251,191,36,0.3); } 
+    .msg-bubble.bot em { color: #34d399; font-style: normal; font-weight: 600; } 
+
+    @keyframes slideUp { from { transform: translateY(30px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+</style>
+
+<!-- WIDGET CONTAINER -->
+<div id="ai-widget-container">
+    <button id="ai-trigger-btn" onclick="toggleAiChat()">
+        <span class="ai-status-dot"></span>
+        AL-HIKMAH
+        <i data-lucide="sparkles" style="width:16px; height:16px;"></i>
+    </button>
+</div>
+
+<!-- CHAT WINDOW -->
+<div id="ai-chat-window">
+    <div class="ai-header">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div style="background:linear-gradient(135deg, #fbbf24, #d97706); padding:8px; border-radius:50%; box-shadow: 0 0 15px rgba(251,191,36,0.5);">
+                <i data-lucide="moon-star" style="width:18px; height:18px; color:#0f172a;"></i>
+            </div>
+            <div>
+                <div style="font-weight:800; font-size:14px; letter-spacing:1px; color:#fbbf24; text-shadow: 0 0 10px rgba(251,191,36,0.5);">KONSULTAN HIKMAH</div>
+                <div style="font-size:11px; opacity:0.8; color:white;">Falaqyah Digital CAKRA BUANA AL-HIKMAH</div>
+            </div>
+        </div>
+        <button onclick="toggleAiChat()" style="background:rgba(251,191,36,0.1); border:none; color:#fbbf24; cursor:pointer; padding:6px; border-radius:50%; transition:all 0.2s;">
+            <i data-lucide="x" style="width:20px; height:20px;"></i>
+        </button>
+    </div>
+
+    <div id="ai-messages" class="ai-messages">
+        <div class="msg-row bot">
+            <div class="msg-bubble bot">
+                <strong>Assalamu'alaikum.</strong><br>
+                Saya siap menghitung <em>Sa'at Falakiyah</em> (Waktu Perbintangan) untuk hajat Anda sesuai kaidah Al-Hikmah.
+            </div>
+        </div>
+    </div>
+
+    <div class="ai-input-area">
+        <input type="text" id="ai-input" class="ai-input-box" placeholder="Contoh: Kapan waktu Ritual Pelet?" onkeypress="if(event.key==='Enter') handleAiSubmit()">
+        <button class="ai-send-btn" onclick="handleAiSubmit()">
+            <i data-lucide="send" style="width:18px; height:18px;"></i>
+        </button>
+    </div>
+</div>
+
+<script>
+    lucide.createIcons();
+    const aiContainer = document.getElementById('ai-widget-container');
+    const aiChatWindow = document.getElementById('ai-chat-window');
+    const aiTriggerBtn = document.getElementById('ai-trigger-btn');
+    const aiMessages = document.getElementById('ai-messages');
+    const aiInput = document.getElementById('ai-input');
+    const manualKey = "AIzaSyDsVs8DFaNqdfDBiUJWLliHzxg_3fmsGLg"; 
+
+    // --- LOGIKA AUTO-DETEKSI (Tidak Berubah) ---
+    setInterval(() => {
+        const passwordInputs = document.querySelectorAll('input[placeholder*="Kode"], input[placeholder*="Rahasia"]');
+        let isPasswordScreenVisible = false;
+        passwordInputs.forEach(input => {
+            if (input.offsetParent !== null) isPasswordScreenVisible = true;
+        });
+        const openingScreen = document.getElementById('opening-screen');
+        let isOpeningScreenVisible = false;
+        if (openingScreen && openingScreen.style.display !== 'none' && openingScreen.style.opacity !== '0') {
+            isOpeningScreenVisible = true;
+        }
+
+        if (isPasswordScreenVisible || isOpeningScreenVisible) {
+            aiContainer.style.opacity = '0';
+            setTimeout(() => { if(aiContainer.style.opacity === '0') aiContainer.style.display = 'none'; }, 1000);
+        } else {
+            if (aiContainer.style.display !== 'block') {
+                aiContainer.style.display = 'block';
+                // Force reflow
+                aiContainer.offsetHeight; 
+                aiContainer.style.opacity = '1';
+            }
+        }
+    }, 1000);
+
+    function toggleAiChat() {
+        if (aiChatWindow.style.display === 'none' || aiChatWindow.style.display === '') {
+            aiChatWindow.style.display = 'flex';
+            aiTriggerBtn.style.transform = 'scale(0.8)'; aiTriggerBtn.style.opacity = '0'; 
+            setTimeout(() => aiTriggerBtn.style.display = 'none', 300);
+        } else {
+            aiChatWindow.style.display = 'none';
+            aiTriggerBtn.style.display = 'flex';
+            setTimeout(() => { aiTriggerBtn.style.transform = 'scale(1)'; aiTriggerBtn.style.opacity = '1'; }, 10);
+        }
+    }
+
+    function appendAiMessage(role, text) {
+        const div = document.createElement('div'); div.className = `msg-row ${role}`;
+        const bubble = document.createElement('div'); bubble.className = `msg-bubble ${role}`;
+        if (role === 'bot') { bubble.innerHTML = marked.parse(text); } else { bubble.textContent = text; }
+        div.appendChild(bubble); aiMessages.appendChild(div); aiMessages.scrollTop = aiMessages.scrollHeight;
+    }
+
+    async function handleAiSubmit() {
+        const text = aiInput.value.trim(); if (!text) return;
+        appendAiMessage('user', text); aiInput.value = ''; aiInput.disabled = true;
+        
+        const loadingDiv = document.createElement('div'); loadingDiv.className = 'msg-row bot'; loadingDiv.id = 'ai-loading';
+        loadingDiv.innerHTML = `<div class="msg-bubble bot" style="font-style:italic; color:#fbbf24; display:flex; align-items:center; gap:10px;"><i data-lucide="loader-2" style="animation:spin 1s linear infinite; width:16px;"></i> Sedang menghitung sa'at...</div>`;
+        aiMessages.appendChild(loadingDiv); aiMessages.scrollTop = aiMessages.scrollHeight; lucide.createIcons();
+
+        try {
+            const systemPrompt = `PERAN: Ahli Falak (Sistem Al-Hikmah) kitab Syamsul Ma'arif (Syeikh Ali Al-Buni). INSTRUKSI: Jawab TO THE POINT. FORMAT: 1. PARAGRAF PERTAMA (LANGSUNG JAWAB WAKTU): Sebutkan **Hari**, **Nama Planet (Kawkab)**, **Jam ke-berapa**, dan **Posisi Matahari**. 2. PARAGRAF KEDUA (PENJELASAN): Jelaskan tabiat planet dan kesesuaian hajat. Gunakan bahasa mengalir, cerdas, tidak kaku.`;
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${manualKey}`, {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ contents: [{ parts: [{ text: text }] }], systemInstruction: { parts: [{ text: systemPrompt }] } })
+            });
+            const data = await response.json();
+            const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Gagal menghitung. Coba lagi.";
+            document.getElementById('ai-loading').remove(); appendAiMessage('bot', reply);
+        } catch (e) {
+            document.getElementById('ai-loading').remove(); appendAiMessage('bot', "Koneksi terputus.");
+        } finally { aiInput.disabled = false; aiInput.focus(); }
+    }
+</script>
+<style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+</script>
 </body>
 </html>
