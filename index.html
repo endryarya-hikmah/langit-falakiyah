@@ -3404,102 +3404,103 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 <body class="loading-slow">
 </body>
-<!-- WIDGET AL-HIKMAH (Emerald Ultimate: Fix ReferenceError, Rainbow Border, Auto-Show) -->
+<!-- WIDGET AL-HIKMAH (Emerald V5: Smart Date Target, Academic Tone, Auto-Show) -->
 <!-- Letakkan kode ini tepat DI ATAS tag penutup </body> -->
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;600&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;600&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.9.0/suncalc.min.js"></script>
 
 <style>
-    /* --- 1. THEME VARIABLES (ROYAL EMERALD) --- */
+    /* --- 1. TEMA: EMERALD & GOLD --- */
     :root {
         --gold: #ffd700; 
         --cyan: #00f3ff;
         --purple: #9d4edd;
         --pink: #ff00ff; 
         --green: #2dd4bf; 
+        --white: #e2e8f0;
+        --crimson: #f43f5e;
+        
+        /* BACKGROUND HIJAU MENGKILAP */
         --emerald-dark: #022c22;
-        --emerald-light: #065f46;
+        --emerald-shiny: #064e3b;
     }
 
-    /* --- 2. CONTAINER UTAMA (CENTER MUTLAK) --- */
+    /* CONTAINER TOMBOL (CENTER FIXED) */
     #ai-widget-container {
         font-family: 'Rajdhani', sans-serif;
         position: fixed; bottom: 30px; 
-        left: 50%; transform: translateX(-50%); /* KUNCI TENGAH */
+        left: 50%; transform: translateX(-50%);
         z-index: 2147483647; 
-        display: flex; /* Flex agar align items center */
-        flex-direction: column; align-items: center;
-        
-        opacity: 0; pointer-events: none; /* Default Sembunyi */
+        display: none; /* DEFAULT MATI (Tunggu Script) */
+        opacity: 0;
         transition: opacity 1s ease;
-        
-        filter: drop-shadow(0 0 25px rgba(45, 212, 191, 0.4));
-        width: auto;
+        filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.4));
+        width: auto; pointer-events: none;
     }
 
     /* TOMBOL PEMICU */
     @keyframes pulse-emerald {
-        0% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.7); }
-        70% { box-shadow: 0 0 0 20px rgba(45, 212, 191, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0); }
+        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+        70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
 
     #ai-trigger-btn {
-        background: linear-gradient(145deg, #022c22, #064e3b); /* Hijau Mewah */
-        color: var(--gold); border: 1px solid var(--gold);
+        background: linear-gradient(145deg, #022c22, #065f46);
+        color: var(--gold); border: 1px solid var(--green);
         border-radius: 50px; padding: 12px 30px;
         cursor: pointer; display: flex; align-items: center; gap: 10px;
-        font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; font-weight: 900;
+        font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; font-weight: 700;
         animation: pulse-emerald 3s infinite; white-space: nowrap;
         backdrop-filter: blur(20px); text-shadow: 0 0 5px var(--gold);
+        pointer-events: auto;
     }
-    
-    /* --- 3. JENDELA CHAT (BACKGROUND HIJAU MENGKILAP + BORDER PELANGI) --- */
+
+    /* --- 3. JENDELA CHAT (HIJAU MENGKILAP + PELANGI) --- */
     @keyframes border-rainbow {
         0% { border-color: var(--gold); box-shadow: 0 0 20px rgba(255,215,0,0.3); }
         25% { border-color: var(--cyan); box-shadow: 0 0 30px rgba(0,243,255,0.3); }
         50% { border-color: var(--pink); box-shadow: 0 0 30px rgba(255,0,255,0.3); }
-        75% { border-color: var(--green); box-shadow: 0 0 30px rgba(45,212,191,0.3); }
+        75% { border-color: var(--green); box-shadow: 0 0 30px rgba(45,212,191,0.4); }
         100% { border-color: var(--gold); box-shadow: 0 0 20px rgba(255,215,0,0.3); }
     }
 
     #ai-chat-window {
         display: none; position: fixed; 
         bottom: 95px; 
-        left: 50%; transform: translateX(-50%); /* CENTER FIX */
-        
+        left: 50%; transform: translateX(-50%); /* CENTER */
         width: 90vw; max-width: 350px; height: 680px; max-height: 75vh;
-        
         border-radius: 20px; flex-direction: column; overflow: hidden; z-index: 2147483647;
         
-        /* BACKGROUND HIJAU ZAMRUD MENGKILAP (ROYAL EMERALD) */
-        background: linear-gradient(160deg, #022c22 0%, #064e3b 50%, #022c22 100%);
+        /* BACKGROUND: HIJAU ZAMRUD GRADASI */
+        background: linear-gradient(170deg, #064e3b 0%, #022c22 60%, #000000 100%);
         
         border: 2px solid var(--gold);
         animation: slideUp 0.5s cubic-bezier(0.19, 1, 0.22, 1), border-rainbow 6s infinite linear;
         box-shadow: 0 40px 100px #000;
+        pointer-events: auto;
     }
-
+    
     @keyframes slideUp { from {transform: translate(-50%, 50px); opacity: 0;} to {transform: translate(-50%, 0); opacity: 1;} }
 
-    /* ORNAMEN BACKGROUND (SHINE) */
-    .shine-effect {
+    /* SHINE EFFECT */
+    .shine-layer {
         position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
         background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1), transparent 70%);
-        animation: shine-rotate 15s infinite linear; pointer-events: none; z-index: 0;
+        animation: spin 20s infinite linear; pointer-events: none; z-index: 0;
     }
-    @keyframes shine-rotate { 0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);} }
+    @keyframes spin { 100% {transform: rotate(360deg);} }
 
     /* HEADER */
     .ai-header {
-        background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(10px);
-        padding: 14px 18px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 14px 18px; background: rgba(0,0,0,0.2);
+        border-bottom: 1px solid rgba(255,255,255,0.1);
         display: flex; justify-content: space-between; align-items: center; z-index: 10;
+        backdrop-filter: blur(10px);
     }
-    .header-left { display: flex; align-items: center; gap: 10px; }
     .header-orb {
         width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--gold);
         display: flex; justify-content: center; align-items: center; position: relative;
@@ -3510,9 +3511,9 @@ document.addEventListener("DOMContentLoaded", function() {
         box-shadow: 0 0 8px var(--green); animation: blink 2s infinite;
     }
     .header-title { font-family: 'Cinzel'; color: #fff; font-size: 12px; letter-spacing: 1px; text-shadow: 0 0 10px var(--gold); }
-    .header-status { font-size: 9px; color: var(--green); font-family: 'Rajdhani'; letter-spacing: 1px; margin-top: 2px; }
+    .header-status { font-size: 9px; color: var(--green); font-family: 'Rajdhani'; margin-top: 2px; }
 
-    /* TABS SCROLLABLE */
+    /* TABS */
     .mode-switch-container {
         overflow-x: auto; white-space: nowrap; padding: 10px 15px; 
         background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 10;
@@ -3526,45 +3527,37 @@ document.addEventListener("DOMContentLoaded", function() {
         font-family: 'Rajdhani'; font-weight: 700; letter-spacing: 1px; flex-shrink: 0;
     }
     .mode-btn.active { 
-        background: rgba(45, 212, 191, 0.3); color: #fff; border-color: var(--green);
+        background: rgba(16, 185, 129, 0.3); color: #fff; border-color: var(--green);
         box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
     }
 
     /* CHAT AREA */
     .ai-messages { flex: 1; padding: 15px; overflow-y: auto; position: relative; z-index: 5; scrollbar-width: none; }
     
-    /* USER BUBBLE */
-    .msg-wrapper { display: flex; width: 100%; margin-bottom: 15px; }
-    .msg-wrapper.user { justify-content: flex-end; }
-    .msg-wrapper.bot { justify-content: flex-start; }
-
     .msg-bubble {
-        padding: 10px 14px; border-radius: 12px; font-size: 11px; max-width: 90%;
+        padding: 10px 14px; border-radius: 12px; font-size: 11px; margin-bottom: 15px; max-width: 90%;
         line-height: 1.5;
     }
     .msg-bubble.user {
         background: linear-gradient(90deg, rgba(0,0,0,0.3), rgba(0,0,0,0.5));
-        border-right: 2px solid var(--gold); color: #fff; text-align: right;
-    }
-    .msg-bubble.bot {
-        width: 100%; padding: 0; background: transparent; /* Bot bubble is container for cards */
+        border-right: 2px solid var(--gold); color: #fff; margin-left: auto; text-align: right;
     }
     
-    /* HIKMAH CARD */
+    /* HIKMAH CARD (GLASS GREEN) */
     .hikmah-card {
-        background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(2, 44, 34, 0.8); border: 1px solid rgba(16, 185, 129, 0.3);
         border-radius: 10px; overflow: hidden; width: 100%;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: fadeUp 0.4s ease-out;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4); animation: fadeUp 0.4s ease;
     }
     .card-header {
         background: rgba(255, 255, 255, 0.05); padding: 8px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        font-size: 9px; color: var(--green); font-weight: 700; letter-spacing: 1px;
+        font-size: 9px; color: var(--cyan); font-weight: 700; letter-spacing: 1px;
         display: flex; justify-content: space-between; align-items: center;
     }
-
-    .hikmah-table { width: 100%; border-collapse: collapse; font-family: 'Rajdhani', sans-serif; }
-    .hikmah-table th { text-align: left; padding: 8px 12px; color: #aaa; font-size: 9px; width: 30%; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .hikmah-table td { padding: 8px 12px; color: #fff; font-size: 11px; border-bottom: 1px solid rgba(255,255,255,0.05); font-weight: 500; }
+    
+    table { width: 100%; border-collapse: collapse; font-family: 'Rajdhani'; }
+    td, th { padding: 8px 12px; font-size: 11px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #eee; }
+    th { color: #aaa; text-align: left; width: 35%; font-weight: 600; font-size: 9px; text-transform: uppercase; }
     
     .val-gold { color: var(--gold); font-weight: 700; }
     .val-time { font-family: 'Courier New', monospace; font-weight: 700; letter-spacing: -0.5px; color: #fff; }
@@ -3612,16 +3605,16 @@ document.addEventListener("DOMContentLoaded", function() {
     </button>
 </div>
 
-<!-- WINDOW -->
+<!-- WINDOW (HIJAU MENGKILAP) -->
 <div id="ai-chat-window">
-    <div class="shine-effect"></div>
+    <div class="shine-layer"></div>
     
     <div class="ai-header">
         <div class="header-left">
             <div class="header-orb"></div>
-            <div>
+            <div style="margin-left:10px;">
                 <div class="header-title">AL-HIKMAH 8D</div>
-                <div class="header-status">EMERALD MASTER</div>
+                <div class="header-status">EMERALD SYSTEM</div>
             </div>
         </div>
         <div style="display:flex; gap:6px;">
@@ -3630,7 +3623,6 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
     </div>
 
-    <!-- 8 MODE SWITCHER -->
     <div class="mode-switch-container">
         <button class="mode-btn active" onclick="setMode('falak')" id="btn-falak">FALAK</button>
         <button class="mode-btn" onclick="setMode('amalan')" id="btn-amalan">AMALAN</button>
@@ -3664,12 +3656,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     navigator.geolocation.getCurrentPosition(p => { userLat = p.coords.latitude; userLong = p.coords.longitude; });
     
-    // AUTO SHOW LOGIC (INTELLIGENT WAIT)
+    // --- LOGIKA AUTO-DETECT (MUNCL SETELAH PASSWORD HILANG) ---
     setInterval(() => {
         const pwInput = document.querySelector('input[placeholder*="Kode"]');
         const opScreen = document.getElementById('opening-screen');
-        // Cek apakah elemen penghalang ada dan terlihat
+        
         let isLocked = false;
+        // Cek jika elemen password/loading masih ada di DOM dan terlihat
         if (pwInput && pwInput.offsetParent !== null) isLocked = true;
         if (opScreen && (opScreen.style.display !== 'none' && opScreen.style.opacity !== '0')) isLocked = true;
         
@@ -3677,11 +3670,12 @@ document.addEventListener("DOMContentLoaded", function() {
             aiContainer.style.opacity = '0'; 
             aiContainer.style.pointerEvents = 'none';
         } else { 
+            aiContainer.style.display = 'flex'; // Pastikan flex
             aiContainer.style.opacity = '1'; 
             aiContainer.style.pointerEvents = 'auto';
             if(aiMessages.children.length===0) appendAiMessage('bot', {type:'intro'});
         }
-    }, 800);
+    }, 1000);
 
     function calculatePreciseTime(targetDateStr) {
         const date = new Date(targetDateStr);
@@ -3712,34 +3706,22 @@ document.addEventListener("DOMContentLoaded", function() {
         const btn = document.getElementById('btn-' + m);
         if(btn) btn.classList.add('active');
         
-        if(m==='falak') aiInput.placeholder = "Ketik Hajat...";
+        if(m==='falak') aiInput.placeholder = "Ketik Hajat (Misal: Pengasihan)...";
         else if(m==='aura' || m==='jodoh') aiInput.placeholder = "Masukkan Nama...";
         else aiInput.placeholder = "Ketik Sesuatu...";
     }
     setTimeout(() => setMode('falak'), 100);
 
-    // --- FUNGSI PESAN (FIXED & SAFE) ---
     function appendAiMessage(role, content) {
-        // Container untuk pesan (Wrapper)
-        const wrapper = document.createElement('div');
-        wrapper.style.width = "100%";
-        wrapper.style.display = "flex";
-        wrapper.style.marginBottom = "15px";
+        const msgDiv = document.createElement('div');
         
-        if(role === 'user') {
-            wrapper.style.justifyContent = "flex-end";
-            const bubble = document.createElement('div');
-            bubble.className = 'msg-bubble user';
-            bubble.innerText = content;
-            wrapper.appendChild(bubble);
+        if(role==='user') {
+            msgDiv.className = 'msg-bubble user'; msgDiv.innerText = content;
             chatHistoryText += `[USER]: ${content}\n`;
         } else {
-            wrapper.style.justifyContent = "center";
-            const botContainer = document.createElement('div');
-            botContainer.style.width = "100%";
-
+            msgDiv.style.marginBottom = '20px';
             if(content.type === 'intro') {
-                botContainer.innerHTML = `<div style="text-align:center; color:#ccc; font-size:10px; margin-top:60%;">
+                msgDiv.innerHTML = `<div style="text-align:center; color:#ccc; font-size:10px; margin-top:60%;">
                     <i data-lucide="compass" style="width:24px; color:var(--gold); margin-bottom:10px;"></i><br>
                     Sistem Online. Pilih Mode & Ketik Hajat.
                 </div>`;
@@ -3775,20 +3757,17 @@ document.addEventListener("DOMContentLoaded", function() {
                     bodyHTML = `<div style="padding:10px;">${content.main_content || content.makna_utama}</div>`;
                 }
 
-                botContainer.innerHTML = `
+                msgDiv.innerHTML = `
                 <div class="hikmah-card">
                     <div class="card-header"><span>${content.title}</span><i data-lucide="sparkles" style="width:10px; color:var(--cyan)"></i></div>
                     ${bodyHTML}
                     <div class="hikmah-desc"><strong>PENJELASAN HIKMAH</strong>${content.desc}</div>
                 </div>`;
-                chatHistoryText += `[SYSTEM]: ${content.title}\n${content.desc}\n\n`;
             } else {
-                botContainer.innerHTML = `<div style="color:red; padding:10px; font-size:10px;">${content.text}</div>`;
+                msgDiv.innerHTML = `<div style="color:red; padding:10px; font-size:10px;">${content.text}</div>`;
             }
-            wrapper.appendChild(botContainer);
         }
-        
-        aiMessages.appendChild(wrapper); 
+        aiMessages.appendChild(msgDiv); 
         aiMessages.scrollTop = aiMessages.scrollHeight;
         lucide.createIcons();
     }
@@ -3804,9 +3783,20 @@ document.addEventListener("DOMContentLoaded", function() {
         try {
             const today = new Date().toISOString().split('T')[0];
             let prompt = "";
-            if(currentMode === 'falak') prompt = `PERAN: Ahli Falak. INFO: Hari ${today}. TUGAS: Cari Hari/Planet terbaik utk '${text}'. Jika hari ini bukan, cari TANGGAL DEPAN. JSON: {"target_date_iso":"YYYY-MM-DD", "target_display":"Hari Tgl", "kawkab":"Planet", "desc":"Filosofi."}`;
-            else if(currentMode === 'jodoh') prompt = `PERAN: Ahli Falak Jodoh. Hitung '${text}'. JSON: {title:"HITUNG JODOH", skor:"XX%", elemen_pria:"Unsur", elemen_wanita:"Unsur", desc:"Analisa."}`;
-            else if(currentMode === 'amalan') prompt = `PERAN: Tabib Rohani. Resep '${text}'. JSON: {title:"AMALAN", amalan_utama:"Nama", waktu_khusus:"Waktu", sedekah:"Saran", desc:"Kaifiyat."}`;
+            // PROMPT DIPERBAIKI: MINTA HARI & PASARAN, DAN NAMA HARI DI KAWKAB
+            if(currentMode === 'falak') prompt = `
+            PERAN: Ahli Falak Akademis (Rujukan Kitab Syamsul Ma'arif).
+            INPUT USER: '${text}'. HARI INI: ${today}.
+            TUGAS:
+            1. Identifikasi Hari & Planet terbaik untuk hajat tersebut.
+            2. Jika hari ini bukan hari yang tepat, cari TANGGAL MASA DEPAN (Maksimal 30 hari ke depan).
+            3. Format Tanggal WAJIB: "Nama Hari (Pasaran), Tanggal Bulan Tahun" (Contoh: Jumat Kliwon, 12 Des 2025).
+            4. Format Kawkab WAJIB: "Nama Planet (Hari)" (Contoh: Zuhrah (Hari Jumat)).
+            5. Penjelasan: Gunakan bahasa akademis, ilmiah, serius, dan tidak berlebihan (No Lebay).
+            OUTPUT JSON: {"target_date_iso":"YYYY-MM-DD", "target_date":"Format Lengkap Diatas", "kawkab":"Format Lengkap Diatas", "desc":"Penjelasan Akademis."}`;
+            
+            else if(currentMode === 'jodoh') prompt = `PERAN: Ahli Falak Jodoh. Hitung '${text}'. JSON: {title:"HITUNG JODOH", skor:"XX%", elemen_pria:"Unsur", elemen_wanita:"Unsur", desc:"Analisa serius."}`;
+            else if(currentMode === 'amalan') prompt = `PERAN: Tabib Rohani. Resep '${text}'. JSON: {title:"AMALAN", amalan_utama:"Nama Wirid", waktu_khusus:"Waktu", sedekah:"Saran", desc:"Kaifiyat."}`;
             else if(currentMode === 'obat') prompt = `PERAN: Tabib. Resep Herbal '${text}'. JSON: {title:"RESEP SYIFA", herbal:"Bahan", desc:"Diagnosa."}`;
             else if(currentMode === 'ayat') prompt = `PERAN: Ahli Tafsir. Cari ayat obat '${text}'. JSON: {title:"PANDUAN QUR'ANI", surah:"Surah:Ayat", arab:"Teks", arti:"Arti", desc:"Tafsir."}`;
             else if(currentMode === 'syair') prompt = `PERAN: Penyair Sufi. Tema '${text}'. JSON: {title:"SENANDUNG SUFI", bait:"Isi Syair", desc:"Makna."}`;
@@ -3834,6 +3824,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const a = document.createElement('a'); a.href=URL.createObjectURL(b);
         a.download='RISALAH.txt'; a.click();
     }
+</script>
 </script>
 </script>
 </script>
