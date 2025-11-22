@@ -939,10 +939,87 @@ body:hover #stardust-cursor {
 </div>
 <p class="quote">"Langit dan waktu adalah cermin ketetapan, tempat ruh menapaki garis takdir."</p>
   
-  <div id="visitor-counter" class="auratik-counter">
-    ✦ Jumlah Ruh yang Telah Menatap Langit Ini: <span id="visitor-count">...</span> ✦
-  </div>
-  
+  <style>
+  @keyframes tajalliFade {
+    0% { opacity: 0; transform: translateY(5px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .angka-ghoib {
+    display: inline-block;
+    color: #ffd700;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    opacity: 0;
+    animation: tajalliFade 2s ease-out forwards;
+  }
+<style>
+  /* Gaya Emas Bercahaya */
+  .angka-ghoib {
+    color: #ffd700;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+  }
+</style>
+
+<style>
+  /* Rumus Animasi Cahaya Berdenyut */
+  @keyframes nafasEmas {
+    0% { 
+      text-shadow: 0 0 5px #b8860b, 0 0 10px #ffd700; 
+      transform: scale(1); 
+    }
+    50% { 
+      text-shadow: 0 0 20px #ffd700, 0 0 35px #fffacd; /* Cahaya memuncak */
+      transform: scale(1.15); /* Sedikit membesar */
+    }
+    100% { 
+      text-shadow: 0 0 5px #b8860b, 0 0 10px #ffd700; 
+      transform: scale(1); 
+    }
+  }
+</style>
+
+<style>
+  /* 1. Animasi Border Kelap-Kelip Warna-Warni (Disco Hikmah) */
+  @keyframes borderDisco {
+    0%   { border-color: #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.5) inset; } /* Emas */
+    25%  { border-color: #2ecc71; box-shadow: 0 0 15px rgba(46, 204, 113, 0.5) inset; } /* Hijau Emerald */
+    50%  { border-color: #e67e22; box-shadow: 0 0 15px rgba(230, 126, 34, 0.5) inset; } /* Oranye */
+    75%  { border-color: #9b59b6; box-shadow: 0 0 15px rgba(155, 89, 182, 0.5) inset; } /* Ungu Amethyst */
+    100% { border-color: #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.5) inset; } /* Balik Emas */
+  }
+
+  /* 2. Animasi Nafas Emas untuk Angka (Yang lama) */
+  @keyframes nafasEmas {
+    0%, 100% { text-shadow: 0 0 5px #b8860b, 0 0 10px #ffd700; transform: scale(1); }
+    50% { text-shadow: 0 0 20px #ffd700, 0 0 35px #fffacd; transform: scale(1.15); }
+  }
+
+  /* 3. Desain Bubble Premium */
+  .bubble-premium {
+      display: inline-block;
+      background: linear-gradient(145deg, rgba(30, 10, 30, 0.9), rgba(10, 5, 10, 0.95)); /* Latar Gelap Mewah */
+      border: 3px solid #ffd700; /* Border awal */
+      border-radius: 30px; /* Bentuk Bubble Lonjong */
+      padding: 20px 30px; /* Jarak lega di dalam */
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6); /* Bayangan timbul 3D */
+      animation: borderDisco 8s infinite linear; /* Jalankan animasi kelap-kelip */
+      max-width: 90%; /* Agar rapi di HP */
+  }
+
+  .label-teks { display: block; color: #d0b0d0; margin-bottom: 10px; font-size: 0.95em; }
+  .angka-inti { display: inline-block; color: #ffd700; font-weight: bold; font-size: 1.8em; animation: nafasEmas 3s infinite ease-in-out; }
+</style>
+
+<div id="visitor-counter" style="text-align: center; margin: 30px 0;">
+   <div class="bubble-premium">
+       <span class="label-teks">✦ Jejak Pengunjung di Falaqyah Digital CBA ✦</span>
+       
+     <span id="angka-final" class="angka-inti">
+   Loading...
+</span>
+   </div>
+</div>
   <div id="donation-info">
     <h3>Donasi untuk Kode Rahasia</h3>
     <p style="font-size: 0.9em; margin:0 0 10px 0; line-height: 1.5;">Untuk mendapat Kode Rahasia, silakan donasi seikhlasnya. Anda akan menerima Kode via WhatsApp setelah mengirim bukti transfer.</p>
@@ -2654,16 +2731,7 @@ if (stardustCursorEl) {
 <!-- Waktu Falakiyah (container) -->
 <div id="falaq-times" style="min-width:320px;margin:12px 0;font-family:Cinzel,serif;"></div>
 <script>
-  // Inisialisasi: tampilkan di div id="falaq-times"
-  FalaqTimesAdvanced.init({
-    containerId: 'falaq-times',
-    hourLengthMinutes: 60,    // biasanya 60; ubah kalau mau
-    showJsonBlock: true,      // tampilkan JSON (bisa dimatikan)
-    // forceUsePageLocation: false, // aktifkan kalau mau paksa pakai lokasi page saja
-    onJson: function(json){
-      console.log('Falaq JSON', json);
-    }
-  });
+
 </script>
 /* FalaqTimesAdvanced.js
    - Versi lanjutan: auratic highlights (sa'at 1/2/3), JSON output, overrides
@@ -2942,6 +3010,17 @@ const FalaqTimesAdvanced = (function(){
     }
   };
 })();
+  // Inisialisasi: tampilkan di div id="falaq-times"
+  FalaqTimesAdvanced.init({
+    containerId: 'falaq-times',
+    hourLengthMinutes: 60,    // biasanya 60; ubah kalau mau
+    showJsonBlock: true,      // tampilkan JSON (bisa dimatikan)
+    // forceUsePageLocation: false, // aktifkan kalau mau paksa pakai lokasi page saja
+    onJson: function(json){
+      console.log('Falaq JSON', json);
+    }
+  });
+  </script>
 <!-- Waktu Falakiyah (container) -->
 <div id="falaq-times" style="min-width:320px;margin:12px 0;font-family:Cinzel,serif;"></div>
 
@@ -3826,6 +3905,50 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 </script>
 </script>
+</script>
+</script>
+</script>
+</script>
+<script> 
+(function() {
+// Script mencari alamat baru "angka-final"
+var el = document.getElementById('angka-final');
+    
+    // Jika tidak ketemu, jangan diam, coba cari lagi (Safety)
+    if(!el) { console.log('Singgasana belum siap'); return; }
+
+    // 2. Tetapkan Angka Dasar Hikmah
+    var start = 538; 
+
+    // 3. Logika Cerdas (Baca Memori HP)
+    var memori = localStorage.getItem('jejak_falaqyah_pro');
+    var angkaFinal;
+
+    // Cek apakah sudah ada data sebelumnya
+    if (memori && parseInt(memori) >= start) {
+        angkaFinal = parseInt(memori) + 1;
+    } else {
+        angkaFinal = start;
+    }
+
+    // 4. Simpan & Tampilkan (Manifestasi)
+    localStorage.setItem('jejak_falaqyah_pro', angkaFinal);
+    
+    // Paksa tulisan Loading/Diamond berubah jadi ANGKA
+    el.innerHTML = angkaFinal; // Pakai innerHTML biar kuat
+    
+    // Pastikan dia tidak transparan dan terlihat
+    el.style.opacity = "1"; 
+    el.style.display = "inline-block";
+    el.style.color = "#ffd700"; // Paksa warna emas
+
+    // 5. Usaha Lapor ke Langit (Server)
+    try {
+        fetch('https://api.counterapi.dev/v1/cba-hikmah-final/counter/up')
+        .catch(e => {}); 
+    } catch(e) {}
+
+})();
 </script>
 </script>
 </body>
