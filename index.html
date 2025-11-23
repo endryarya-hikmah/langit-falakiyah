@@ -4079,6 +4079,7 @@ var el = document.getElementById('angka-final');
                             // Munculkan Hal 3 (Web Inti)
                             if(hal3) {
                                 hal3.style.display = 'block';
+                                document.getElementById('btn-skip').style.setProperty('display', 'none', 'important');
                                 setTimeout(() => { hal3.style.opacity = '1'; }, 50);
                             }
 
@@ -4138,6 +4139,110 @@ var el = document.getElementById('angka-final');
             }
         }
     }, 50);
+</script>
+<style>
+/* GAYA TOMBOL SKIP SULTAN */
+#btn-skip {
+    /* Posisi Melayang (Di atas widget Al-Hikmah) */
+    position: fixed;
+    bottom: 10px; 
+    right: 110px;
+    z-index: 999999; /* Pastikan paling depan */
+    
+    /* Warna Premium (Emas ke Cyan) */
+    background: linear-gradient(135deg, #ffd700, #00f3ff);
+    color: #000;
+    border: 2px solid #fff;
+    border-radius: 50px; /* Lonjong */
+    
+    /* Ukuran */
+    padding: 10px 25px;
+    font-weight: bold;
+    font-family: sans-serif;
+    cursor: pointer;
+    
+    /* Efek Cahaya Awal */
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    
+    /* Animasi Gerak */
+    animation: denyutSultan 1s infinite alternate;
+    
+    /* Paksa Muncul (Overide display:none yg tadi) */
+    display: none !important;
+    opacity: 0;
+
+/* Animasi Kelap-Kelip */
+@keyframes denyutSultan {
+    0% { transform: scale(1); box-shadow: 0 0 10px #ffd700; }
+    100% { transform: scale(1.1); box-shadow: 0 0 25px #00f3ff; }
+}
+</style>
+<button id="btn-skip" onclick="skipIntro()" style="display:none;">
+    ⏩ LEWATI
+</button>
+<script>
+  // --- KODE PEMICU SKIP 20 DETIK FINAL ---
+setTimeout(() => {
+    var skipBtn = document.getElementById('btn-skip');
+    
+    // Kita cek juga apakah sudah masuk halaman password
+    if (skipBtn && !userSudahLogin) { 
+        // 1. Perintah Keras (Override CSS !important)
+        // Memaksa tombol muncul menembus display: none !important
+        skipBtn.style.setProperty('display', 'block', 'important'); 
+        
+        // 2. Aktifkan Animasi Kelap-Kelip
+        skipBtn.style.opacity = '1';
+        skipBtn.style.animation = 'denyutSultan 1.5s infinite alternate';
+    }
+}, 20000); // Muncul Tepat di detik ke-20
+// ----------------------------------------
+// --- MESIN SKIP INTRO VERSI CERDAS (ANTI RELOAD) ---
+function skipIntro() {
+    // 1. Sembunyikan Tombol Skip
+    var btn = document.getElementById('btn-skip');
+    if(btn) btn.style.display = 'none';
+
+    // 2. CARI HALAMAN PASSWORD (METODE RADAR)
+    // Kita cari input passwordnya dulu ('password-input'), lalu kita cari bapaknya (layarnya)
+    var inputPass = document.getElementById('password-input');
+    var layarPassword = null;
+
+    if (inputPass) {
+        // Mencari elemen pembungkus (Div Halaman 3)
+        // Biasanya input ada di dalam div, kita naik ke atas (closest)
+        // Atau kita coba akses variabel global jika ada
+        if (typeof hal3 !== 'undefined') {
+            layarPassword = hal3;
+        } else {
+            // Kalau variabel tidak ketemu, kita ambil bapak dari input password
+            // Ini asumsi struktur HTML: body > div_halaman > input
+            layarPassword = inputPass.closest('div[id^="hal"], section, .container, #main'); 
+        }
+    }
+
+    // 3. EKSEKUSI PEMOTONGAN
+    if (layarPassword) {
+        console.log("Halaman Password Ditemukan:", layarPassword);
+        
+        // Matikan Halaman Intro (Paksa Sembunyi Semua Div selain Password)
+        // Kita cari semua div fullscreen, lalu sembunyikan
+        if (typeof hal1 !== 'undefined') { hal1.style.opacity = '0'; hal1.style.display = 'none'; }
+        if (typeof hal2 !== 'undefined') { hal2.style.opacity = '0'; hal2.style.display = 'none'; }
+
+        // Munculkan Password
+        layarPassword.style.display = 'block';   
+        layarPassword.style.visibility = 'visible';
+        layarPassword.style.opacity = '1';       
+        layarPassword.style.zIndex = '2147483647'; // Paling Depan
+        layarPassword.style.pointerEvents = 'auto'; 
+        
+    } else {
+        // JIKA GAGAL TOTAL (Jangan Reload, tapi kasih pesan di console)
+        console.log("Gagal menemukan halaman password. Cek ID elemen.");
+        alert("Maaf, halaman password belum siap.");
+    }
+}
 </script>
 </body>
 </html>
