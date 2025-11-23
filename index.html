@@ -5,6 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Langit Falaqyah CBA ✦ Al-Hikmah v3.5 (Hisab Lengkap)</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@500;700&display=swap" rel="stylesheet">
+<!-- FONT BARU -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Amiri:wght@400;700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+
+<style>
+    /* TRANSISI GLOBAL */
+    .falaq-section { position: absolute; top: 0; left: 0; width: 100%; height: 100vh; transition: opacity 1.5s ease-in-out; overflow: hidden; }
+    .falaq-hidden { opacity: 0; pointer-events: none; z-index: -1; }
+    
+    /* HALAMAN 2 (KOSMIK) */
+    #halaman-kedua { display: flex; justify-content: center; align-items: center; background: linear-gradient(135deg, #0f0518 0%, #1a0b2e 50%, #11001c 100%); position: fixed; z-index: 10; }
+    .stars-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px), radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px); background-size: 550px 550px, 350px 350px; animation: starMove 60s linear infinite; z-index: -1; }
+    @keyframes starMove { from { transform: translateY(0); } to { transform: translateY(-550px); } }
+
+    /* KARTU & BUBBLE */
+    .magic-card { position: relative; width: 90%; max-width: 650px; background: rgba(255, 255, 255, 0.03); border-radius: 20px; padding: 3px; backdrop-filter: blur(10px); box-shadow: 0 0 40px rgba(139, 92, 246, 0.15); }
+    .magic-card::before { content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, #ffd700, transparent 30%, #00ffff, transparent 60%, #ff00ff, transparent); animation: borderRotate 4s linear infinite; z-index: 0; }
+    .card-content { position: relative; background: rgba(10, 5, 20, 0.9); border-radius: 18px; padding: 2.5rem; z-index: 1; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); }
+    @keyframes borderRotate { 100% { transform: rotate(360deg); } }
+
+    /* TEXT */
+    .text-opening { font-family: 'Montserrat', sans-serif; color: #e2e8f0; line-height: 1.6; font-size: 1.1rem; margin-bottom: 1.5rem; }
+    .kitab-list { margin-top: 1.5rem; border-top: 1px solid rgba(255, 215, 0, 0.3); padding-top: 1.5rem; }
+    .kitab-name { font-family: 'Amiri', serif; font-size: 1.4rem; color: #fbbf24; margin-bottom: 0.5rem; display: block; transition: transform 0.3s; }
+    .kitab-name:hover { transform: scale(1.05); color: #fff; }
+
+    /* HALAMAN 3 (INTI) */
+    #halaman-ketiga-inti { display: none; opacity: 0; transition: opacity 1.5s ease-in-out; position: relative; z-index: 5; min-height: 100vh; background: white; }
+</style>
 /* CSS Donatur Fade */
 #donatur-dinamis {
   transition: opacity 1.0s ease-in-out;
@@ -893,6 +921,7 @@ body:hover #stardust-cursor {
 </style>
 </head>
 <body>
+  <div id="halaman-utama-anda" class="falaq-section">
   <!-- ===== opening-screen (safe block) ===== -->
 <div id="opening-screen">
   <h1>✦ SEDANG MEMBUKA LANGIT DAN WAKTU ✦</h1>
@@ -920,6 +949,11 @@ body:hover #stardust-cursor {
     <div id="loading-bar"></div>
   </div>
 </div>
+<!-- 1. TUTUP HALAMAN 1 (Loading Selesai) -->
+</div>
+
+<!-- 2. BUKA HALAMAN 3 (Mulai Masuk Website Planet) -->
+<div id="halaman-ketiga-inti">
 <!-- ===== end opening-screen ===== -->
 
 <canvas id="universe"></canvas>
@@ -1009,6 +1043,7 @@ body:hover #stardust-cursor {
 
   .label-teks { display: block; color: #d0b0d0; margin-bottom: 10px; font-size: 0.95em; }
   .angka-inti { display: inline-block; color: #ffd700; font-weight: bold; font-size: 1.8em; animation: nafasEmas 3s infinite ease-in-out; }
+  
 </style>
 
 <div id="visitor-counter" style="text-align: center; margin: 30px 0;">
@@ -3693,7 +3728,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <div class="header-orb"></div>
             <div style="margin-left:10px;">
                 <div class="header-title">AL-HIKMAH</div>
-                <div class="header-status">EMERALD SYSTEM CAKRA BUANA</div>
+                <div class="header-status">EMERALD MASTER SYSTEM CAKRA BUANA</div>
             </div>
         </div>
         <div style="display:flex; gap:6px;">
@@ -3950,6 +3985,124 @@ var el = document.getElementById('angka-final');
 
 })();
 </script>
+</script>
+
+<!-- ================================================== -->
+    <!-- BATAS AKHIR HALAMAN LAMA (PENUTUP PEMBUNGKUS) -->
+    <!-- ================================================== -->
+    </div> 
+    <!-- Kode </div> di atas ini PENTING untuk menutup halaman 1 -->
+
+
+    <!-- ================================================== -->
+    <!-- HALAMAN 2: KUTIPAN KITAB (17 DETIK) -->
+    <!-- ================================================== -->
+    <div id="halaman-kedua" class="falaq-section falaq-hidden">
+        <div class="stars-bg"></div>
+        <div class="magic-card">
+            <div class="card-content">
+                <div class="text-yellow-500 text-2xl mb-4 opacity-80">◈ ◈ ◈</div>
+
+                <p class="text-opening">
+                    Web Falaqyah ini disusun dengan <strong class="text-cyan-300">presisi</strong> dan <strong class="text-cyan-300">kebenaran</strong>,<br>
+                    berdasarkan petunjuk para Guru serta tiga rujukan Falaqyah utama:
+                </p>
+
+                <div class="kitab-list">
+                    <span class="kitab-name">Manba‘u Ushûl al-Hikmah</span>
+                    <span class="kitab-name">al-Lum‘ah fî al-Syams al-Ma‘ārif</span>
+                    <span class="kitab-name">Mujarrabât al-Dairabî al-Kubrā</span>
+                </div>
+
+                 <div class="text-yellow-500 text-2xl mt-6 opacity-80">◈ ◈ ◈</div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================================================== -->
+    <!-- HALAMAN 3: WEB INTI (TEMPAT MENU UTAMA) -->
+    <!-- ================================================== -->
+    
+
+    </div>
+
+
+    <!-- ================================================== -->
+    <!-- JANTUNG TRANSISI (SCRIPT PENGATUR WAKTU) -->
+    <!-- ================================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hal1 = document.getElementById('halaman-utama-anda');
+            const hal2 = document.getElementById('halaman-kedua');
+            const hal3 = document.getElementById('halaman-ketiga-inti');
+
+            // --- FASE 1: TUNGGU 15 DETIK (HALAMAN 1) ---
+            setTimeout(() => {
+                if(hal1) hal1.style.opacity = '0'; // Fade Out Hal 1
+                
+                setTimeout(() => {
+                    if(hal1) hal1.style.display = 'none'; // Hilangkan Hal 1
+                    
+                    // Munculkan Hal 2
+                    if(hal2) {
+                        hal2.classList.remove('falaq-hidden'); 
+                        void hal2.offsetWidth;
+                        hal2.style.opacity = '1';
+                    }
+
+                    // --- FASE 2: TUNGGU 17 DETIK (HALAMAN 2) ---
+                    setTimeout(() => {
+                        if(hal2) hal2.style.opacity = '0'; // Fade Out Hal 2
+
+                        setTimeout(() => {
+                            if(hal2) hal2.style.display = 'none'; // Hilangkan Hal 2
+                            
+                            // Munculkan Hal 3 (Web Inti)
+                            if(hal3) {
+                                hal3.style.display = 'block';
+                                setTimeout(() => { hal3.style.opacity = '1'; }, 50);
+                            }
+
+                        }, 1500); // Durasi animasi hilang
+
+                    }, 17000); // WAKTU TUNGGU HALAMAN 2 (17 DETIK)
+
+                }, 1500); // Durasi animasi hilang
+
+            }, 15000); // WAKTU TUNGGU HALAMAN 1 (15 DETIK)
+        });
+    </script>
+    
+    <!-- SCRIPT SATPAM HANTU (REVISI: COUNTER TETAP MUNCUL) -->
+<script>
+    setInterval(() => {
+        // 1. Cek Layar Donasi
+        const tembokDonasi = document.getElementById('donation-info');
+        const isDonasiVisible = tembokDonasi && window.getComputedStyle(tembokDonasi).display !== 'none';
+
+        // 2. Daftar Hantu yang WAJIB SEMBUNYI (Cuma Tombol Bubble)
+        // Catatan: Counter Pengunjung sudah DIHAPUS dari daftar ini agar tetap muncul
+        const hantuList = [
+            document.getElementById('tombol-alhikmah'),     // ID Bubble 1
+            document.querySelector('.floating-button'),     // ID Bubble 2
+            document.querySelector('.bubble-menu'),         // ID Bubble 3
+            document.querySelector('div[onclick*="menu"]') // ID Bubble 4
+        ];
+
+        // 3. Eksekusi
+        if (isDonasiVisible) {
+            // KONDISI: Di Layar Password -> Sembunyikan Tombol Bubble Saja
+            hantuList.forEach(hantu => {
+                if (hantu) hantu.style.display = 'none';
+            });
+        } else {
+            // KONDISI: Sudah Masuk -> Munculkan Kembali
+            hantuList.forEach(hantu => {
+                if (hantu) hantu.style.display = 'block'; 
+            });
+        }
+    }, 100);
 </script>
 </body>
 </html>
