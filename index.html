@@ -32,13 +32,13 @@
 
     /* HALAMAN 3 (INTI) */
     #halaman-ketiga-inti { display: none; opacity: 0; transition: opacity 1.5s ease-in-out; position: relative; z-index: 5; min-height: 100vh; background: white; }
-</style>
+
 /* CSS Donatur Fade */
 #donatur-dinamis {
   transition: opacity 1.0s ease-in-out;
   opacity: 0;
 }
-<style>
+
 :root {
   --dvh: 100vh;
 }
@@ -1294,8 +1294,26 @@ if (unlockBtn) {
   unlockBtn.onclick = () => {
     const errorMsg = document.getElementById('password-error');
     if (passwordInput.value.toUpperCase() === 'CBA26') {
-      startMain();
-    } else {
+    startMain();
+
+    // --- 1. MATIKAN SATPAM (Agar Widget Boleh Muncul) ---
+    userSudahLogin = true; 
+    if (typeof penjagaHantu !== 'undefined') clearInterval(penjagaHantu);
+
+    // --- 2. MUNCULKAN WIDGET AL-HIKMAH ---
+    const aiWidget = document.getElementById('ai-widget-container');
+    if (aiWidget) {
+        aiWidget.style.display = 'block';       // Munculkan wujud
+        aiWidget.style.visibility = 'visible';  // Pastikan terlihat
+        aiWidget.style.pointerEvents = 'auto';  // Aktifkan klik
+        
+        // Animasi halus
+        setTimeout(() => {
+            aiWidget.style.opacity = '1';
+        }, 800);
+    }
+    } else 
+    {
       errorMsg.textContent = 'Kode Rahasia Salah.';
       errorMsg.style.display = 'block';
       passwordInput.style.borderColor = '#ff8888';
@@ -3712,7 +3730,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </style>
 
 <!-- TRIGGER -->
-<div id="ai-widget-container">
+<div id="ai-widget-container" style="display: none !important; pointer-events: none !important;">
     <button id="ai-trigger-btn" onclick="toggleAiChat()">
         <i data-lucide="compass" style="width:14px;"></i>
         AL-HIKMAH
@@ -4103,6 +4121,23 @@ var el = document.getElementById('angka-final');
             });
         }
     }, 100);
+</script>
+<script>
+    // --- SCRIPT PENJAGA HANTU (ANTI GHOST CLICK) ---
+    var userSudahLogin = false; // Status awal belum login
+
+    // Loop ini memaksa widget mati setiap 0.05 detik
+    var penjagaHantu = setInterval(function() {
+        if (!userSudahLogin) {
+            var hantu = document.getElementById('ai-widget-container');
+            if (hantu) {
+                hantu.style.display = 'none';      // Hilangkan wujud
+                hantu.style.pointerEvents = 'none'; // Matikan klik
+                hantu.style.visibility = 'hidden';  // Sembunyikan
+                hantu.style.opacity = '0';
+            }
+        }
+    }, 50);
 </script>
 </body>
 </html>
