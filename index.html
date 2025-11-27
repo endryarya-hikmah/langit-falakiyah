@@ -3839,7 +3839,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if(btn) btn.classList.add('active');
         
         if(m==='falak') aiInput.placeholder = "Ketik Hajat (Misal: Pengasihan)...";
-        else if(m==='aura' || m==='jodoh') aiInput.placeholder = "Masukkan Nama...";
+        else if(m==='aura' || m==='jodoh') aiInput.placeholder = "Endry Arya 18-08-1987 Wilma 11-05-1996";
         else aiInput.placeholder = "Ketik Sesuatu...";
     }
     setTimeout(() => setMode('falak'), 100);
@@ -3927,13 +3927,20 @@ document.addEventListener("DOMContentLoaded", function() {
             5. Penjelasan: Gunakan bahasa akademis, ilmiah, serius, dan tidak berlebihan (No Lebay).
             OUTPUT JSON: {"target_date_iso":"YYYY-MM-DD", "target_date":"Format Lengkap Diatas", "kawkab":"Format Lengkap Diatas", "desc":"Penjelasan Akademis."}`;
             
-            else if(currentMode === 'jodoh') prompt = `PERAN: Ahli Falak Jodoh. Hitung '${text}'. JSON: {title:"HITUNG JODOH", skor:"XX%", elemen_pria:"Unsur", elemen_wanita:"Unsur", desc:"Analisa serius."}`;
+            else if(currentMode === 'jodoh') prompt = `PERAN: Ahli Falak Jodoh Bab Hisab Hari CAKRA BUANA AL-HIKMAH, Mīzān al-Jawwād, Syams al-Ma‘ārif (bab ijtima’ huruf),  Ajnās al-Huruf, Taqwīm al-Ikhtiyārāt (Falakiyah),  Al-Isyarāt al-Rūhāniyyah, Jelaskan secara rinci, akurat dan benar, Berikan solusi kedepannya, Hari lahir jawab dengan benar  sesuaikan fakta di tanggal bulan dan tahunnya, jangan hitung berdasarkan Zodiak
+. Hitung '${text}'. JSON: {title:"HITUNG JODOH", skor:"XX%", elemen_pria:"Unsur", elemen_wanita:"Unsur", desc:"Analisa serius."}`;
             else if(currentMode === 'amalan') prompt = `PERAN: Tabib Rohani. Resep '${text}'. JSON: {title:"AMALAN", amalan_utama:"Nama Wirid", waktu_khusus:"Waktu", sedekah:"Saran", desc:"Kaifiyat."}`;
             else if(currentMode === 'obat') prompt = `PERAN: Tabib. Resep Herbal '${text}'. JSON: {title:"RESEP SYIFA", herbal:"Bahan", desc:"Diagnosa."}`;
             else if(currentMode === 'ayat') prompt = `PERAN: Ahli Tafsir. Cari ayat obat '${text}'. JSON: {title:"PANDUAN QUR'ANI", surah:"Surah:Ayat", arab:"Teks", arti:"Arti", desc:"Tafsir."}`;
             else if(currentMode === 'syair') prompt = `PERAN: Penyair Sufi. Tema '${text}'. JSON: {title:"SENANDUNG SUFI", bait:"Isi Syair", desc:"Makna."}`;
             else if(currentMode === 'aura') prompt = `PERAN: Ahli Hikmah. Aura '${text}'. JSON: {title:"ANALISA AURA", nama:"${text}", elemen:"Unsur", desc:"Potensi."}`;
-            else prompt = `PERAN: Tafsir Mimpi. '${text}'. JSON: {title:"TAFSIR MIMPI", makna_utama:"Inti", desc:"Detail."}`;
+            else prompt = `PERAN: Tafsir Mimpi Semua penjelasan mimpi bersumber dari Kitab Al-Hikmah yang shohih dan rujukan klasik turats yang terverifikasi, sehingga dapat dipertanggungjawabkan secara ilmu dan amaliyah.
+
+ menggunakan rujukan utama dari:
+• Ibn Sirin
+• Imam An-Nabulusi
+• Ibn Shahin
+• dan kitab-kitab tafsir mimpi dalam Kutub at-Turats versi Maktabah Syamilah. '${text}'. JSON: {title:"TAFSIR MIMPI", makna_utama:"Inti", desc:"Detail."}`;
 
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${manualKey}`, {
                 method:'POST', headers:{'Content-Type':'application/json'},
